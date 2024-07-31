@@ -1,6 +1,4 @@
-# FastCampusKDTBackend-KDT_DBE1_Toy_Project2
-데브 백엔드 1기 토이프로젝트 2 
-## 토이 프로젝트 1 : 쇼핑몰 만들기 프로젝트 2단계
+# 토이 프로젝트 1 : 쇼핑몰 만들기 프로젝트 2단계
 ### [프로젝트 개요] 
 - **프로젝트 명** : 쇼핑몰 구축을 위한 DB모델링
 - **상세 내용 :** [프로젝트 RFP 노션 링크](https://quickest-asterisk-75d.notion.site/Toy-Project-1-c3f8d546d18646b08934b97ba4d295ea)
