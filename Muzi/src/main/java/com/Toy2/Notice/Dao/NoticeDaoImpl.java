@@ -23,4 +23,25 @@ public class NoticeDaoImpl implements NoticeDao{
     public List<NoticeDto> selectNoticePage(PageHandler pagehandler){
         return sqlSession.selectList(namespace+"selectPage", pagehandler);
     }
+    @Override
+    public int insertNotice(NoticeDto noticeDto){
+        return sqlSession.insert(namespace+"insertNotice", noticeDto);
+    }
+    @Override
+    public NoticeDto selectNoticeById(int notice_no){
+        return sqlSession.selectOne(namespace+"selectNoticeById", notice_no);
+    }
+    @Override
+    public int updateContents(NoticeDto noticeDto){
+       return sqlSession.update(namespace+"updateContents", noticeDto);
+    }
+
+    @Override
+    public int deleteById(int notice_no) {
+        return sqlSession.delete(namespace+"deleteById", notice_no);
+    }
+    @Override
+    public int updateState(NoticeDto noticeDto){
+        return sqlSession.update(namespace+"updateState", noticeDto);
+    }
 }
