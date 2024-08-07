@@ -6,5 +6,10 @@
 	<typeAliases>
 		<typeAlias type="com.Toy2.Notice.domain.NoticeDto" alias="NoticeDto" />
 		<typeAlias type="com.Toy2.Notice.entity.PageHandler" alias="pageHandler" />
+
+
+		<!--K-KY-->
+		<typeAlias type="com.Toy2.product.db.dto.ProductDto" alias="ProductDto"/>
+		<typeAlias type="com.Toy2.product.db.dto.request.ProductUpdateRequestDto" alias="ProductUpdateRequestDto"/>
 	</typeAliases>
 </configuration>
