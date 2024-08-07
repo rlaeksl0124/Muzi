@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ProductMapper">
+
+    <select id="countProduct" resultType="int">
+        SELECT count(*) FROM product
+    </select>
+
+    <select id="selectProduct" parameterType="int" resultType="ProductDto">
+        SELECT * FROM product where pdt_no = #{productNumber}
+    </select>
+
+    <insert id="insertProduct" parameterType="ProductDto">
+        INSERT INTO product
+        (pdt_no, pdt_price, pdt_name, new_item, posting_status
+        , discountable, pdt_amount, notice)
+        VALUES(#{productNumber}, #{productPrice},
+        #{productName}, #{newItem}, #{postingStatus},
+        #{discountable}, #{productAmount}, #{notice})
+    </insert>
+
+    <update id="updateProduct" parameterType="ProductUpdateRequestDto">
+        UPDATE product
+        SET   pdt_price = #{productPrice},
+        pdt_name = #{productName},
+        new_item = #{newItem},
+        discountable = #{discountable},
+        pdt_amount = #{productAmount},
+        notice = #{notice},
+        pdt_code = #{productCode}
+        WHERE pdt_no = #{productNumber}
+    </update>
+
+    <update id="disableProduct" parameterType="int">
+        UPDATE product
+        SET   posting_status = false
+        WHERE pdt_no = #{productNumber}
+    </update>
+
+    <delete id="deleteProduct" parameterType="int">
+        DELETE FROM product WHERE pdt_no=#{productNumber}
+    </delete>
+
+</mapper>
