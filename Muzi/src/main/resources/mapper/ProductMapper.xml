@@ -11,6 +11,10 @@
         SELECT * FROM product where pdt_no = #{productNumber}
     </select>
 
+    <select id="selectProductPage" parameterType="map"  resultType="ProductDto">
+        SELECT * FROM product ORDERS LIMIT #{limit} OFFSET #{offset};
+    </select>
+
     <insert id="insertProduct" parameterType="ProductDto">
         INSERT INTO product
         (pdt_no, pdt_price, pdt_name, new_item, posting_status

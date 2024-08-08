@@ -6,6 +6,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
 
 @Repository
 public class ProductDaoImpl implements ProductDao {
@@ -51,6 +54,13 @@ public class ProductDaoImpl implements ProductDao {
     public ProductDto select(int productNumber) {
         return sqlSession.selectOne(nameSpace + "selectProduct", productNumber);
     }
+
+
+    @Override
+    public List<ProductDto> selectPage(Map<String, Integer> limitAndOffset) {
+        return sqlSession.selectList(nameSpace + "selectProductPage", limitAndOffset);
+    }
+
 
     /**
      * {@link #insert(ProductDto)} 와 유사함 <br>

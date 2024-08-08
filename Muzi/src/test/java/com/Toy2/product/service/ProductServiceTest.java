@@ -10,6 +10,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,6 +26,12 @@ public class ProductServiceTest {
         ProductDto productDto = productService.selectProduct(1);
         System.out.println("productDto = " + productDto);
         assertThat(productDto.getProductNumber()).isGreaterThan(0);
+    }
+
+    @Test
+    public void productServiceSelectPageTest() {
+        List<ProductDto> productDtos = productService.selectProductPage(10, 1);
+        System.out.println("productDtos = " + productDtos);
     }
 
     @Test

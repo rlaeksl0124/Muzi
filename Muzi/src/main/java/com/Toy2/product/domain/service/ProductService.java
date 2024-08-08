@@ -6,6 +6,10 @@ import com.Toy2.product.db.dto.request.ProductUpdateRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class ProductService {
 
@@ -38,6 +42,26 @@ public class ProductService {
         ProductDto select = productDao.select(productNumber);
         if (select != null) {
             return select;
+        }
+        throw new IllegalArgumentException("오류가 발생 했습니다.");
+    }
+
+    /**
+     * @param limit
+     * @param page
+     * @return
+     * */
+    public List<ProductDto> selectProductPage(int limit, int page) {
+        if (page >= 100000) {
+            throw new IllegalArgumentException();
+        }
+
+        Map<String, Integer> map = new HashMap<>();
+        map.put("limit", limit);
+        map.put("offset", limit * page);
+        List<ProductDto> productDtos = productDao.selectPage(map);
+        if (productDtos.size() != 0) {
+            return productDtos;
         }
         throw new IllegalArgumentException("오류가 발생 했습니다.");
     }

@@ -10,6 +10,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -152,5 +156,16 @@ public class ProductTest {
     public void 데이터_비활성화() {
         boolean disable = productDao.disable(999999998);
         assertThat(disable).isTrue();
+    }
+
+    @Test
+    public void 페이지_선택_테스트() {
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        hashMap.put("limit", 20);
+        hashMap.put("offset", 0);
+
+        List<ProductDto> productDtos = productDao.selectPage(hashMap);
+        assertThat(productDtos).isNotNull();
+        System.out.println("productDtos = " + productDtos);
     }
 }
