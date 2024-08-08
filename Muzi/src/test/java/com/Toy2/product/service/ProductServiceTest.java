@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -80,6 +81,31 @@ public class ProductServiceTest {
         ProductDto productDto = productService.selectProduct(Integer.MAX_VALUE);
         assertThat(productDto.getProductName()).isEqualTo("테스트 수정 상품");
         assertThat(update).isTrue();
+    }
+
+    @Test
+    @Transactional
+    public void productServiceManyInsertTest() {
+        List<ProductDto> productDtos = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            ProductDto build = new ProductDto.Builder()
+                    .productNumber(i + 10000)
+                    .productName("테스트 상품")
+                    .productPrice(10000)
+                    .postingStatus(true)
+                    .amount(100)
+                    .discountable(true)
+                    .newItem(true)
+                    .viewCount(0)
+                    .productCode("")
+                    .notice("없음").build();
+            productDtos.add(build);
+        }
+        productService.insertProduct(productDtos);
+        for (int i = 0; i < 10; i++) {
+            ProductDto productDto = productService.selectProduct(10000 + i);
+            assertThat(productDto).isNotNull();
+        }
     }
 
     @Test

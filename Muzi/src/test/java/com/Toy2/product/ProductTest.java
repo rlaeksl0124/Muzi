@@ -3,6 +3,7 @@ package com.Toy2.product;
 import com.Toy2.product.db.dao.ProductDao;
 import com.Toy2.product.db.dto.ProductDto;
 import com.Toy2.product.db.dto.request.ProductUpdateRequestDto;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,12 +24,18 @@ public class ProductTest {
     @Autowired
     ProductDao productDao;
 
+    @Before
+    public void before() {
+
+    }
+
     @Test
     public void productCountTest() {
         int count = productDao.count();
         System.out.println("count = " + count);
     }
 
+    //assert문이 있어야함
     @Test
     @Transactional
     public void insertDummiesData() {
@@ -37,7 +43,6 @@ public class ProductTest {
         for (int i = 0; i < 100; i++) {
             try {
                 ProductDto build = new ProductDto.Builder()
-//                .productNumber((int) (Math.random()*100000000))
                         .productNumber(i + count)
                         .productName("테스트 상품" + i)
                         .productPrice(10000)
@@ -57,6 +62,7 @@ public class ProductTest {
         }
     }
 
+    //데이터 꺼내서 확인하기
     @Test
     @Transactional
     public void productInsertTest() {
@@ -161,7 +167,7 @@ public class ProductTest {
     @Test
     public void 페이지_선택_테스트() {
         HashMap<String, Integer> hashMap = new HashMap<>();
-        hashMap.put("limit", 20);
+        hashMap.put("limit", 10);
         hashMap.put("offset", 0);
 
         List<ProductDto> productDtos = productDao.selectPage(hashMap);

@@ -11,6 +11,7 @@ public class ProductDto {
     private final String notice;
     private final int viewCount;
     private final String productCode;
+    private final int deliveryFee;
 
     public static class Builder {
         private int productNumber;
@@ -23,6 +24,8 @@ public class ProductDto {
         private int viewCount;
         private String notice;
         private String productCode;
+        private int deliveryFee;
+
 
         public Builder productNumber(int productNumber) {
             this.productNumber = productNumber;
@@ -74,6 +77,11 @@ public class ProductDto {
             return this;
         }
 
+        public Builder deliveryFee(int deliveryFee) {
+            this.deliveryFee = deliveryFee;
+            return this;
+        }
+
         public ProductDto build() {
             return new ProductDto(this);
         }
@@ -99,7 +107,7 @@ public class ProductDto {
     public ProductDto(int productNumber, int productPrice, String productName,
                       boolean newItem, boolean postingStatus,
                       boolean discountable, int productAmount, String notice,
-                      int viewCount, String productCode) {
+                      int viewCount, String productCode, int deliveryFee) {
         this.productNumber = productNumber;
         this.productPrice = productPrice;
         this.productName = productName;
@@ -110,6 +118,7 @@ public class ProductDto {
         this.notice = notice;
         this.viewCount = viewCount;
         this.productCode = productCode;
+        this.deliveryFee = deliveryFee;
     }
 
 
@@ -124,6 +133,7 @@ public class ProductDto {
         this.viewCount = builder.viewCount;
         this.notice = builder.notice;
         this.productCode = builder.productCode;
+        this.deliveryFee = builder.deliveryFee;
     }
 
 
@@ -169,6 +179,10 @@ public class ProductDto {
     }
 
 
+    public int getDeliveryFee() {
+        return deliveryFee;
+    }
+
     @Override
     public String toString() {
         return "ProductDto{" +
@@ -182,6 +196,7 @@ public class ProductDto {
                 ", notice='" + notice + '\'' +
                 ", viewCount=" + viewCount +
                 ", productCode='" + productCode + '\'' +
+                ", deliveryFee=" + deliveryFee +
                 '}';
     }
 }
