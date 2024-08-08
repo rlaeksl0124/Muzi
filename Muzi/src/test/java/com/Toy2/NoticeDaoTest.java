@@ -5,6 +5,7 @@ import com.Toy2.Notice.Dao.NoticeTestDao;
 import com.Toy2.Notice.domain.NoticeDto;
 import com.Toy2.Notice.entity.PageHandler;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,10 @@ public class NoticeDaoTest {
     @Autowired
     NoticeTestDao noticeTestDao;
 
-    PageHandler pagehanddler;
     ArrayList<NoticeDto> dtolist = new ArrayList<>();
 
     /* 외부 csv 파일 사용 하여 더미 dtolist 만들기 */
+    @Before
     public void dtoSetting(){
         FileReader fr;
         String str = "";
@@ -64,6 +65,7 @@ public class NoticeDaoTest {
     }
 
     /* db 초기화를 위한 메서드 */
+    @Before
     public void dbSetting(){
 
         /* db 초기화 */
@@ -74,11 +76,15 @@ public class NoticeDaoTest {
     }
 
     @Test
-    public void Inserttest(){
+    public void countTest(){
 
-        /* 초기화 */
-        dtoSetting();
-        dbSetting();
+        /* 카운트 테스트 */
+        int cnt=noticeDao.count();
+        Assert.assertEquals(cnt,0);
+    }
+
+    @Test
+    public void Inserttest(){
 
         /* 초기화 학인 */
         Assert.assertEquals(noticeDao.count(),0);
@@ -91,7 +97,7 @@ public class NoticeDaoTest {
         Assert.assertEquals(noticeDao.count(),1);
 
         /* 값 확인 */
-        NoticeDto insertDto=noticeDao.selectNoticeById(1);
+        NoticeDto insertDto=noticeDao.selectById(1);
         Assert.assertEquals(insertDto.getN_title(), dto.getN_title());
         Assert.assertEquals(insertDto.getN_contents(), dto.getN_contents());
         Assert.assertEquals(insertDto.getN_createDate(), dto.getN_createDate());
@@ -113,89 +119,62 @@ public class NoticeDaoTest {
         /* 한개 삭제  및 확인 */
         noticeDao.deleteById(1);
         Assert.assertEquals(noticeDao.count(),1);
-        Assert.assertNull(noticeDao.selectNoticeById(1));
+        Assert.assertNull(noticeDao.selectById(1));
     }
     @Test
     public void Deletetest(){
-        /* 초기화 */
-        dtoSetting();
-        dbSetting();
+
         Assert.assertEquals(noticeDao.count(),0);
 
         /* 만든 더미 첫번째 값 삽입 */
         NoticeDto dto=dtolist.get(0);
         noticeDao.insertNotice(dto);
         Assert.assertEquals(noticeDao.count(),1);
-        noticeDao.deleteById(1);
-        Assert.assertNull(noticeDao.selectNoticeById(1));
-
+        /* 삭제 후 확인 */
+        Assert.assertEquals(noticeDao.deleteById(1),1);
+        Assert.assertNull(noticeDao.selectById(1));
+        /* 삭제 후 다시 지웠을 때 */
+        Assert.assertEquals(noticeDao.deleteById(1),0);
     }
     @Test
     public void updateTest(){
-        /* 초기화 */
-        dtoSetting();
-        dbSetting();
 
         /* 초기화 확인 */
         Assert.assertEquals(noticeDao.count(),0);
-        NoticeDto dto=dtolist.get(0);
 
         /* 삽입 및 확인*/
+        NoticeDto dto=dtolist.get(0);
         noticeDao.insertNotice(dto);
         Assert.assertEquals(noticeDao.count(),1);
 
-        /* 첫번째 값 가져와서 변경*/
-        NoticeDto dto1=noticeDao.selectNoticeById(1);
+        /* 첫번째 값 가져와서 변경 title,contents 변경*/
+        NoticeDto dto1=noticeDao.selectById(1);
         dto1.setN_title(dtolist.get(1).getN_title());
         dto1.setN_contents(dtolist.get(1).getN_contents());
         noticeDao.updateContents(dto1);
 
-        /* 변경 확인 */
-        Assert.assertEquals(noticeDao.selectNoticeById(1).getN_contents(),dto1.getN_contents());
-        Assert.assertEquals(noticeDao.selectNoticeById(1).getN_title(),dto1.getN_title());
+        /* 변경 확인 (title,contents)*/
+        Assert.assertEquals(noticeDao.selectById(1).getN_contents(),dto1.getN_contents());
+        Assert.assertEquals(noticeDao.selectById(1).getN_title(),dto1.getN_title());
 
 
-    }
-    @Test
-    public void InsertListtest(){
-        dtoSetting();
-        dbSetting();
-
-        /* 전체 Dtolist insert */
-        for(NoticeDto dto : dtolist){
-            noticeDao.insertNotice(dto);
-        }
-        Assert.assertEquals(noticeDao.count(),dtolist.size());
-
-        /* 값 확인*/
-        Assert.assertEquals(noticeDao.selectNoticeById(1).getN_contents(),dtolist.get(0).getN_contents());
-        Assert.assertEquals(noticeDao.selectNoticeById(1).getN_title(),dtolist.get(0).getN_title());
-        Assert.assertEquals(noticeDao.selectNoticeById(2).getN_contents(),dtolist.get(1).getN_contents());
-        Assert.assertEquals(noticeDao.selectNoticeById(2).getN_title(),dtolist.get(1).getN_title());
-    }
-
-
-    @Test
-    public void countTest(){
-        dtoSetting();
-        dbSetting();
-        int cnt=noticeDao.count();
-        Assert.assertEquals(cnt,0);
     }
     @Test
     public void selectListTest(){
-        dtoSetting();
-        dbSetting();
+
+        /* dto 삽입(data 15개) */
         for(NoticeDto dto : dtolist){
             noticeDao.insertNotice(dto);
         }
-        pagehanddler = new PageHandler(noticeDao.count(), 1);
+
+        /* 1페이지 조회 및 확인 */
+        PageHandler pagehanddler = new PageHandler(noticeDao.count(), 1);
         List<NoticeDto> dtolist1=noticeDao.selectNoticePage(pagehanddler);
         Assert.assertEquals(10,dtolist1.size());
         pagehanddler = new PageHandler(noticeDao.count(), pagehanddler.getEndPage());
 
+        /* 마지막 페이지 조회 및 확인 */
         List<NoticeDto> dtolist2 = noticeDao.selectNoticePage(pagehanddler);
         Assert.assertEquals(dtolist.size()%10,dtolist2.size());
     }
-
 }

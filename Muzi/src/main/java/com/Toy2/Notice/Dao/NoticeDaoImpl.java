@@ -28,7 +28,7 @@ public class NoticeDaoImpl implements NoticeDao{
         return sqlSession.insert(namespace+"insertNotice", noticeDto);
     }
     @Override
-    public NoticeDto selectNoticeById(int notice_no){
+    public NoticeDto selectById(int notice_no){
         return sqlSession.selectOne(namespace+"selectNoticeById", notice_no);
     }
     @Override

@@ -12,7 +12,7 @@ public interface NoticeService {
 
     int updateNotice(NoticeDto notice);
 
-    NoticeDto getNotice(int id);
+    NoticeDto getNotice(int id) throws Exception;
 
     List<NoticeDto> getNoticePage(int page);
 

@@ -3,19 +3,19 @@ package com.Toy2;
 import com.Toy2.Notice.Dao.NoticeTestDao;
 import com.Toy2.Notice.Service.NoticeService;
 import com.Toy2.Notice.domain.NoticeDto;
-import com.Toy2.Notice.entity.PageHandler;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.List;
 import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/**/root-context.xml"})
@@ -26,10 +26,10 @@ public class NoticeServiceTest {
     @Autowired
     private NoticeTestDao noticeTestDao;
 
-    PageHandler pagehanddler;
     ArrayList<NoticeDto> dtolist = new ArrayList<>();
 
     /* 외부 csv 파일 사용 하여 더미 dtolist 만들기 */
+    @Before
     public void dtoSetting(){
         FileReader fr;
         String str = "";
@@ -65,6 +65,7 @@ public class NoticeServiceTest {
     }
 
     /* db 초기화를 위한 메서드 */
+    @Before
     public void dbSetting(){
 
         /* db 초기화 */
@@ -74,10 +75,7 @@ public class NoticeServiceTest {
         noticeTestDao.autoIncreasereset();
     }
     @Test
-    public void deleteContentsTest() {
-        /* 초기화 */
-        dtoSetting();
-        dbSetting();
+    public void deleteContentsTest() throws Exception {
         Assert.assertEquals(noticeService.count(), 0);
 
         /* 삽입 */
@@ -85,6 +83,7 @@ public class NoticeServiceTest {
         Assert.assertEquals(noticeService.count(), 1);
         noticeService.addNotice(dtolist.get(1));
         Assert.assertEquals(noticeService.count(), 2);
+
         /* 삭제 (상태 변경) */
         noticeService.deleteContents(noticeService.getNotice(1));
         Assert.assertEquals(noticeService.count(), 1);
@@ -94,14 +93,13 @@ public class NoticeServiceTest {
         NoticeDto noticeDto = noticeService.getNotice(1);
         Assert.assertEquals(noticeDto.getN_contents(),dtolist.get(0).getN_contents());
         Assert.assertEquals(noticeDto.getN_title(),dtolist.get(0).getN_title());
+        Assert.assertNotEquals(noticeDto.getLast_mod_dt(),dtolist.get(0).getLast_mod_dt());
     }
     @Test
-    public void addNoticeTest() {
-        /* 초기화 */
-        dtoSetting();
-        dbSetting();
+    public void addNoticeTest() throws Exception {
         Assert.assertEquals(noticeService.count(), 0);
 
+        /* 삽입 테스트 */
         noticeService.addNotice(dtolist.get(0));
         Assert.assertEquals(noticeService.count(), 1);
         NoticeDto noticeDto = noticeService.getNotice(1);
@@ -111,10 +109,7 @@ public class NoticeServiceTest {
 
     }
     @Test
-    public void updateNoticeTest() {
-        /* 초기화 */
-        dtoSetting();
-        dbSetting();
+    public void updateNoticeTest() throws Exception {
         Assert.assertEquals(noticeService.count(), 0);
 
         /* 값 넣기 */
@@ -137,18 +132,17 @@ public class NoticeServiceTest {
         noticeDto = noticeService.getNotice(1);
         Assert.assertEquals(noticeDto.getN_title(),dtolist.get(1).getN_title());
         Assert.assertEquals(noticeDto.getN_contents(),dtolist.get(1).getN_contents());
+        Assert.assertNotEquals(noticeDto.getLast_mod_dt(),dtolist.get(0).getLast_mod_dt());
     }
     @Test
     public void getSelectTest() {
-        /* 초기화 */
-        dtoSetting();
-        dbSetting();
         Assert.assertEquals(noticeService.count(), 0);
 
         /* db 초기화(insert) */
         for(NoticeDto dto:dtolist){
             noticeService.addNotice(dto);
         }
+
         Assert.assertEquals(noticeService.count(), dtolist.size());
 
         /* 페이지 가져오기 */
