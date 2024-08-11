@@ -6,5 +6,7 @@
 	<typeAliases>
 		<typeAlias type="com.Toy2.Notice.domain.NoticeDto" alias="NoticeDto" />
 		<typeAlias type="com.Toy2.Notice.entity.PageHandler" alias="pageHandler" />
+		<typeAlias type="com.Toy2.Notice.domain.FaqDto" alias="FaqDto" />
+		<typeAlias type="com.Toy2.Notice.domain.InqDto" alias="InqDto" />
 	</typeAliases>
 </configuration>
