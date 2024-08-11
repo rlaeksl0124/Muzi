@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+		PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.Toy2.Notice.domain.NoticeDto" alias="NoticeDto" />
+		<typeAlias type="com.Toy2.Notice.entity.PageHandler" alias="pageHandler" />
+		<typeAlias type="com.Toy2.Notice.domain.FaqDto" alias="FaqDto" />
+		<typeAlias type="com.Toy2.Notice.domain.InqDto" alias="InqDto" />
+	</typeAliases>
+</configuration>

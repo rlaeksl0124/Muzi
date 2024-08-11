@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mapper 태그에 namespace 등록하기 -->
+<mapper namespace="com.Toy2.Notice.Dao.InqMapper">
+
+<!--     보이는 거 관리 하기-->
+
+    <!-- count - 행 개수 셈  -->
+    <!-- parameter : 없음 , result: int -->
+    <select id="count" resultType="int">
+        SELECT count(*) FROM INQ
+    </select>
+
+
+    <!--   deleteAll - INQ 테이블 행 전제 삭제 -->
+    <!-- parameter : 없음 , result: 없음 -->
+    <delete id="deleteAll">
+        DELETE FROM INQ
+    </delete>
+
+
+    <!--   delete - 특정 INQ 게시글을 하나 삭제; 게시글 번호와 담당자가 같으면 글을 삭제 -->
+    <!-- parameter : map, result: 없음 -->
+    <delete id="delete" parameterType="map">
+        DELETE FROM INQ
+        WHERE INQ_no = #{inq_no} and INQ_admin = #{inq_admin}
+    </delete>
+
+
+    <!-- insert - INQ 게시글로 INQDto를 등록 -->
+    <!-- parameter : INQDto, result: 없음 -->
+    <insert id="insert" parameterType="INQDto">
+        INSERT INTO INQ(inq_admin, cate_no, c_email, inq_title, inq_content, inq_att_file,
+                        inq_date, inq_status, inq_sms, inq_email,
+                        first_reg_date, first_reg_id, last_mod_date, last_mod_id)
+        VALUES (#{inq_admin}, #{cate_no}, #{c_email}, #{inq_title}, #{inq_content}, #{inq_att_file},
+                #{inq_date}, #{inq_status}, #{inq_sms}, #{inq_email}, CURRENT_TIMESTAMP, #{first_reg_id}, CURRENT_TIMESTAMP, #{last_mod_id})
+    </insert>
+
+
+    <!--     selectAll   -->
+    <!--     parameter : 없음 , result: INQDto -->
+    <select id="selectAll" resultType="InqDto">
+        SELECT inq_no, cate_no, c_email, inq_title, inq_content, inq_att_file, inq_date
+        FROM INQ
+        ORDER BY inq_date DESC, inq_no DESC;
+    </select>
+
+
+    <sql id="selectFromInq">
+        SELECT inq_no, cate_no, c_email, inq_title, inq_content, inq_att_file, inq_date
+        FROM INQ
+    </sql>
+
+    <!--    select - 선택한 INQ 게시글을 하나 조회 -->
+    <!-- parameter : INQ_no(int), result: 없음 -->
+    <select id="select" parameterType="int" resultType="InqDto">
+        <include refid="selectFromInq"/>
+        WHERE inq_no = #{inq_no}
+    </select>
+
+
+    <!--    update - INQ에 등록된 문의글은 수정 불가 -->
+    <!--    parameter : INQDto, result : 없음-->
+<!--    <update id="update" parameterType="InqDto">-->
+<!--        UPDATE INQ-->
+<!--        SET cate_no = #{cate_no},-->
+<!--            inq_title = #{INQ_title},-->
+<!--            inq_content = #{INQ_content},-->
+<!--            INQ_att_file = #{INQ_att_file},-->
+<!--            last_mod_date = CURRENT_TIMESTAMP,-->
+<!--            last_mod_id = #{last_mod_id}-->
+<!--        WHERE INQ_admin = #{INQ_admin}-->
+<!--    </update>-->
+
+</mapper>
+
