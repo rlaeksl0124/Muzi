@@ -248,10 +248,10 @@ public class FaqDto {
     }
 
     public String getFormattedRegDate(){
-        if (faq_reg_date != null){
+        if (faq_reg_date != null){          // faq_reg_date null이 아닌 경우
+            // 등록일을 "yyyy-MM-dd" 형식으로 포맷하여 문자열로 변환
             return faq_reg_date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
-        return "";
+        return "";          // faq_reg_date이 null인 경우 빈 문자열 반환
     }
-
  }
