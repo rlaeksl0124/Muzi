@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,10 +57,17 @@
     </style>
 </head>
 <body>
+
+<script>
+    let msg = "${msg}";
+    if (msg == "REG_OK") alert("성공적으로 등록되었습니다.");
+    if (msg == "REG_ERR") alert("게시글 등록이 실패했습니다. 다시 시도해주세요.");
+    if (msg == "LIST_ERR") alert("FAQ 목록을 불러오는 데 실패했습니다.");
+</script>
+
 <div class="container">
     <div class="header">
         <div>
-<%--            <button onclick="location.href='faq_register.jsp'">FAQ 등록</button>--%>
             <button onclick="location.href='${pageContext.request.contextPath}/faq/register'">FAQ 등록</button>
             <button onclick="deleteSelected()">FAQ 삭제</button>
         </div>
@@ -78,18 +86,17 @@
         </tr>
         </thead>
         <tbody>
-        <!-- Sample rows for illustration. In actual implementation, data will be fetched dynamically -->
-        <tr>
-            <td class="checkbox"><input type="checkbox" name="faq"></td>
-            <td>FAQ 제목1</td>
-            <td>작성자1</td>
-        </tr>
-        <tr>
-            <td class="checkbox"><input type="checkbox" name="faq"></td>
-            <td>FAQ 제목1</td>
-            <td>작성자1</td>
-        </tr>
-        <!-- Add more rows as needed -->
+        <c:forEach var="faqDto" items="${list}">
+            <tr>
+                <td class="checkbox"><input type="checkbox" name="faq" value="${faqDto.faq_no}"></td>
+                <td class="faq_title">
+                    <a href="${pageContext.request.contextPath}/faq/view?faq_no=${faqDto.faq_no}">
+                            ${faqDto.faq_title}
+                    </a>
+                </td>
+                <td class="faq_writer">${faqDto.faq_writer}</td>
+            </tr>
+        </c:forEach>
         </tbody>
     </table>
 </div>

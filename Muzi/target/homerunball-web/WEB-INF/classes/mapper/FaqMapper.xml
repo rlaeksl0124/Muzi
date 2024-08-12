@@ -42,7 +42,7 @@
     <select id="selectAll" resultType="FaqDto">
         SELECT *
         FROM FAQ
-        ORDER BY faq_reg_date DESC, faq_no ASC;
+        ORDER BY faq_no ASC;
     </select>
 
 

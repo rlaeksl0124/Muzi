@@ -54,36 +54,31 @@ public class FaqController {
                 throw new Exception("FAQ Register failed.");
 
             model.addAttribute("faqDto", faqDto);
-            model.addAttribute("msg", "FAQ registered successfully.");
+            model.addAttribute("msg", "REG_OK");
             return "redirect:/faq"; // faq_center.jsp로 리다이렉트
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("faqDto", faqDto);
-            model.addAttribute("msg", "registerFAQ Error");
-            return "redirect:/faq";
+            model.addAttribute("msg", "REG_ERR");
+            return "faq_register";
         }
     }
 
-    // 리스트 보여줘야 지
+    @RequestMapping("/view")
+    public String viewFaq(@RequestParam("faq_no") Integer faq_no, Model model) throws Exception {
+        FaqDto faqDto = faqService.selectFaq(faq_no);
+        model.addAttribute("faqDto", faqDto);
+        return "faq_view";
+    }
 
-
-    // FAQ 전체 삭제
-//    int deleteAllFaq() throws Exception;
-//    @GetMapping("/removeAll")
-//    public String remove(Integer faq_no, HttpSession session){
-//    }
-
-
-//    // FAQ 삭제
-//    int deleteFaq(Integer faq_no, String faq_admin) throws Exception;
-
-
-//    // 관리자가 전체 FAQ 조회
-//    List<FaqDto> selectAll() throws Exception;
-
-//    // 선택한 FAQ 조회
-//    FaqDto selectFaq(Integer faq_no) throws Exception;
-
-//    // FAQ 수정
-//    int updateFaq(FaqDto faqDto) throws Exception;
+    @RequestMapping("")
+    public String faqCenter(Model model){
+        try {
+            List<FaqDto> faqList = faqService.selectAll();
+            model.addAttribute("list", faqList);
+        } catch (Exception e){
+            e.printStackTrace();
+            model.addAttribute("msg", "LIST_ERR");
+        }
+        return "faq_center";
+    }
 }
