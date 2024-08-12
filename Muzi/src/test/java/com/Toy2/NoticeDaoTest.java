@@ -166,7 +166,6 @@ public class NoticeDaoTest {
         for(NoticeDto dto : dtolist){
             noticeDao.insertNotice(dto);
         }
-
         /* 1페이지 조회 및 확인 */
         PageHandler pagehanddler = new PageHandler(noticeDao.count(), 1);
         List<NoticeDto> dtolist1=noticeDao.selectNoticePage(pagehanddler);

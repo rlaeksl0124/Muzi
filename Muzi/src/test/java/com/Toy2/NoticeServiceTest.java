@@ -3,6 +3,7 @@ package com.Toy2;
 import com.Toy2.Notice.Dao.NoticeTestDao;
 import com.Toy2.Notice.Service.NoticeService;
 import com.Toy2.Notice.domain.NoticeDto;
+import com.Toy2.Notice.entity.PageHandler;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -146,7 +147,7 @@ public class NoticeServiceTest {
         Assert.assertEquals(noticeService.count(), dtolist.size());
 
         /* 페이지 가져오기 */
-        List<NoticeDto> pagelist = noticeService.getNoticePage(1);
+        List<NoticeDto> pagelist = noticeService.getNoticePage(new PageHandler(noticeService.count(),1));
         Assert.assertEquals(pagelist.size(), 10);
     }
 }

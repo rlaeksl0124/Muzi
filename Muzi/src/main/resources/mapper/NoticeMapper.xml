@@ -29,6 +29,7 @@
     <select id="selectPage" parameterType="pageHandler" resultType="NoticeDto">
         select * from Notice
         where n_state = 'Y'
+        order by notice_no desc
         limit #{pageSize} offset #{offset};
     </select>
 

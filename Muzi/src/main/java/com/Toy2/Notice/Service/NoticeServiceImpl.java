@@ -42,9 +42,8 @@ public class NoticeServiceImpl implements NoticeService {
         return noticeDao.selectById(id);
     }
     @Override
-    public List<NoticeDto> getNoticePage(int page) {
-        PageHandler pagehandler= new PageHandler(noticeDao.count(),page);
-        return noticeDao.selectNoticePage(pagehandler);
+    public List<NoticeDto> getNoticePage(PageHandler ph) {
+        return noticeDao.selectNoticePage(ph);
     }
     /* 삭제 대신 사용할 상태 변경 */
     @Override

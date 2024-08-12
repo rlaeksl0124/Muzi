@@ -10,7 +10,7 @@ public class NoticeDto {
     private String n_contents;
     private String c_email = "admin";
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date n_createDate;
+    private Date n_createDate = new Date();
     private int n_ViewCnt;
     private String n_state;
     private String frst_reg_id = "admin";

@@ -1,0 +1,67 @@
+@charset "utf-8";
+* { margin: 0; padding: 0; border: 0; box-sizing: border-box; }
+ul { list-style: none; }
+a { text-decoration: none; color: black; }
+
+header {
+    width: 1200px;
+    height: 70px;
+}
+.mainHeader>ul {
+    display: flex; justify-content:space-between;
+}
+
+.mainSearch> form{
+    display: flex;
+    justify-content:space-between;
+    width: 700px;
+    height: 30px;
+}
+.mainSearch {
+    width: 400px;
+}
+.subHeader>ul {
+    display : flex;
+    justify-content: space-evenly;
+}
+
+/* contents 디자인*/
+h2{
+    align-items: center;
+}
+textarea{
+    height: 303px;
+}
+.comment-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.comment-form label {
+    font-weight: bold;
+}
+
+.comment-form input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.comment-form input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.comment-form input[type="submit"]:hover {
+    background-color: #0056b3;
+}
