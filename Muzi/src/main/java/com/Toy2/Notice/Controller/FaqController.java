@@ -35,7 +35,7 @@ public class FaqController {
             @RequestParam("faq_order") Integer faq_order,
             @RequestParam("faq_title") String faq_title,
             @RequestParam("faq_content") String faq_content,
-            @RequestParam("faq_closing") String faq_closing,
+//            @RequestParam("faq_closing") String faq_closing,
             @RequestParam("faq_writer") String faq_writer,
             // faq_reg_date는 사용자가 입력하는게 아니라 FAQ 등록 시점을 저장하는 거
             Model model){
@@ -45,7 +45,7 @@ public class FaqController {
         faqDto.setFaq_title(faq_title);
         faqDto.setFaq_order(faq_order);
         faqDto.setFaq_content(faq_content);
-        faqDto.setFaq_closing(faq_closing);
+//        faqDto.setFaq_closing(faq_closing);
         faqDto.setFaq_writer(faq_writer);
 
         try {

@@ -32,8 +32,8 @@
     <!-- insert - FAQ 게시글로 FaqDto를 등록 -->
     <!-- parameter : FaqDto, result: 없음 -->
     <insert id="insert" parameterType="FaqDto">
-        INSERT INTO FAQ (cate_no, faq_order, faq_title, faq_content, faq_closing, faq_att_file, faq_writer)
-        VALUES (#{cate_no}, #{faq_order}, #{faq_title}, #{faq_content}, #{faq_closing}, #{faq_att_file}, #{faq_writer})
+        INSERT INTO FAQ (cate_no, faq_order, faq_title, faq_content, faq_att_file, faq_writer)
+        VALUES (#{cate_no}, #{faq_order}, #{faq_title}, #{faq_content},  #{faq_att_file}, #{faq_writer})
     </insert>
 
 

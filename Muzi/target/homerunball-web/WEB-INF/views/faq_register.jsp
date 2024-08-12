@@ -147,6 +147,7 @@
         </div>
         <div class="form-group">
             <label for="faq_closing">FAQ 끝맺음말</label>
+            <p>미입력 시 자동값이 채워집니다.</p>
             <textarea id="faq_closing" name="faq_closing" rows="3"></textarea>
         </div>
         <div class="form-group">
