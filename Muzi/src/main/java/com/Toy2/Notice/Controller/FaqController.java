@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -25,7 +24,6 @@ public class FaqController {
     // FAQ 등록 페이지로 이동
     @GetMapping("/register")
     public String insertFAQ() {
-
         return "faq_register";
     }
 
@@ -51,17 +49,16 @@ public class FaqController {
         faqDto.setFaq_writer(faq_writer);
 
         try {
-            if (faqService.insertFaq(faqDto) != 1)          // != 1이면 insert 안됐다는 뜻
+            if (faqService.insertFaq(faqDto) != 1)          // != 1이면 insert 안 됐다는 뜻
                 throw new Exception("FAQ registration failed.");
 
             model.addAttribute("faqDto", faqDto);           // == 1이면 insert 된 거니까
 //            model.addAttribute("msg", "REG_OK");
-            return "redirect:/faq";                    // faq로 등록해놓은 faq_center.jsp로 리다이렉트
+            return "redirect:/faq";                    // /faq로 등록해놓은 faq_center.jsp로 리다이렉트
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("msg", "REG_ERR");
-//            return "faq_register";                  // 예외가 발생하면 다시 FAQ 등록 폼으로 이동
-            return "redirect:/register";
+//            model.addAttribute("msg", "REG_ERR");
+            return "faq_register";         // 예외가 발생하면 다시 FAQ 등록 폼으로 이동
         }
     }
 
