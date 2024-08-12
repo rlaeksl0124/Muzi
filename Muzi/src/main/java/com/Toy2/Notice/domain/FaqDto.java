@@ -13,6 +13,7 @@ public class FaqDto {
     /* 필드 선언 */
     private Integer faq_no;           /* FAQ 게시글 번호도 int로 받음 */
     private Integer cate_no;
+    private String categoryName;            // 카테고리를 이름으로 보려고 추가함
     private Integer faq_order;
     private char is_top;
     private String faq_title;
@@ -71,6 +72,19 @@ public class FaqDto {
 
     public void setCate_no(Integer cate_no) {
         this.cate_no = cate_no;
+    }
+
+    // 카테고리 이름 Getter & Setter
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public void setFaq_view_cnt(int faq_view_cnt) {
+        this.faq_view_cnt = faq_view_cnt;
     }
 
     public Integer getFaq_order() {
@@ -193,12 +207,14 @@ public class FaqDto {
         this.faq_admin = faq_admin;
     }
 
+
     /* toString() */
     @Override
     public String toString() {
         return "FaqDto{" +
                 "faq_no=" + faq_no +
                 ", cate_no=" + cate_no +
+                ", categoryName='" + categoryName + '\'' +
                 ", faq_order=" + faq_order +
                 ", is_top=" + is_top +
                 ", faq_title='" + faq_title + '\'' +

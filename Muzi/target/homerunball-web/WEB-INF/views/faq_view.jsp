@@ -81,7 +81,7 @@
     </div>
 
     <div class="faq-meta">
-        <div><strong>분류:</strong> ${faqDto.cate_no}</div>
+        <div><strong>분류유형:</strong> ${faqDto.categoryName}</div>
         <div><strong>작성자:</strong> ${faqDto.faq_writer}</div>
         <div><strong>작성일:</strong> ${faqDto.formattedRegDate}</div>
     </div>
@@ -93,7 +93,7 @@
     <div class="faq-closing">
         ${faqDto.faq_closing}
     </div>
-    
+
     <button class="back-button" onclick="location.href='${pageContext.request.contextPath}/faq'">목록으로 돌아가기</button>
 </div>
 

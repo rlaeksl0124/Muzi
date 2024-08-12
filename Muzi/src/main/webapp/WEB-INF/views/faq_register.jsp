@@ -74,19 +74,17 @@
         <h1>FAQ 등록</h1>
     </div>
 
-    <form action="${pageContext.request.contextPath}/faq/register" method="POST"> <!-- Ensure the method is POST -->
+    <form id="faqForm" action="${pageContext.request.contextPath}/faq/register" method="POST">
         <div class="form-group">
             <label for="faq_title">FAQ 제목</label>
             <input type="text" id="faq_title" name="faq_title" required>
         </div>
-
 
         <!-- Dropdown for selecting category -->
         <div class="form-group">
             <label for="cate_no">카테고리 선택</label>
             <select id="cate_no" name="cate_no" required>
                 <option value="">카테고리 선택</option>
-
                 <!-- Example category data -->
                 <optgroup label="제품정보안내">
                     <option value="101">소파류</option>
@@ -98,7 +96,6 @@
                     <option value="107">배송관련</option>
                     <option value="108">기타</option>
                 </optgroup>
-
                 <optgroup label="회원혜택/서비스">
                     <option value="201">L.POINT 회원</option>
                     <option value="202">메일매거진</option>
@@ -109,13 +106,11 @@
                     <option value="207">L.POINT</option>
                     <option value="208">카탈로그</option>
                 </optgroup>
-
                 <optgroup label="회원정보">
                     <option value="301">정보변경</option>
                     <option value="302">아이디/비밀번호</option>
                     <option value="303">탈퇴</option>
                 </optgroup>
-
                 <optgroup label="주문/결제방법">
                     <option value="401">주문 방법 및 확인</option>
                     <option value="402">대량구매</option>
@@ -125,24 +120,20 @@
                     <option value="406">결제수단</option>
                     <option value="407">소량재고</option>
                 </optgroup>
-
                 <optgroup label="취소/교환/반품">
                     <option value="501">반품</option>
                     <option value="502">주문취소</option>
                     <option value="503">교환/AS방법</option>
                 </optgroup>
-
                 <optgroup label="배송관련">
                     <option value="601">배송확인/기간</option>
                     <option value="602">배송지변경</option>
                     <option value="603">배송기간</option>
                 </optgroup>
-
                 <optgroup label="영수증">
                     <option value="701">현금영수증</option>
                     <option value="702">신용카드 매출전표</option>
                 </optgroup>
-
                 <optgroup label="사이트 이용문의">
                     <option value="801">PC문제해결/오류</option>
                     <option value="802">MUJI 고객센터 이용 안내</option>
@@ -159,30 +150,55 @@
             <textarea id="faq_closing" name="faq_closing" rows="3"></textarea>
         </div>
         <div class="form-group">
-            <lable for="faq_writer">FAQ 작성자</lable>
+            <label for="faq_writer">FAQ 작성자</label>
             <input type="text" id="faq_writer" name="faq_writer" required>
         </div>
 
         <div class="form-group">
-            <lable for="faq_order">FAQ 순서</lable>
+            <label for="faq_order">FAQ 순서</label>
             <input type="number" id="faq_order" name="faq_order" required>
         </div>
 
         <div class="button-group">
             <button type="submit">등록</button>
         </div>
+
     </form>
 </div>
 
 <script>
-    funciton register_btn(msg){
-        if (msg == "REG_OK")
-            alert("성공적으로 등록되었습니다.");
-        if (msg == "REG_ERR")
-            alert("등록 실패했습니다. 다시 시도해주세요.");
-        if (msg == "LIST_ERR")
-            alert ("FAQ 목록을 불러오는 데 실패했습니다.");
-    }
+    document.getElementById('faqForm').addEventListener('submit', function(event) {
+        // Get the form elements
+        var faqTitle = document.getElementById('faq_title').value;
+        var faqWriter = document.getElementById('faq_writer').value;
+        var faqClosing = document.getElementById('faq_closing').value;
+        var faqOrder = document.getElementById('faq_order').value;
+
+        // Validate lengths
+        if (faqTitle.length > 100) {
+            alert("FAQ 제목은 100자 이내로 입력해 주세요.");
+            event.preventDefault(); // Prevent form submission
+            return;
+        }
+
+        if (faqWriter.length > 10) {
+            alert("FAQ 작성자는 10자 이내로 입력해 주세요.");
+            event.preventDefault(); // Prevent form submission
+            return;
+        }
+
+        if (faqClosing.length > 100) {
+            alert("FAQ 끝맺음말은 100자 이내로 입력해 주세요.");
+            event.preventDefault(); // Prevent form submission
+            return;
+        }
+
+        if (faqOrder.length > 10) {
+            alert("FAQ 순서는 100자 이내로 입력해 주세요.");
+            event.preventDefault(); // Prevent form submission
+            return;
+        }
+    });
 </script>
 
 </body>

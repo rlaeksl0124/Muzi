@@ -74,6 +74,7 @@
         <thead>
         <tr>
             <th class="checkbox"><input type="checkbox" onclick="selectAll(this)"></th>
+            <th>분류유형</th>
             <th>FAQ 제목</th>
             <th>작성자</th>
         </tr>
@@ -82,6 +83,7 @@
         <c:forEach var="faqDto" items="${list}">
             <tr>
                 <td class="checkbox"><input type="checkbox" name="faq" value="${faqDto.faq_no}"></td>
+                <td>${faqDto.categoryName}</td>
                 <td class="faq_title">
                     <a href="${pageContext.request.contextPath}/faq/view?faq_no=${faqDto.faq_no}">
                             ${faqDto.faq_title}
