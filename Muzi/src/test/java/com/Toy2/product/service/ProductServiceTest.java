@@ -36,6 +36,7 @@ public class ProductServiceTest {
     }
 
     @Test
+    @Transactional
     public void productServiceInsertTest() {
         ProductDto build = new ProductDto.Builder()
                 .productNumber(Integer.MAX_VALUE)
@@ -53,6 +54,7 @@ public class ProductServiceTest {
     }
 
     @Test
+    @Transactional
     public void productServiceUpdateTest() {
         productService.insertProduct(new ProductDto.Builder()
                 .productNumber(Integer.MAX_VALUE)
@@ -75,6 +77,7 @@ public class ProductServiceTest {
                 .amount(10000)
                 .notice("없음")
                 .productCode("qqqqqq")
+                .privateProduct(true)
                 .build();
 
         boolean update = productService.updateProduct(build);
@@ -109,6 +112,7 @@ public class ProductServiceTest {
     }
 
     @Test
+    @Transactional
     public void productServiceDeleteTest() {
         boolean delete = productService.deleteService(1);
         assertThat(delete).isTrue();

@@ -120,6 +120,7 @@ public class ProductTest {
                 .discountable(true)
                 .amount(10000)
                 .notice("없음")
+                .privateProduct(true)
                 .productCode("qqqqqq")
                 .build();
         assertThat(productDao.update(build)).isTrue();
@@ -137,6 +138,7 @@ public class ProductTest {
                 .amount(10000)
                 .notice("없음")
                 .productCode("qqqqqq")
+                .privateProduct(true)
                 .build();
         assertThat(productDao.update(build)).isFalse();
     }

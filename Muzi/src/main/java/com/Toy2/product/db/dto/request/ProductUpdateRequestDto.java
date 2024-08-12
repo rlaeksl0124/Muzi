@@ -22,6 +22,7 @@ public class ProductUpdateRequestDto {
     private final int productAmount;
     private final String notice;
     private final String productCode;
+    private final boolean privateProduct;
 
     public ProductUpdateRequestDto(Builder builder) {
         this.productNumber = builder.productNumber;
@@ -32,6 +33,44 @@ public class ProductUpdateRequestDto {
         this.productAmount = builder.productAmount;
         this.notice = builder.notice;
         this.productCode = builder.productCode;
+        this.privateProduct = builder.privateProduct;
+    }
+
+
+    public int getProductNumber() {
+        return productNumber;
+    }
+
+    public int getProductPrice() {
+        return productPrice;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public boolean isNewItem() {
+        return newItem;
+    }
+
+    public boolean isDiscountable() {
+        return discountable;
+    }
+
+    public int getProductAmount() {
+        return productAmount;
+    }
+
+    public String getNotice() {
+        return notice;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public boolean isPrivateProduct() {
+        return privateProduct;
     }
 
     public static class Builder {
@@ -43,6 +82,7 @@ public class ProductUpdateRequestDto {
         private int productAmount;
         private String notice;
         private String productCode;
+        private boolean privateProduct;
 
         public Builder productNumber(int productNumber) {
             this.productNumber = productNumber;
@@ -84,42 +124,14 @@ public class ProductUpdateRequestDto {
             return this;
         }
 
+        public Builder privateProduct(boolean privateProduct) {
+            this.privateProduct = privateProduct;
+            return this;
+        }
+
         public ProductUpdateRequestDto build() {
             return new ProductUpdateRequestDto(this);
         }
 
     }
-
-    public int getProductNumber() {
-        return productNumber;
-    }
-
-    public int getProductPrice() {
-        return productPrice;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public boolean isNewItem() {
-        return newItem;
-    }
-
-    public boolean isDiscountable() {
-        return discountable;
-    }
-
-    public int getProductAmount() {
-        return productAmount;
-    }
-
-    public String getNotice() {
-        return notice;
-    }
-
-    public String getProductCode() {
-        return productCode;
-    }
-
 }
