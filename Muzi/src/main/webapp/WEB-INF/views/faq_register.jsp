@@ -168,11 +168,22 @@
             <input type="number" id="faq_order" name="faq_order" required>
         </div>
 
-
         <div class="button-group">
             <button type="submit">등록</button>
         </div>
     </form>
 </div>
+
+<script>
+    funciton register_btn(msg){
+        if (msg == "REG_OK")
+            alert("성공적으로 등록되었습니다.");
+        if (msg == "REG_ERR")
+            alert("등록 실패했습니다. 다시 시도해주세요.");
+        if (msg == "LIST_ERR")
+            alert ("FAQ 목록을 불러오는 데 실패했습니다.");
+    }
+</script>
+
 </body>
 </html>

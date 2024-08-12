@@ -1,6 +1,7 @@
 <!-- faq_view : 게시글 하나를 보여주는 페이지  -->
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,16 +37,36 @@
 <body>
 
 <div class="container">
-    <div class="faq-detail">
-        <h2>${faqDto.faq_title}</h2>
-        <p>분류유형: ${faqDto.cate_no}</p>
-        <p><strong>작성자:</strong>${faqDto.faq_writer}</p>
-        <p><strong>작성일:</strong>${faqDto.faq_reg_date}</p>
-        <p><strong>내용:</strong>${faqDto.faq_content}</p>
-<%--        <p>${faqDto.faq_content}</p>--%>
-    </div>
-    <button onclick="location.href='${pageContext.request.contextPath}/faq'">목록으로 돌아가기</button>
+        <h3>${faqDto.faq_title}</h3>
 </div>
+
+<div class ="container">
+    <p><strong>분류 유형</strong><p>
+    <p>${faqDto.cate_no}</p>
+</div>
+
+<div class = "container">
+    <p><strong>작성자</strong> <p>
+    <p>${faqDto.faq_writer}</p>
+</div>
+
+<div class = "container">
+    <p>${faqDto.faq_content}</p>
+    <p>${faqDto.faq_closing}</p>
+</div>
+
+
+<%--<div class = "container">--%>
+<%--    <p><strong>작성일</strong></p>--%>
+<%--    <p><fmt:formatDate value="${faqDto.faq_reg_date}" pattern="yyyy-MM-dd" /></p>  <!-- Registration Date -->--%>
+<%--</div>--%>
+
+<div class="container">
+    <p><strong>작성일</strong></p>
+    <p>${faqDto.formattedRegDate}</p>
+</div>
+
+<button onclick="location.href='${pageContext.request.contextPath}/faq'">목록으로 돌아가기</button>
 
 </body>
 </html>

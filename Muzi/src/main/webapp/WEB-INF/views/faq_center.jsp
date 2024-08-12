@@ -58,13 +58,6 @@
 </head>
 <body>
 
-<script>
-    let msg = "${msg}";
-    if (msg == "REG_OK") alert("성공적으로 등록되었습니다.");
-    if (msg == "REG_ERR") alert("게시글 등록이 실패했습니다. 다시 시도해주세요.");
-    if (msg == "LIST_ERR") alert("FAQ 목록을 불러오는 데 실패했습니다.");
-</script>
-
 <div class="container">
     <div class="header">
         <div>

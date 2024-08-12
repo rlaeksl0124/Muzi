@@ -4,6 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Valid
@@ -20,11 +21,11 @@ public class FaqDto {
     private String faq_closing;
     private String faq_att_file;
     private char faq_show;
-    @DateTimeFormat(pattern = "yyyy-mm-dd") private LocalDateTime faq_reg_date;
+    @DateTimeFormat(pattern = "yyyy-NMM-dd") private LocalDateTime faq_reg_date;
     private int faq_view_cnt;
-    @DateTimeFormat(pattern = "yyyy-mm-dd") private LocalDateTime first_reg_date;
+    @DateTimeFormat(pattern = "yyyy-MM-dd") private LocalDateTime first_reg_date;
     private String first_reg_id;
-    @DateTimeFormat(pattern = "yyyy-mm-dd") private LocalDateTime last_mod_date;
+    @DateTimeFormat(pattern = "yyyy-MM-dd") private LocalDateTime last_mod_date;
     private String last_mod_id;
     private String faq_admin;       /* 해당 FAQ 게시글을 등록한 담당자 */
 
@@ -228,6 +229,13 @@ public class FaqDto {
                 Objects.equals(cate_no, faqDto.cate_no) &&
                 Objects.equals(faq_title, faqDto.faq_title) &&
                 Objects.equals(faq_content, faqDto.faq_content);
+    }
+
+    public String getFormattedRegDate(){
+        if (faq_reg_date != null){
+            return faq_reg_date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+        return "";
     }
 
  }
