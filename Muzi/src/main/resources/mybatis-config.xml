@@ -11,5 +11,10 @@
 		<!--K-KY-->
 		<typeAlias type="com.Toy2.product.db.dto.ProductDto" alias="ProductDto"/>
 		<typeAlias type="com.Toy2.product.db.dto.request.ProductUpdateRequestDto" alias="ProductUpdateRequestDto"/>
+		<typeAlias type="com.Toy2.productcategory.db.dto.ProductCategoryDto" alias="ProductCategoryDto"/>
+		<typeAlias type="com.Toy2.productcategory.db.dto.request.ProductCategoryUpdateRequestDto" alias="ProductCategoryUpdateRequestDto"/>
+		<typeAlias type="com.Toy2.productcategory.categoryclosure.db.dto.ProductCategoryClosureDto" alias="ProductCategoryClosureDto"/>
+		<typeAlias type="com.Toy2.productcategory.categoryclosure.db.dto.request.CategoryClosureInsertRequestDto" alias="CategoryClosureInsertRequestDto"/>
+
 	</typeAliases>
 </configuration>
