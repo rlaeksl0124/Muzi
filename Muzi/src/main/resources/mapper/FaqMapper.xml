@@ -32,10 +32,8 @@
     <!-- insert - FAQ 게시글로 FaqDto를 등록 -->
     <!-- parameter : FaqDto, result: 없음 -->
     <insert id="insert" parameterType="FaqDto">
-        INSERT INTO FAQ (cate_no, faq_order, is_top, faq_title, faq_content, faq_writer, faq_closing, faq_att_file,
-                         faq_show, faq_reg_date, first_reg_id, last_mod_date, last_mod_id, faq_admin)
-        VALUES (#{cate_no}, #{faq_order}, #{is_top}, #{faq_title}, #{faq_content}, #{faq_writer}, #{faq_closing}, #{faq_att_file},
-                #{faq_show}, CURRENT_TIMESTAMP, #{first_reg_id}, CURRENT_TIMESTAMP, #{last_mod_id}, #{faq_admin})
+        INSERT INTO FAQ (cate_no, faq_order, faq_title, faq_content, faq_closing, faq_att_file, faq_writer)
+        VALUES (#{cate_no}, #{faq_order}, #{faq_title}, #{faq_content}, #{faq_closing}, #{faq_att_file}, #{faq_writer})
     </insert>
 
 
@@ -61,15 +59,6 @@
     </select>
 
 
-    <!-- increaseViewCnt - 조회수 올리기 -->
-    <!-- parameter : Integer faq_no, result :  없음 -->
-    <update id="increaseViewCnt" parameterType="int">
-        UPDATE FAQ
-        SET faq_view_cnt = faq_view_cnt + 1
-        WHERE faq_no = #{faq_no}
-    </update>
-
-
     <!--    update - FAQ에 등록된 게시글을 수정; 게시글의 번호와 담당자가 같은지 확인 -->
     <!--    parameter : FaqDto, result : 없음-->
     <update id="update" parameterType="FaqDto">
@@ -82,9 +71,19 @@
             faq_writer = #{faq_writer},
             faq_closing = #{faq_closing},
             faq_att_file = #{faq_att_file},
+            faq_view_cnt = #{faq_view_cnt},
             last_mod_date = CURRENT_TIMESTAMP,
             last_mod_id = #{last_mod_id}
         WHERE faq_admin = #{faq_admin}
+    </update>
+
+
+    <!-- increaseViewCnt - 조회수 올리기 -->
+    <!-- parameter : Integer faq_no, result :  없음 -->
+    <update id="increaseViewCnt" parameterType="int">
+        UPDATE FAQ
+        SET faq_view_cnt = faq_view_cnt + 1
+        WHERE faq_no = #{faq_no}
     </update>
 
 </mapper>

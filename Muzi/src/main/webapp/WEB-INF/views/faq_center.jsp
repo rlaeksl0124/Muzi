@@ -59,7 +59,8 @@
 <div class="container">
     <div class="header">
         <div>
-            <button onclick="location.href='faq_register.jsp'">FAQ 등록</button>
+<%--            <button onclick="location.href='faq_register.jsp'">FAQ 등록</button>--%>
+            <button onclick="location.href='${pageContext.request.contextPath}/faq/register'">FAQ 등록</button>
             <button onclick="deleteSelected()">FAQ 삭제</button>
         </div>
         <div>

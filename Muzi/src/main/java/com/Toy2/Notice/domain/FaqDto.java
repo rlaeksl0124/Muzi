@@ -10,9 +10,9 @@ import java.util.Objects;
 public class FaqDto {
 
     /* 필드 선언 */
-    private int faq_no;           /* FAQ 게시글 번호도 int로 받음 */
-    private int cate_no;
-    private int faq_order;
+    private Integer faq_no;           /* FAQ 게시글 번호도 int로 받음 */
+    private Integer cate_no;
+    private Integer faq_order;
     private char is_top;
     private String faq_title;
     private String faq_content;
@@ -20,14 +20,11 @@ public class FaqDto {
     private String faq_closing;
     private String faq_att_file;
     private char faq_show;
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDateTime faq_reg_date;
+    @DateTimeFormat(pattern = "yyyy-mm-dd") private LocalDateTime faq_reg_date;
     private int faq_view_cnt;
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDateTime first_reg_date;
+    @DateTimeFormat(pattern = "yyyy-mm-dd") private LocalDateTime first_reg_date;
     private String first_reg_id;
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDateTime last_mod_date;
+    @DateTimeFormat(pattern = "yyyy-mm-dd") private LocalDateTime last_mod_date;
     private String last_mod_id;
     private String faq_admin;       /* 해당 FAQ 게시글을 등록한 담당자 */
 
@@ -37,7 +34,7 @@ public class FaqDto {
 
     /* NOT NULL 채우는 생성자 */
     /*  (cate_no, faq_order, is_top, faq_title, faq_content) */
-    public FaqDto(int cate_no, int faq_order, char is_top, String faq_title, String faq_content){
+    public FaqDto(Integer cate_no, Integer faq_order, char is_top, String faq_title, String faq_content){
         this.cate_no = cate_no;
         this.faq_order = faq_order;
         this.is_top = is_top;
@@ -59,28 +56,27 @@ public class FaqDto {
     }
 
     /* Getter & Setter */
-    public int getFaq_no() {
+    public Integer getFaq_no() {
         return faq_no;
     }
 
-
-    public void setFaq_no(int faq_no) {
+    public void setFaq_no(Integer faq_no) {
         this.faq_no = faq_no;
     }
 
-    public int getCate_no() {
+    public Integer getCate_no() {
         return cate_no;
     }
 
-    public void setCate_no(int cate_no) {
+    public void setCate_no(Integer cate_no) {
         this.cate_no = cate_no;
     }
 
-    public int getFaq_order() {
+    public Integer getFaq_order() {
         return faq_order;
     }
 
-    public void setFaq_order(int faq_order) {
+    public void setFaq_order(Integer faq_order) {
         this.faq_order = faq_order;
     }
 
@@ -155,6 +151,7 @@ public class FaqDto {
     public void setView_cnt(int faq_view_cnt) {
         this.faq_view_cnt = faq_view_cnt;
     }
+
     public LocalDateTime getFirst_reg_date() {
         return first_reg_date;
     }
@@ -210,7 +207,7 @@ public class FaqDto {
                 ", faq_att_file='" + faq_att_file + '\'' +
                 ", faq_show=" + faq_show +
                 ", faq_reg_date=" + faq_reg_date +
-                ", view_cnt=" + faq_view_cnt +
+                ", faq_view_cnt=" + faq_view_cnt +
                 ", first_reg_date=" + first_reg_date +
                 ", first_reg_id='" + first_reg_id + '\'' +
                 ", last_mod_date=" + last_mod_date +

@@ -28,4 +28,6 @@ public interface FaqService {
 
     // FAQ 수정
     int updateFaq(FaqDto faqDto) throws Exception;
+
+
 }

@@ -19,8 +19,6 @@ public class FaqServiceImpl implements FaqService {
         return faqDao.count();
     }
 
-
-
     // 관리자가 삭제
     @Override
     public int deleteAllFaq() throws Exception {

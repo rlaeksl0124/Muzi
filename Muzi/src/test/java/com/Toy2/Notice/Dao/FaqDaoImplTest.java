@@ -318,13 +318,12 @@ public class FaqDaoImplTest {
         Integer faq_no = faqDao.selectAll().get(0).getFaq_no();
         assertTrue(faqDao.count() == 1);
         System.out.println(faq_no);
-        System.out.println(faqDto);
+        System.out.println(faqDao.select(faq_no));
 
-        faqDto.setCate_no(302);              /* cate_no 값 변경 */
-        faqDto.setLast_mod_id("asdf");         /* last_mod_id 값 변경 */
+        //faqDto.setCate_no(302);                 /* cate_no 값 변경 */
+        faqDto.setFaq_order(3);          /* last_mod_id 값 변경 */
         assertTrue(faqDao.update(faqDto) == 1);
         System.out.println(faqDao.selectAll().get(0).getFaq_no());
-        System.out.println(faqDto);
     }
 
 
@@ -346,10 +345,13 @@ public class FaqDaoImplTest {
         /* faq_admin은 값 변경 안됨 */
         faqDto.setCate_no(104);              /* cate_no 값 변경 */
         faqDto.setFaq_admin("change");         /* faq_admin 변경함 */
+        System.out.println(faqDto);
         assertFalse(faqDao.update(faqDto) == 1);        /* faq_admin 달라져서 update 안됨*/
 
         /* faq_admin 원래대로 변경 */
-        faqDto.setFaq_admin("admin");
+        faqDto.setFaq_admin("admin1");
+        faqDto.setCate_no(202);
+        System.out.println(faqDto);
         assertTrue(faqDao.update(faqDto) == 1);
     }
 
