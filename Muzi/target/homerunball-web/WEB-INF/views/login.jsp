@@ -8,14 +8,13 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
+    <link href="<c:url value='/css/login.css'/>" type="text/css" rel="stylesheet"/>
     <title>login</title>
 </head>
 <body>
 <div id="snap-sync-body" class="snap-sync-pc">
     <div id="snap-sync-wrapper">
         <div class="snap-sync-container">
-            <!-- <div class="left" style="background-image: url(&quot;&quot;); height: 943px;"></div> -->
             <div class="snap-sync-content snap-sync-login-type">
                 <div class="snap-sync-logo">
                     <a href="/">
@@ -38,9 +37,9 @@
                             </div>
                         </div>
                         <div class="sync-buttons">
-                            <div>
-                                <a href="/list/API/login_kakao_sync.html" class="sync-common-btn sync-kakao-btn"></a>
-                            </div>
+                            <a href="/kakao/login">
+                                <img id="kakao" src="<c:url value='/img/kakao_login_medium_wide.png'/>" alt="카카오로 로그인" style="max-width: 100%; height: auto;">
+                            </a>
                         </div>
                         <div class="sync-info-image">
                             <div class="sync-info-img">
@@ -65,7 +64,7 @@
                                         <input type="text" name="c_email" maxlength="30" class="idInput" value placeholder="이메일을 입력해주세요." required/>
                                     </div>
                                     <div class="sync-form-input">
-                                        <input type="text" name="c_pwd" maxlength="40" class="pwdInput" value placeholder="비밀번호를 입력해주세요." required/>
+                                        <input type="password" name="c_pwd" maxlength="40" class="pwdInput" value placeholder="비밀번호를 입력해주세요." required/>
                                     </div>
                                     <button type="submit" class="loginBtn">로그인</button>
                                     <div class="searchId_pwd">
@@ -86,20 +85,14 @@
                     </div>
                     <div class="sync-sns-buttons btn-type">
                         <div><button type="button" class="sns-btn sync-sns-naver naver">네이버 계정으로 로그인</button></div>
-                        <div class="subBtn" id="kakaoBtn">
-                            <a href="/kakao/login">
-                                <img id="kakao" src="https://cdn-icons-png.flaticon.com/128/3669/3669973.png" width="40" height="40">
-                            </a>
-                        <div>
+                        <div><button type="button" class="sns-btn sync-sns-apple">애플 계정으로 로그인</button></div>
                     </div>
                 </div>
-            </div>
-            <div class="sync-join-button-area">
-                <div class="sync-join-button">
-                    <div>
+                <div class="sync-join-button-area">
+                    <div class="sync-join-button">
                         <a href="/signup/add" class="sync-join-btn">
                             <span>회원가입</span>
-                            <span class="move-arrow"></span>
+                            <span class="move-arrow">></span>
                         </a>
                     </div>
                 </div>
