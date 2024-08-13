@@ -21,17 +21,17 @@
     </delete>
 
 
-    <!--   delete - 특정 FAQ 게시글을 하나 삭제; 게시글 번호와 담당자가 같으면 글을 삭제 -->
+    <!--   delete - 특정 FAQ 게시글을 하나 삭제; 담당자가 글을 삭제(컨트롤러) -->
     <!-- parameter : map, result: 없음 -->
-    <delete id="delete" parameterType="map">
+    <delete id="delete" parameterType="int">
         DELETE FROM FAQ
-        WHERE faq_no = #{faq_no} and faq_writer = #{faq_writer}
+        WHERE faq_no = #{faq_no}
     </delete>
 
 
     <!-- insert - FAQ 게시글로 FaqDto를 등록 -->
     <!-- parameter : FaqDto, result: 없음 -->
-    <insert id="insert" parameterType="FaqDto">
+    <insert id="insert" parameterType="FaqDto" useGeneratedKeys="true" keyProperty="faq_no">
         INSERT INTO FAQ (cate_no, faq_order, faq_title, faq_content, faq_att_file, faq_writer)
         VALUES (#{cate_no}, #{faq_order}, #{faq_title}, #{faq_content},  #{faq_att_file}, #{faq_writer})
     </insert>
@@ -59,22 +59,23 @@
     </select>
 
 
-    <!--    update - FAQ에 등록된 게시글을 수정; 게시글의 번호와 담당자가 같은지 확인 -->
+    <!--    update - FAQ에 등록된 게시글을 수정; 게시글의 번호와 담당자가 맞는지 확인 -->
+    <!--    담당자만 게시글 삭제 가능-->
     <!--    parameter : FaqDto, result : 없음-->
     <update id="update" parameterType="FaqDto">
         UPDATE FAQ
+        #  faq_writer, faq_admin은 바꾸지 못함
         SET cate_no = #{cate_no},
             faq_order = #{faq_order},
             is_top = #{is_top},
             faq_title = #{faq_title},
             faq_content = #{faq_content},
-            faq_writer = #{faq_writer},
             faq_closing = #{faq_closing},
             faq_att_file = #{faq_att_file},
             faq_view_cnt = #{faq_view_cnt},
             last_mod_date = CURRENT_TIMESTAMP,
             last_mod_id = #{last_mod_id}
-        WHERE faq_admin = #{faq_admin}
+        WHERE faq_no = #{faq_no}
     </update>
 
 

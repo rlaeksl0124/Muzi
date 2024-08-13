@@ -13,7 +13,7 @@ public interface FaqDao {
     int deleteAll();
     List<FaqDto> selectAll();
 
-    int delete(Integer faq_no, String faq_writer);
+    int delete(Integer faq_no);
     int insert(FaqDto faqDto);
     int update(FaqDto faqDto);
     FaqDto select(Integer faq_no);

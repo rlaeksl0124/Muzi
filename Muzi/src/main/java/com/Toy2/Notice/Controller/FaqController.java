@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -16,6 +18,7 @@ import java.util.List;
 public class FaqController {
 
     @Autowired FaqService faqService;       // FaqService 주입 받기
+
 
     /* READ - FAQ 리스트 보여줌 */
     @RequestMapping("")
@@ -34,6 +37,24 @@ public class FaqController {
             //model.addAttribute("msg", "LIST_ERR");          // 에러 메시지를 model에 추가
         }
         return "faq_center";
+    }
+
+
+    /* READ - 선택한 FAQ 게시글 조회 */
+//    @RequestMapping("/view")
+    @GetMapping("/view")
+    public String viewFaq(@RequestParam("faq_no") Integer faq_no, Model model) throws Exception {       // 매개변수로 조회할 faq_no 넘김
+        FaqDto faqDto = faqService.selectFaq(faq_no);           // 매개변수로 받은 faq_no를 가진 게시글을 faqDto로 저장
+        if (faqDto == null) {               // faqDto가 null이면 해당하는 게시글이 없다는 것
+            throw new Exception("FAQ not found");
+        }
+
+        // cate_no를 카테고리의 이름으로 표시하기 위한 변환
+        String categoryName = FaqCategory.getCategoryName(faqDto.getCate_no());         // FaqCategory에서 번호에 해당하는 카테고리 이름을 저장
+        faqDto.setCategoryName(categoryName);           // 저장한 카테고리 이름을 faqDto의 카테고리로 설정
+
+        model.addAttribute("faqDto", faqDto);           // view에 넘기기 위해 faqDto를 model에 추가
+        return "faq_view";          // faq_view.jsp 선택한 게시글 보여주는 페이지로 이동
     }
 
 
@@ -72,23 +93,29 @@ public class FaqController {
     }
 
 
-    /* READ - FAQ 게시글 하나 선택 후 조회 */
-//    @RequestMapping("/view")
-    @GetMapping("/view")
-    public String viewFaq(@RequestParam("faq_no") Integer faq_no, Model model) throws Exception {       // 매개변수로 조회할 faq_no 넘김
-        FaqDto faqDto = faqService.selectFaq(faq_no);           // 매개변수로 받은 faq_no를 가진 게시글을 faqDto로 저장
-        if (faqDto == null) {               // faqDto가 null이면 해당하는 게시글이 없다는 것
-            throw new Exception("FAQ not found");
-        }
+    // Delete - 특정 FAQ 게시글 하나 삭제
+    // 관리자만 FAQ 게시글 삭제 가능
+//    @GetMapping("/remove")
+//    public String delete(Integer faq_no, HttpServletRequest request){
+//        // 관리자인지 확인
+//        if (!loginCheck(request))
+//            return "faq_center";
+////        try {
+////            if (faqService.deleteFaq(faq_no) != 1){
+////
+////            }
+////        }
+//        return "";
+//    }
 
-        // cate_no를 카테고리의 이름으로 표시하기 위한 변환
-        String categoryName = FaqCategory.getCategoryName(faqDto.getCate_no());         // FaqCategory에서 번호에 해당하는 카테고리 이름을 저장
-        faqDto.setCategoryName(categoryName);           // 저장한 카테고리 이름을 faqDto의 카테고리로 설정
 
-        model.addAttribute("faqDto", faqDto);           // view에 넘기기 위해 faqDto를 model에 추가
-        return "faq_view";          // faq_view.jsp 선택한 게시글 보여주는 페이지로 이동
+    // 임시 로그인 확인 메서드
+    private boolean loginCheck(HttpServletRequest request){
+        // 1. 세션을 얻기
+        // getSession(false) : HttpSession이 존재하면 현재 HttpSession을 반환하고 존재하지 않으면 null 반환
+        HttpSession session = request.getSession(false);
+        // 2. 세션이 null이 아니면 존재한다는 것 && session에 id가 있는지 확인
+        // 있으면 true 반환; 없으면 null 반환
+        return session != null && session.getAttribute("id") != null;
     }
-
-    // Delete
-
 }

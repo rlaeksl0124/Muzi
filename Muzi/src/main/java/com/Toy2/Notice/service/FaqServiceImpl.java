@@ -27,8 +27,8 @@ public class FaqServiceImpl implements FaqService {
 
     // 작성자가 삭제
     @Override
-    public int deleteFaq(Integer faq_no, String faq_writer) throws Exception{
-        return faqDao.delete(faq_no, faq_writer);
+    public int deleteFaq(Integer faq_no) throws Exception{
+        return faqDao.delete(faq_no);
     }
 
     // FAQ 등록
@@ -48,7 +48,6 @@ public class FaqServiceImpl implements FaqService {
     public FaqDto selectFaq(Integer faq_no) throws Exception{
         FaqDto faqDto = faqDao.select(faq_no);
         faqDao.increaseViewCnt(faq_no);
-
         return faqDto;
     }
 

@@ -73,9 +73,10 @@ public class FaqServiceImplTest {
         assertTrue(faqDao.count() == 1);
 
         faqDto.setFaq_admin("asdfasdf");        /* faq_admin 변경 */
-        assertFalse(faqDao.delete(faqDto.getFaq_no(), faqDto.getFaq_admin()) == 1);     /* faq_admin이 달라서 삭제 안됨 */
+        assertFalse(faqDao.update(faqDto) == 1);
+        faqDto.setCate_no(104);
+        assertTrue(faqDao.update(faqDto) == 1);
 
-        faqDto.setFaq_admin("admin");        /* faq_admin 동일하게 변경 */
         assertTrue(faqDao.deleteAll() == 1);      /* 삭제되는 행은 1개 */
         assertTrue(faqDao.count() == 0);        /* 행 삭제해서 없음 */
     }

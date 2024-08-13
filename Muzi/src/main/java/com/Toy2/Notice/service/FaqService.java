@@ -15,7 +15,7 @@ public interface FaqService {
     int deleteAllFaq() throws Exception;
 
     // FAQ 삭제
-    int deleteFaq(Integer faq_no, String faq_admin) throws Exception;
+    int deleteFaq(Integer faq_no) throws Exception;
 
     // FAQ 등록
     int insertFaq(FaqDto faqDto) throws Exception;

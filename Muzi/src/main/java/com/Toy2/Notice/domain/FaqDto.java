@@ -13,7 +13,7 @@ public class FaqDto {
     /* 필드 선언 */
     private Integer faq_no;           /* FAQ 게시글 번호도 int로 받음 */
     private Integer cate_no;
-    private String categoryName;            // 카테고리를 이름으로 보려고 추가함
+    private String categoryName;            // 카테고리를 이름으로 보기 위해 추가함
     private Integer faq_order;
     private char is_top;
     private String faq_title;

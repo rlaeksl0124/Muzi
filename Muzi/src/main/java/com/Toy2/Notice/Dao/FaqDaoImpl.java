@@ -30,15 +30,16 @@ public class FaqDaoImpl implements FaqDao{
         return session.delete(namespace + "deleteAll");
     }
 
-    /* delete - 특정 FAQ 게시글을 하나 삭제; 게시글 번호와 담당자가 같으면 글을 삭제 */
+    /* delete - 특정 FAQ 게시글을 하나 삭제; 게시글 번호로 관리자만 FAQ 글을 삭제 */
     @Override
-    public int delete(Integer faq_no, String faq_writer) {
-        /* faq_no와 faq_admin로 삭제할 게시글 판별 */
-        Map map = new HashMap();               /* parameter가 두 개 이므로 Map으로 저장 */
-        map.put("faq_no", faq_no);
-        map.put("faq_writer", faq_writer);
+    public int delete(Integer faq_no) {
+        /* faq_no와  */
+
+//        Map map = new HashMap();               /* parameter가 두 개 이므로 Map으로 저장 */
+//        map.put("faq_no", faq_no);
+//        map.put("faq_writer", faq_writer);
         /* 매개변수로 map 넘겨주기 */
-        return session.delete(namespace + "delete", map);
+        return session.delete(namespace + "delete", faq_no);
     }
 
     /* insert - FAQ 게시글로 FaqDto을 등록 */
@@ -63,6 +64,7 @@ public class FaqDaoImpl implements FaqDao{
     /* update - FAQ에 등록된 게시글을 수정; 게시글의 번호와 담당자가 같은지 확인 */
     @Override
     public int update(FaqDto faqDto) {
+        System.out.println("Updating FAQ with data: " + faqDto);
         return session.update(namespace + "update", faqDto);
     }
 

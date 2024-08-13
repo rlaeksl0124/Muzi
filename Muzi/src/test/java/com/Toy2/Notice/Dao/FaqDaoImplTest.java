@@ -1,6 +1,7 @@
 package com.Toy2.Notice.Dao;
 
 import com.Toy2.Notice.domain.FaqDto;
+import kotlin.jvm.Synchronized;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +80,7 @@ public class FaqDaoImplTest {
     }
 
 
-    // deleteAllTest2 - faq_admin이 달라도 삭제됨
+    // deleteAllTest2
     @Test
     public void deleteAllTest2() {
         faqDao.deleteAll();
@@ -93,18 +94,20 @@ public class FaqDaoImplTest {
                         "  평일 (월~금) : 9:00~20:00\n" +
                         " ＊주말/공휴일 휴무 ");
         assertTrue(faqDao.insert(faqDto) == 1);         /* 추가되는 행은 1개*/
+        Integer faq_no = faqDao.selectAll().get(0).getFaq_no();
         assertTrue(faqDao.count() == 1);
 
         faqDto.setFaq_admin("asdfasdf");        /* faq_admin 변경 */
-        assertFalse(faqDao.delete(faqDto.getFaq_no(), faqDto.getFaq_admin()) == 1);     /* faq_admin이 달라서 삭제 안됨 */
+        assertFalse(faqDao.delete(faqDto.getFaq_no()) == 1);     /* faq_admin이 달라서 삭제 안됨 */
 
-        faqDto.setFaq_admin("admin");        /* faq_admin 동일하게 변경 */
+        faqDto.setFaq_admin("admin1");        /* faq_admin 동일하게 변경 */
+        assertTrue(faqDao.update(faqDto) == 1);
         assertTrue(faqDao.deleteAll() == 1);      /* 삭제되는 행은 1개 */
         assertTrue(faqDao.count() == 0);        /* 행 삭제해서 없음 */
     }
 
 
-    // deleteTest1 - 특정 FAQ 하나 삭제 (faq_no와 faq_admin이 같아야 삭제 가능)
+    // deleteTest1 - 특정 FAQ 하나 삭제 (faq_no 같아야 삭제 가능)
     @Test
     public void deleteTest1(){
         faqDao.deleteAll();        /* 테이블 비우기 */
@@ -118,19 +121,17 @@ public class FaqDaoImplTest {
                         "[관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
         assertTrue(faqDao.insert(faqDto) == 1);     /* 추가되는 행은 1개*/
         Integer faq_no = faqDao.selectAll().get(0).getFaq_no();     /* 등록한 faqDto의 faq_no 가져와서 저장 */
-        assertTrue(faqDao.delete(faq_no, faqDto.getFaq_writer()) == 1);        /* admin 같음 - 삭제됨 */
+        assertTrue(faqDao.delete(faq_no) == 1);        /* admin 같음 - 삭제됨 */
         assertTrue(faqDao.count() == 0);        /* 삭제했으니 행 0개*/
 
-        assertTrue(faqDao.insert(faqDto) == 1);     /* faqDto 다시 등록 */
-        faq_no = faqDao.selectAll().get(0).getFaq_no();     /* 등록한 faqDto의 faq_no 저장 */
-        assertTrue(faqDao.delete(faq_no, faqDto.getFaq_writer() + "aa") == 0);      /* admin 다른 값 - 삭제 불가 */
-
-        assertTrue(faqDao.delete(faq_no, faqDto.getFaq_writer()) == 1);      /* admin 변경 안함 - 삭제 가능 */
-        assertTrue(faqDao.count() == 0);
+        assertTrue(faqDao.insert(faqDto) == 1);             /* faqDto 다시 등록 */
+        Integer faq_no2 = faqDao.selectAll().get(0).getFaq_no();     /* 등록한 faqDto의 faq_no 가져와서 저장 */
+        assertTrue(faqDao.delete(faq_no2) == 0);            /* 삭제 */
+        assertTrue(faqDao.count() == 0);             /* 삭제 후 행 0개 */
     }
 
 
-    // deleteTest2 - faq_no, faq_admin 값이 다르면 삭제 못함
+    // deleteTest2 - faq_no 값이 다르면 삭제 못함
     @Test
     public void deleteTest2() {
         faqDao.deleteAll();        /* 테이블 비우기 */
@@ -145,14 +146,9 @@ public class FaqDaoImplTest {
         assertTrue(faqDao.insert(faqDto) == 1);     /* 추가되는 행은 1개*/
         // faq_no 계속 바뀌니 insert 이후에 바로 저장하기
         Integer faq_no = faqDao.selectAll().get(0).getFaq_no();     /* 등록한 faqDto의 faq_no 값 저장 */
-        assertTrue(faqDao.count() == 1);
+        assertTrue(faqDao.count() == 1);        /* 행 1개*/
 
-        faqDto.setFaq_writer("change");      /* admin 값 변경 */
-        assertFalse(faqDao.delete(faq_no, faqDto.getFaq_writer()) == 1);        /* admin 다르니 삭제 못함 */
-        assertTrue(faqDao.count() == 1);        /* 삭제 못했으니 행 1개*/
-
-        faqDto.setFaq_writer("test");       /* faq_admin 다시 동일하게 변경 */
-        assertTrue(faqDao.delete(faq_no, faqDto.getFaq_writer()) == 1);        /* admin 같음 - 삭제됨 */
+        assertTrue(faqDao.delete(faq_no) == 1);        /* admin 같음 - 삭제됨 */
         assertTrue(faqDao.count() == 0);        /* 삭제했으니 행 0개*/
     }
 
@@ -320,14 +316,16 @@ public class FaqDaoImplTest {
         System.out.println(faq_no);
         System.out.println(faqDao.select(faq_no));
 
-        //faqDto.setCate_no(302);                 /* cate_no 값 변경 */
-        faqDto.setFaq_order(3);          /* last_mod_id 값 변경 */
-        assertTrue(faqDao.update(faqDto) == 1);
-        System.out.println(faqDao.selectAll().get(0).getFaq_no());
+        faqDto.setFaq_order(3);          /* faq_order 값 변경 */
+        synchronized (this) {
+            assertTrue(faqDao.update(faqDto) == 1);
+            assertTrue(faqDao.deleteAll() == 1);
+            assertTrue(faqDao.count() == 0);
+        }
     }
 
 
-    // updateTest2 - faq_admin 관리자는 수정 못함
+    // updateTest2
     @Test
     public void updateTest2() {
         faqDao.deleteAll();         /* 테이블 비우기 */
@@ -343,16 +341,10 @@ public class FaqDaoImplTest {
         assertTrue(faqDao.count() == 1);            /* 행 1개 추가돼서 전체 행이 1개 */
 
         /* faq_admin은 값 변경 안됨 */
-        faqDto.setCate_no(104);              /* cate_no 값 변경 */
-        faqDto.setFaq_admin("change");         /* faq_admin 변경함 */
-        System.out.println(faqDto);
-        assertFalse(faqDao.update(faqDto) == 1);        /* faq_admin 달라져서 update 안됨*/
-
-        /* faq_admin 원래대로 변경 */
-        faqDto.setFaq_admin("admin1");
-        faqDto.setCate_no(202);
-        System.out.println(faqDto);
-        assertTrue(faqDao.update(faqDto) == 1);
+        faqDto.setFaq_order(22);              /* cate_no 값 변경 */
+        assertTrue(faqDao.update(faqDto) == 1);        /* faq_admin 달라져서 update 안됨*/
+        assertTrue(faqDao.deleteAll() == 1);
+        assertTrue(faqDao.count() == 0);
     }
 
     // updateTest3 - update 해서 NOT NULL인 컬럼 NULL로 됐을 때
