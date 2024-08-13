@@ -5,6 +5,8 @@ import com.Toy2.Notice.domain.FaqDto;
 import com.Toy2.Notice.entity.FaqCategory;
 import com.Toy2.Notice.service.FaqService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -96,17 +98,21 @@ public class FaqController {
 //     delete - 게시글 조회한 페이지 faq_view.jsp에서 삭제 작업
 //     관리자만 FAQ 게시글 삭제 가능
     @DeleteMapping("/remove")
-    public String delete(@RequestParam Integer faq_no){
-        // 현재 : 관리자 확인은 생략하고 진행
+    @ResponseBody       // 메서드 반환값이 HTTP 응답 본문이 되게 함
+    public ResponseEntity<String> delete(@RequestParam Integer faq_no) {
         try {
-            if (faq_no == null || faq_no <= 0)
-                throw new IllegalArgumentException("유효하지 않은 FAQ 번호");
-            if (faqService.deleteFaq(faq_no) != 1)
-                throw new Exception("FAQ 하나 삭제 실패");
-        } catch (Exception e){
+
+            if (faq_no == null || faq_no <= 0) {
+                return ResponseEntity.badRequest().body("유효하지 않은 FAQ 번호");
+            }
+            if (faqService.deleteFaq(faq_no) != 1) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("FAQ 하나 삭제 실패");
+            }
+            return ResponseEntity.ok("FAQ 삭제 성공");
+        } catch (Exception e) {
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("FAQ 삭제 중 오류 발생");
         }
-        return "redirect:/faq";         // 삭제 성공하면 faq_center.jsp로 리다이렉트
-    }
+}
 
 }

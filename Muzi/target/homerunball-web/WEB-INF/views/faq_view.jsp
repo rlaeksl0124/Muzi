@@ -49,7 +49,7 @@
             margin-bottom: 20px;
         }
         .faq-closing {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
             color: #333;
             margin-top: 20px;
@@ -120,27 +120,31 @@
 
 <%-- JavaScript로 작성한 코드 --%>
 <script>
-    // deleteFaq 함수 정의 - FAQ를 삭제하는 함수
     function deleteFaq(faq_no) {
-        if (confirm("FAQ를 삭제하시겠습니까?")) {        // alert 창 표시; 'cancel', 'ok' 택 1
-            fetch(`${pageContext.request.contextPath}/faq/remove?faq_no=${faq_no}`, {
-                method: 'DELETE'        //  HTTP 메서드로 DELETE를 사용하여 서버에 데이터 삭제 요청
+        if (confirm("FAQ를 삭제하시겠습니까?")) {
+            fetch(`/faq/remove?faq_no=${faqDto.faq_no}`, {
+                method: 'DELETE'  // DELETE 메서드로 요청
             })
-                .then(response => {     // 요청에 대한 응답
-                    if (response.ok) {      // 서버 응답 성공 시
-                        alert("FAQ가 성공적으로 삭제되었습니다.");       // alert 창으로 성공 안내
-                        window.location.href = `${pageContext.request.contextPath}/faq`;     // 삭제 후 FAQ로 리다이렉트
-                    } else {        // 서버 응답 실패 시
-                        alert("FAQ 삭제 실패했습니다.");        // alert 창으로 삭제 안내
+                .then(response => {
+                    if (response.ok) {  // 응답 상태가 200-299 범위일 때
+                        return response.text();  // 응답 본문을 텍스트로 변환
+                    } else {
+                        throw new Error("FAQ 삭제 실패했습니다.");  // 상태 코드가 실패를 나타내면 오류 발생
                     }
                 })
-                .catch(error => {       // 요청 중 에러가 발생한 경우
-                    console.error('Error:', error);         // 콘솔에 오류 메세지 출력
-                    alert("오류가 발생했습니다. 다시 시도해 주세요.");       // alert 창으로 오류 안내
+                .then(message => {
+                    alert(message);  // 성공 메시지 표시
+                    window.location.href = `${pageContext.request.contextPath}/faq`;  // FAQ 목록 페이지로 리다이렉트
+                })
+                .catch(error => {
+                    console.error('Error:', error);  // 콘솔에 오류 출력
+                    alert("오류가 발생했습니다. 다시 시도해 주세요.");  // 사용자에게 오류 메시지 표시
                 });
         }
     }
 </script>
+
+
 
 </body>
 </html>
