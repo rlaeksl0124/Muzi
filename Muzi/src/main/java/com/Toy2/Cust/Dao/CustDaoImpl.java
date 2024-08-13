@@ -12,7 +12,7 @@ public class CustDaoImpl implements CustDao {
     @Autowired
     private SqlSession session;
 
-    private static String namespace = "com.muzi.cust.dao.CustDao.";
+    private static String namespace = "com.Toy2.Cust.Dao.CustDao.";
 
     /* 고객수 조회 */
     @Override

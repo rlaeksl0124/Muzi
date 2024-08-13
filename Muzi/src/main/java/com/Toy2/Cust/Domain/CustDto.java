@@ -20,7 +20,7 @@ public class CustDto {
     @NotNull(message = "생일은 필수 항목입니다.")
     private String c_birth;
     @NotNull(message = "성별은 필수 항목입니다.")
-    private char c_gnd;
+    private String c_gnd;
     @NotNull(message = "휴대전화를 입력해주세요.")
     @Pattern(regexp = "^\\d{11}$", message = "11자리의 숫자만 입력가능합니다.")
     private String c_phn;
@@ -43,10 +43,10 @@ public class CustDto {
 
     /* 고객 생성 */
     public static CustDto custDto(String c_email) {
-        return new CustDto(c_email, "1234", "bbb", "bnick", "19980223", 'W', "01027449853", "02001", "Gangnam-gu, Seoul", "8", 'N');
+        return new CustDto(c_email, "1234", "bbb", "bnick", "19980223", "W", "01027449853", "02001", "Gangnam-gu, Seoul", "8", 'N');
     }
 
-    public CustDto(String c_email, String c_pwd, String c_name, String c_nick, String c_birth, char c_gnd, String c_phn, String c_zip, String c_road_a, String c_det_a, char c_admin) {
+    public CustDto(String c_email, String c_pwd, String c_name, String c_nick, String c_birth, String c_gnd, String c_phn, String c_zip, String c_road_a, String c_det_a, char c_admin) {
         this.c_email = c_email;
         this.c_pwd = c_pwd;
         this.c_name = c_name;
@@ -60,7 +60,7 @@ public class CustDto {
         this.c_admin = c_admin;
     }
 
-    public CustDto(String c_email, String c_stat_cd, String c_pwd, String c_name, String c_nick, String c_birth, char c_gnd, String c_phn, String c_zip, String c_road_a, String c_det_a, char c_admin, char sms_agr, char email_agr, Date reg_date, Date login_dt, int tot_amt, Date frst_reg_dt, String frst_reg_id, Date last_mod_dt, String last_mod_id) {
+    public CustDto(String c_email, String c_stat_cd, String c_pwd, String c_name, String c_nick, String c_birth, String c_gnd, String c_phn, String c_zip, String c_road_a, String c_det_a, char c_admin, char sms_agr, char email_agr, Date reg_date, Date login_dt, int tot_amt, Date frst_reg_dt, String frst_reg_id, Date last_mod_dt, String last_mod_id) {
         this.c_email = c_email;
         this.c_stat_cd = c_stat_cd;
         this.c_pwd = c_pwd;
@@ -132,11 +132,11 @@ public class CustDto {
         this.c_birth = c_birth;
     }
 
-    public char getC_gnd() {
+    public String getC_gnd() {
         return c_gnd;
     }
 
-    public void setC_gnd(char c_gnd) {
+    public void setC_gnd(String c_gnd) {
         this.c_gnd = c_gnd;
     }
 

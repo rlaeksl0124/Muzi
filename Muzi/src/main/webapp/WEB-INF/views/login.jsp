@@ -86,7 +86,11 @@
                     </div>
                     <div class="sync-sns-buttons btn-type">
                         <div><button type="button" class="sns-btn sync-sns-naver naver">네이버 계정으로 로그인</button></div>
-                        <div><button type="button" class="sns-btn sync-sns-apple apple">카카오 계정으로 로그인</button></div>
+                        <div class="subBtn" id="kakaoBtn">
+                            <a href="/kakao/login">
+                                <img id="kakao" src="https://cdn-icons-png.flaticon.com/128/3669/3669973.png" width="40" height="40">
+                            </a>
+                        <div>
                     </div>
                 </div>
             </div>
