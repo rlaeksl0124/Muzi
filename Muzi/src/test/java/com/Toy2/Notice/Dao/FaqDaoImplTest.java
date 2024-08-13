@@ -121,12 +121,16 @@ public class FaqDaoImplTest {
                         "[관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
         assertTrue(faqDao.insert(faqDto) == 1);     /* 추가되는 행은 1개*/
         Integer faq_no = faqDao.selectAll().get(0).getFaq_no();     /* 등록한 faqDto의 faq_no 가져와서 저장 */
+        assertNotNull(faq_no);
+
         assertTrue(faqDao.delete(faq_no) == 1);        /* admin 같음 - 삭제됨 */
         assertTrue(faqDao.count() == 0);        /* 삭제했으니 행 0개*/
 
-        assertTrue(faqDao.insert(faqDto) == 1);             /* faqDto 다시 등록 */
-        Integer faq_no2 = faqDao.selectAll().get(0).getFaq_no();     /* 등록한 faqDto의 faq_no 가져와서 저장 */
-        assertTrue(faqDao.delete(faq_no2) == 0);            /* 삭제 */
+        faqDto.setFaq_order(11);                // faqDto의 faq_order 값 변경
+        assertTrue(faqDao.insert(faqDto) == 1);             /* 변경된 faqDto 새롭게 등록 */
+        Integer faq_no2 = faqDao.selectAll().get(0).getFaq_no();     /* faqDto의 faq_no 가져와서 저장 */
+
+        assertTrue(faqDao.delete(faq_no2) == 1);            /* 삭제 */
         assertTrue(faqDao.count() == 0);             /* 삭제 후 행 0개 */
     }
 
@@ -148,9 +152,53 @@ public class FaqDaoImplTest {
         Integer faq_no = faqDao.selectAll().get(0).getFaq_no();     /* 등록한 faqDto의 faq_no 값 저장 */
         assertTrue(faqDao.count() == 1);        /* 행 1개*/
 
-        assertTrue(faqDao.delete(faq_no) == 1);        /* admin 같음 - 삭제됨 */
+        assertTrue(faqDao.delete(faq_no) == 1);
         assertTrue(faqDao.count() == 0);        /* 삭제했으니 행 0개*/
     }
+
+    @Test
+    public void deleteTest3() {
+        // Step 1: Clear the table
+        faqDao.deleteAll();
+        assertTrue(faqDao.count() == 0); // Ensure table is empty
+
+        // Step 2: Add a new FAQ
+        FaqDto faqDto = new FaqDto(111, 1, 'Y',
+                "The shelf does not fit properly when assembling the SUS SET product.",
+                "If the shelf is difficult to insert, gently tap the top of the shelf to insert the shelf. " +
+                        "If it still doesn’t fit, loosen the hook little by little to make it easier to insert. " +
+                        "More details can be found in the video link.\n" +
+                        "[Related video] https://www.muji.com/kr/mp4_file/sus_assmbly.mp4"
+        );
+        assertTrue(faqDao.insert(faqDto) == 1);     /* 추가되는 행은 1개*/
+
+        // Step 3: Verify the insertion
+        List<FaqDto> allFaqs = faqDao.selectAll();
+        assertFalse(allFaqs.isEmpty()); // Ensure we have some FAQs
+        Integer faq_no = allFaqs.get(0).getFaq_no(); // Get the generated faq_no
+        assertNotNull(faq_no); // Verify the faq_no is not null
+
+        // Step 4: Delete the FAQ
+        assertTrue(faqDao.delete(faq_no) == 1); // Delete the FAQ by its faq_no
+        assertTrue(faqDao.count() == 0); // Ensure the table is empty after deletion
+
+        // Step 5: Re-insert the FAQ
+        faqDto.setFaq_no(null);             // Ensure a new faq_no will be generated
+        assertTrue(faqDao.insert(faqDto) == 1); // Re-insert the FAQ
+
+        // Step 6: Verify re-insertion
+        allFaqs = faqDao.selectAll();
+        assertFalse(allFaqs.isEmpty()); // Ensure the FAQ is inserted again
+        Integer faq_no2 = allFaqs.get(0).getFaq_no(); // Get the new generated faq_no
+        assertNotNull(faq_no2); // Verify the new faq_no is not null
+
+        // Step 7: Attempt to delete the re-inserted FAQ
+        assertTrue(faqDao.delete(faq_no2) == 1); // Delete the FAQ
+        assertTrue(faqDao.count() == 0); // Ensure the table is empty after deletion
+    }
+
+
+
 
     // insertTest1 - FAQ 게시글 추가
     @Test
