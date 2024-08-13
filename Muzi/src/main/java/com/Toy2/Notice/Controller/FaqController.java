@@ -93,20 +93,13 @@ public class FaqController {
     }
 
 
-    // Delete - 특정 FAQ 게시글 하나 삭제
-    // 관리자만 FAQ 게시글 삭제 가능
-//    @GetMapping("/remove")
-//    public String delete(Integer faq_no, HttpServletRequest request){
-//        // 관리자인지 확인
-//        if (!loginCheck(request))
-//            return "faq_center";
-////        try {
-////            if (faqService.deleteFaq(faq_no) != 1){
-////
-////            }
-////        }
-//        return "";
-//    }
+//     Delete - 특정 FAQ 게시글 하나 삭제
+//     관리자만 FAQ 게시글 삭제 가능
+    @GetMapping("/remove")
+    public String delete(Integer faq_no,HttpServletRequest request, HttpSession session){
+        // 현재 : 관리자 확인은 생략하고 진행
+        return "";
+    }
 
 
     // 임시 로그인 확인 메서드
