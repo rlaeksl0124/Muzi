@@ -97,48 +97,34 @@ public class FaqController {
     }
 
 
-//     delete - 게시글 조회한 페이지 faq_view.jsp에서 삭제 작업
-//     관리자만 FAQ 게시글 삭제 가능
-//    @DeleteMapping("/remove")
-//    @ResponseBody       // 메서드 반환값이 HTTP 응답 본문이 되게 함
-//    public ResponseEntity<String> delete(@RequestParam Integer faq_no) {
-//        try {
-//
-//            if (faq_no == null || faq_no <= 0) {
-//                return ResponseEntity.badRequest().body("유효하지 않은 FAQ 번호");
-//            }
-//            if (faqService.deleteFaq(faq_no) != 1) {
-//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("FAQ 하나 삭제 실패");
-//            }
-//            return ResponseEntity.ok("FAQ 삭제 성공");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("FAQ 삭제 중 오류 발생");
-//        }
-//    }
-
+    /* delete - 게시글 조회한 페이지 faq_view.jsp에서 삭제 작업 */
+    //     관리자만 FAQ 게시글 삭제 가능
     @DeleteMapping("/remove")
     public void remove(@RequestParam Integer faq_no, HttpServletResponse response) throws IOException {
         try {
-            if (faq_no == null || faq_no <= 0) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("Invalid FAQ number");
+            // 선택한 faq_no가 잘 넘어왔는지 확인
+            if (faq_no == null || faq_no <= 0) {        // null이거나 0보다 작은 경우
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);     // 상태코드 400으로 설정
+                response.getWriter().write("유효하지 않은 FAQ 번호입니다.");       // 클라이언트에게 오류 메세지 전송
                 return;
             }
-            if (faqService.deleteFaq(faq_no) != 1) {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                response.getWriter().write("FAQ deletion failed");
+
+            // 넘어온 faq_no로 deleteFaq 해당 FAQ 하나 삭제
+            if (faqService.deleteFaq(faq_no) != 1) {        // 쿼리 결과가 1이 아니면
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);       // 상태코드 500으로 설정
+                response.getWriter().write("삭제 실패했습니다.");       // 클라이언트에게 오류 메세지 전송
                 return;
             }
             // 설정된 문자 인코딩과 Content-Type을 사용하여 응답 작성
-            response.setContentType("text/plain;charset=UTF-8");
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().write("FAQ successfully deleted");
+            response.setContentType("text/plain;charset=UTF-8");        // Header에 인코딩 정보 설정
+            response.setStatus(HttpServletResponse.SC_OK);          // 상태코드 200으로 설정
+            response.getWriter().write("성공적으로 삭제되었습니다.");       // 클라이언트에게 오류 메세지 전송
+
         } catch (Exception e) {
             e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.setContentType("text/plain;charset=UTF-8");
-            response.getWriter().write("FAQ deletion error");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);        // 상태코드 500으로 설정
+            response.setContentType("text/plain;charset=UTF-8");         // Header에 인코딩 정보 설정
+            response.getWriter().write("FAQ 삭제 에러");                // 클라이언트에게 오류 메세지 전송
         }
     }
 
