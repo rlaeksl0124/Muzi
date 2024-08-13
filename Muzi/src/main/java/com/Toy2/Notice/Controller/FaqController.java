@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -102,30 +103,27 @@ public class FaqController {
     @DeleteMapping("/remove")
     public void remove(@RequestParam Integer faq_no, HttpServletResponse response) throws IOException {
         try {
-            // 선택한 faq_no가 잘 넘어왔는지 확인
-            if (faq_no == null || faq_no <= 0) {        // null이거나 0보다 작은 경우
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);     // 상태코드 400으로 설정
-                response.getWriter().write("유효하지 않은 FAQ 번호입니다.");       // 클라이언트에게 오류 메세지 전송
+            if (faq_no == null || faq_no <= 0) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("유효하지 않은 FAQ 번호");
                 return;
             }
-
-            // 넘어온 faq_no로 deleteFaq 해당 FAQ 하나 삭제
-            if (faqService.deleteFaq(faq_no) != 1) {        // 쿼리 결과가 1이 아니면
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);       // 상태코드 500으로 설정
-                response.getWriter().write("삭제 실패했습니다.");       // 클라이언트에게 오류 메세지 전송
+            if (faqService.deleteFaq(faq_no) != 1) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().write("삭제 실패했습니다.");
                 return;
             }
             // 설정된 문자 인코딩과 Content-Type을 사용하여 응답 작성
-            response.setContentType("text/plain;charset=UTF-8");        // Header에 인코딩 정보 설정
-            response.setStatus(HttpServletResponse.SC_OK);          // 상태코드 200으로 설정
-            response.getWriter().write("성공적으로 삭제되었습니다.");       // 클라이언트에게 오류 메세지 전송
-
+            response.setContentType("text/plain;charset=UTF-8");
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().write("성공적으로 삭제되었습니다.");
         } catch (Exception e) {
             e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);        // 상태코드 500으로 설정
-            response.setContentType("text/plain;charset=UTF-8");         // Header에 인코딩 정보 설정
-            response.getWriter().write("FAQ 삭제 에러");                // 클라이언트에게 오류 메세지 전송
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.setContentType("text/plain;charset=UTF-8");
+            response.getWriter().write("FAQ 삭제 에러");
         }
     }
+
 
 }
