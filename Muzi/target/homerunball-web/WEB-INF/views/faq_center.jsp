@@ -62,7 +62,7 @@
     <div class="header">
         <div>
             <button onclick="location.href='${pageContext.request.contextPath}/faq/register'">FAQ 등록</button>
-            <button onclick="deleteSelected()">FAQ 삭제</button>
+<%--            <button type="button" onclick="deleteFaq()">FAQ 삭제</button>--%>
         </div>
         <div>
             <span>사용자: <strong>${faq_writer}</strong> 님</span>
@@ -98,15 +98,10 @@
 
 <script>
     function selectAll(source) {
-        checkboxes = document.getElementsByName('faq');
-        for (var i = 0; i < checkboxes.length; i++) {
+        const checkboxes = document.getElementsByName('faq');
+        for (let i = 0; i < checkboxes.length; i++) {
             checkboxes[i].checked = source.checked;
         }
-    }
-
-    function deleteSelected() {
-        // Implement delete functionality here
-        alert('Selected FAQs will be deleted.');
     }
 </script>
 </body>

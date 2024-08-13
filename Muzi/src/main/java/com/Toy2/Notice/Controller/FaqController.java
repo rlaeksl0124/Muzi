@@ -93,22 +93,20 @@ public class FaqController {
     }
 
 
-//     Delete - 특정 FAQ 게시글 하나 삭제
+//     delete - 게시글 조회한 페이지 faq_view.jsp에서 삭제 작업
 //     관리자만 FAQ 게시글 삭제 가능
-    @GetMapping("/remove")
-    public String delete(Integer faq_no,HttpServletRequest request, HttpSession session){
+    @DeleteMapping("/remove")
+    public String delete(@RequestParam Integer faq_no){
         // 현재 : 관리자 확인은 생략하고 진행
-        return "";
+        try {
+            if (faq_no == null || faq_no <= 0)
+                throw new IllegalArgumentException("유효하지 않은 FAQ 번호");
+            if (faqService.deleteFaq(faq_no) != 1)
+                throw new Exception("FAQ 하나 삭제 실패");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return "redirect:/faq";         // 삭제 성공하면 faq_center.jsp로 리다이렉트
     }
 
-
-    // 임시 로그인 확인 메서드
-    private boolean loginCheck(HttpServletRequest request){
-        // 1. 세션을 얻기
-        // getSession(false) : HttpSession이 존재하면 현재 HttpSession을 반환하고 존재하지 않으면 null 반환
-        HttpSession session = request.getSession(false);
-        // 2. 세션이 null이 아니면 존재한다는 것 && session에 id가 있는지 확인
-        // 있으면 true 반환; 없으면 null 반환
-        return session != null && session.getAttribute("id") != null;
-    }
 }

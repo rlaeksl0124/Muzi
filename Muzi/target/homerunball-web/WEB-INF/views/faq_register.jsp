@@ -161,7 +161,8 @@
         </div>
 
         <div class="button-group">
-            <button type="submit">등록</button>
+            <button type="submit">등록</button>           <!-- type="submit" : form data를 제출하는 버튼-->
+
         </div>
 
     </form>
@@ -172,7 +173,7 @@
         // Get the form elements
         var faqTitle = document.getElementById('faq_title').value;
         var faqWriter = document.getElementById('faq_writer').value;
-        var faqClosing = document.getElementById('faq_closing').value;
+        // var faqClosing = document.getElementById('faq_closing').value;
         var faqOrder = document.getElementById('faq_order').value;
 
         // Validate lengths
