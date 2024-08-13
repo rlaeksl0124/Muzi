@@ -1,6 +1,7 @@
 package com.Toy2.product.service;
 
 import com.Toy2.product.db.dto.ProductDto;
+import com.Toy2.product.db.dto.request.ProductPageRequestDto;
 import com.Toy2.product.db.dto.request.ProductUpdateRequestDto;
 import com.Toy2.product.domain.service.ProductService;
 import org.junit.Test;
@@ -31,7 +32,7 @@ public class ProductServiceTest {
 
     @Test
     public void productServiceSelectPageTest() {
-        List<ProductDto> productDtos = productService.selectProductPage(10, 1);
+        List<ProductDto> productDtos = productService.selectProductPage(new ProductPageRequestDto(2, 10));
         System.out.println("productDtos = " + productDtos);
     }
 

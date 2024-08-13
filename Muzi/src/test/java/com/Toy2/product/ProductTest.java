@@ -2,6 +2,7 @@ package com.Toy2.product;
 
 import com.Toy2.product.db.dao.ProductDao;
 import com.Toy2.product.db.dto.ProductDto;
+import com.Toy2.product.db.dto.request.ProductPageRequestDto;
 import com.Toy2.product.db.dto.request.ProductUpdateRequestDto;
 import org.junit.Before;
 import org.junit.Test;
@@ -172,7 +173,7 @@ public class ProductTest {
         hashMap.put("limit", 10);
         hashMap.put("offset", 0);
 
-        List<ProductDto> productDtos = productDao.selectPage(hashMap);
+        List<ProductDto> productDtos = productDao.selectPage(new ProductPageRequestDto(0, 10));
         assertThat(productDtos).isNotNull();
         System.out.println("productDtos = " + productDtos);
     }

@@ -1,13 +1,13 @@
 package com.Toy2.product.db.dao;
 
 import com.Toy2.product.db.dto.ProductDto;
+import com.Toy2.product.db.dto.request.ProductPageRequestDto;
 import com.Toy2.product.db.dto.request.ProductUpdateRequestDto;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 
 @Repository
@@ -57,8 +57,8 @@ public class ProductDaoImpl implements ProductDao {
 
 
     @Override
-    public List<ProductDto> selectPage(Map<String, Integer> limitAndOffset) {
-        return sqlSession.selectList(nameSpace + "selectProductPage", limitAndOffset);
+    public List<ProductDto> selectPage(ProductPageRequestDto pageRequestDto) {
+        return sqlSession.selectList(nameSpace + "selectProductPage", pageRequestDto);
     }
 
 

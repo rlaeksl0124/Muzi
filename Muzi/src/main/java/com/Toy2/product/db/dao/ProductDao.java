@@ -1,10 +1,10 @@
 package com.Toy2.product.db.dao;
 
 import com.Toy2.product.db.dto.ProductDto;
+import com.Toy2.product.db.dto.request.ProductPageRequestDto;
 import com.Toy2.product.db.dto.request.ProductUpdateRequestDto;
 
 import java.util.List;
-import java.util.Map;
 
 public interface ProductDao {
 
@@ -13,7 +13,7 @@ public interface ProductDao {
     boolean insert(ProductDto build);
 
     ProductDto select(int productNumber);
-    List<ProductDto> selectPage(Map<String, Integer> limitAndOffset);
+    List<ProductDto> selectPage(ProductPageRequestDto pageRequestDto);
 
     boolean update(ProductUpdateRequestDto updateRequestDto);
     boolean delete(int productNumber);

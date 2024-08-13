@@ -15,8 +15,8 @@
     </select>
 
     <!--페이지 선택-->
-    <select id="selectProductPage" parameterType="map" resultType="ProductDto">
-        SELECT * FROM product ORDERS LIMIT #{limit} OFFSET #{offset};
+    <select id="selectProductPage" parameterType="ProductPageRequestDto" resultType="ProductDto">
+        SELECT * FROM product ORDERS LIMIT #{limit} OFFSET #{page};
     </select>
 
     <!--상품 삽입-->
@@ -56,4 +56,35 @@
     <delete id="deleteProduct" parameterType="int">
         DELETE FROM product WHERE pdt_no=#{productNumber}
     </delete>
+
+
+<!--  상품 디테일  -->
+    <!--상품 이미지-->
+    <select id="selectProductImage" parameterType="int" resultType="ProductPictureDto">
+        select pd.pdt_detail_title, pd.pdt_detail_content, pic.*
+        from product_detail pd
+        left join picture pic
+        on pd.pdt_detail_no = pic.pdt_detail_no
+        where pd.pdt_no = #{productNumber} And pd.pdt_detail_title like "productImage%";
+    </select>
+
+    <!--상품 디테일 이미지-->
+    <select id="selectProductDetailImage" parameterType="int" resultType="ProductPictureDto">
+        select pd.pdt_detail_title, pd.pdt_detail_content, pic.*
+        from product_detail pd
+        left join picture pic
+        on pd.pdt_detail_no = pic.pdt_detail_no
+        where pd.pdt_no = #{productNumber} And pd.pdt_detail_title like "detailImage%";
+    </select>
+
+    <select id="selectProductSize" parameterType="int" resultType="ProductSizeDto">
+        select * from product_detail pd
+        left join pdt_size ps
+        on pd.pdt_detail_no = ps.pdt_detail_no
+        where pd.pdt_no = #{productNumber} And pd.pdt_detail_title like "productSize%";
+
+    </select>
+
+
+
 </mapper>

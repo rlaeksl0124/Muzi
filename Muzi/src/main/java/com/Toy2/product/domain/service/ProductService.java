@@ -2,7 +2,10 @@ package com.Toy2.product.domain.service;
 
 import com.Toy2.product.db.dao.ProductDao;
 import com.Toy2.product.db.dto.ProductDto;
+import com.Toy2.product.db.dto.request.ProductPageRequestDto;
 import com.Toy2.product.db.dto.request.ProductUpdateRequestDto;
+import com.Toy2.product.productdetail.db.dao.ProductDetailDao;
+import com.Toy2.product.productdetail.db.dto.ProductPictureDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,8 @@ public class ProductService {
 
     @Autowired
     private ProductDao productDao;
+    @Autowired
+    private ProductDetailDao productDetailDao;
 
     public ProductService(ProductDao productDao) {
         this.productDao = productDao;
@@ -61,19 +66,14 @@ public class ProductService {
     }
 
     /**
-     * @param limit
-     * @param page
      * @return
      */
-    public List<ProductDto> selectProductPage(int limit, int page) {
-        if (page >= 100000) {
+    public List<ProductDto> selectProductPage(ProductPageRequestDto pageRequestDto) {
+        if (pageRequestDto.getPage() >= 100000) {
             throw new IllegalArgumentException();
         }
 
-        Map<String, Integer> map = new HashMap<>();
-        map.put("limit", limit);
-        map.put("offset", limit * page);
-        List<ProductDto> productDtos = productDao.selectPage(map);
+        List<ProductDto> productDtos = productDao.selectPage(pageRequestDto);
         if (productDtos.size() != 0) {
             return productDtos;
         }
@@ -96,5 +96,14 @@ public class ProductService {
      */
     public boolean deleteService(int productNumber) {
         return productDao.delete(productNumber);
+    }
+
+    public Map<Integer, List<ProductPictureDto>> selectPictures(int productNumber) {
+        List<ProductPictureDto> productPictures = productDetailDao.selectProductPicture(productNumber);
+        List<ProductPictureDto> productDetailPicturePictures = productDetailDao.selectProductDetailPicture(productNumber);
+        Map<Integer, List<ProductPictureDto>> map = new HashMap<>();
+        map.put(0, productPictures);
+        map.put(1, productDetailPicturePictures);
+        return map;
     }
 }
