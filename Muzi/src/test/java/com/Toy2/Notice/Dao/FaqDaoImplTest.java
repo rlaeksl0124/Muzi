@@ -34,7 +34,7 @@ public class FaqDaoImplTest {
                 "선반을 끼우기 힘든 상태일때, 선반 상부를 가볍게 두드려 선반을 끼워주십시오." +
                         "그래도 끼워지지 않을 때는 전체적으로 조금씩 후크를 느슨하게 풀어주면 끼우기 쉬워집니다." +
                         "자세한 내용은 동영상 링크에서 확인 할 수 있습니다.\n" +
-                        "    [관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
+                        "[관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
         assertTrue(faqDao.insert(faqDto) == 1);     /* 추가되는 행은 1개*/
         assertTrue(faqDao.count() == 1);
 //        int faq_no = faqDao.selectAll().get(0).getFaq_no();
@@ -66,7 +66,7 @@ public class FaqDaoImplTest {
                 "선반을 끼우기 힘든 상태일때, 선반 상부를 가볍게 두드려 선반을 끼워주십시오." +
                         "그래도 끼워지지 않을 때는 전체적으로 조금씩 후크를 느슨하게 풀어주면 끼우기 쉬워집니다." +
                         "자세한 내용은 동영상 링크에서 확인 할 수 있습니다.\n" +
-                        "    [관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
+                        "[관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
         assertTrue(faqDao.insert(faqDto) == 1);     /* 추가되는 행은 1개*/
         assertTrue(faqDao.deleteAll() == 1);        /* 행 1개밖에 없음 - 삭제되는 행 1개*/
         assertTrue(faqDao.count() == 0);        /* 모두 삭제했으니 행 0개*/
@@ -115,7 +115,7 @@ public class FaqDaoImplTest {
                 "선반을 끼우기 힘든 상태일때, 선반 상부를 가볍게 두드려 선반을 끼워주십시오." +
                         "그래도 끼워지지 않을 때는 전체적으로 조금씩 후크를 느슨하게 풀어주면 끼우기 쉬워집니다." +
                         "자세한 내용은 동영상 링크에서 확인 할 수 있습니다.\n" +
-                        "    [관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
+                        "[관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
         assertTrue(faqDao.insert(faqDto) == 1);     /* 추가되는 행은 1개*/
         Integer faq_no = faqDao.selectAll().get(0).getFaq_no();     /* 등록한 faqDto의 faq_no 가져와서 저장 */
         assertTrue(faqDao.delete(faq_no, faqDto.getFaq_writer()) == 1);        /* admin 같음 - 삭제됨 */
@@ -141,7 +141,7 @@ public class FaqDaoImplTest {
                 "선반을 끼우기 힘든 상태일때, 선반 상부를 가볍게 두드려 선반을 끼워주십시오." +
                         "그래도 끼워지지 않을 때는 전체적으로 조금씩 후크를 느슨하게 풀어주면 끼우기 쉬워집니다." +
                         "자세한 내용은 동영상 링크에서 확인 할 수 있습니다.\n" +
-                        "    [관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
+                        "[관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
         assertTrue(faqDao.insert(faqDto) == 1);     /* 추가되는 행은 1개*/
         // faq_no 계속 바뀌니 insert 이후에 바로 저장하기
         Integer faq_no = faqDao.selectAll().get(0).getFaq_no();     /* 등록한 faqDto의 faq_no 값 저장 */
@@ -167,7 +167,7 @@ public class FaqDaoImplTest {
                 "선반을 끼우기 힘든 상태일때, 선반 상부를 가볍게 두드려 선반을 끼워주십시오." +
                         "그래도 끼워지지 않을 때는 전체적으로 조금씩 후크를 느슨하게 풀어주면 끼우기 쉬워집니다." +
                         "자세한 내용은 동영상 링크에서 확인 할 수 있습니다.\n" +
-                        "    [관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
+                        "[관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
         assertTrue(faqDao.insert(faqDto) == 1);         /* 추가되는 행 1개*/
         Integer faq_no = faqDao.selectAll().get(0).getFaq_no();     /* insert한 faqDao의 faq_no 가져와서 저장 */
         assertTrue(faqDao.count() == 1);             /* 첫 번째 행 추가 - count 개수 1 */
@@ -199,7 +199,7 @@ public class FaqDaoImplTest {
                 "선반을 끼우기 힘든 상태일때, 선반 상부를 가볍게 두드려 선반을 끼워주십시오." +
                         "그래도 끼워지지 않을 때는 전체적으로 조금씩 후크를 느슨하게 풀어주면 끼우기 쉬워집니다." +
                         "자세한 내용은 동영상 링크에서 확인 할 수 있습니다.\n" +
-                        "    [관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
+                        "[관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
         assertTrue(faqDao.insert(faqDto) == 1);        /* 추가되는 행 1개 */
         assertTrue(faqDao.count() == 1);             /* 세 번째 행 추가 - count 개수 3 */
 
@@ -208,7 +208,7 @@ public class FaqDaoImplTest {
                 "선반을 끼우기 힘든 상태일때, 선반 상부를 가볍게 두드려 선반을 끼워주십시오." +
                         "그래도 끼워지지 않을 때는 전체적으로 조금씩 후크를 느슨하게 풀어주면 끼우기 쉬워집니다." +
                         "자세한 내용은 동영상 링크에서 확인 할 수 있습니다.\n" +
-                        "    [관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
+                        "[관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
         assertTrue(faqDao.insert(faqDto2) == 1);        /* 추가되는 행 1개 */
         assertTrue(faqDao.count() == 2);             /* 세 번째 행 추가 - count 개수 3 */
     }
@@ -265,7 +265,7 @@ public class FaqDaoImplTest {
                 "선반을 끼우기 힘든 상태일때, 선반 상부를 가볍게 두드려 선반을 끼워주십시오.   " +
                         "그래도 끼워지지 않을 때는 전체적으로 조금씩 후크를 느슨하게 풀어주면 끼우기 쉬워집니다. " +
                         "자세한 내용은 동영상 링크에서 확인 할 수 있습니다.\n" +
-                        "    [관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
+                        "[관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
         assertTrue(faqDao.insert(faqDto) == 1);     /* 추가되는 행은 1개*/
 
         Integer faq_no = faqDao.selectAll().get(0).getFaq_no();         /* 등록한 faqDto의 faq_no 저장 */
@@ -289,7 +289,7 @@ public class FaqDaoImplTest {
                 "선반을 끼우기 힘든 상태일때, 선반 상부를 가볍게 두드려 선반을 끼워주십시오.   " +
                         "그래도 끼워지지 않을 때는 전체적으로 조금씩 후크를 느슨하게 풀어주면 끼우기 쉬워집니다. " +
                         "자세한 내용은 동영상 링크에서 확인 할 수 있습니다.\n" +
-                        "    [관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
+                        "[관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
         assertTrue(faqDao.insert(faqDto) == 1);
         Integer faq_no = faqDao.selectAll().get(0).getFaq_no();
         assertTrue(faqDao.count() == 1);
@@ -313,7 +313,7 @@ public class FaqDaoImplTest {
                 "선반을 끼우기 힘든 상태일때, 선반 상부를 가볍게 두드려 선반을 끼워주십시오." +
                         "그래도 끼워지지 않을 때는 전체적으로 조금씩 후크를 느슨하게 풀어주면 끼우기 쉬워집니다." +
                         "자세한 내용은 동영상 링크에서 확인 할 수 있습니다.\n" +
-                        "관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
+                        "[관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
         assertTrue(faqDao.insert(faqDto) == 1);     /* 추가되는 행은 1개*/
         Integer faq_no = faqDao.selectAll().get(0).getFaq_no();
         assertTrue(faqDao.count() == 1);
@@ -338,7 +338,7 @@ public class FaqDaoImplTest {
                 "선반을 끼우기 힘든 상태일때, 선반 상부를 가볍게 두드려 선반을 끼워주십시오." +
                         "그래도 끼워지지 않을 때는 전체적으로 조금씩 후크를 느슨하게 풀어주면 끼우기 쉬워집니다." +
                         "자세한 내용은 동영상 링크에서 확인 할 수 있습니다.\n" +
-                        "    [관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
+                        "[관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
         assertTrue(faqDao.insert(faqDto) == 1);     /* 추가되는 행은 1개*/
         assertTrue(faqDao.count() == 1);            /* 행 1개 추가돼서 전체 행이 1개 */
 
