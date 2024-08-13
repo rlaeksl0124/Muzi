@@ -21,7 +21,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-
     @GetMapping("product/")
     public ModelAndView productHome(ModelAndView modelAndView) {
             modelAndView.setViewName("product");
@@ -43,5 +42,12 @@ public class ProductController {
         modelAndView.addObject("attribute", map);
         modelAndView.addObject("product", productDto);
         return modelAndView;
+    }
+
+    @GetMapping("product/pages")
+    @ResponseBody
+    public ResultResponseDto<List<Integer>> getPages(int limit) {
+        List<Integer> pages = productService.countPages(limit);
+        return new ResultResponseDto<>(pages, pages != null);
     }
 }

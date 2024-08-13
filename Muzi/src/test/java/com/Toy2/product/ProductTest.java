@@ -34,6 +34,7 @@ public class ProductTest {
     public void productCountTest() {
         int count = productDao.count();
         System.out.println("count = " + count);
+        System.out.println(count/10);
     }
 
     //assert문이 있어야함

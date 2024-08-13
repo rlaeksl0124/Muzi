@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class ProductService {
@@ -26,6 +28,18 @@ public class ProductService {
     }
 
     public ProductService() {
+    }
+
+    //같을 때 = count / limit
+    //작을 때 = (count / limit) + 1
+    //
+    public List<Integer> countPages(int limit) {
+        int count = productDao.count();
+
+        if (count/limit * limit == count) {
+            return IntStream.rangeClosed(0, (count/limit) - 1).boxed().collect(Collectors.toList());
+        }
+        return IntStream.rangeClosed(0, (count/limit)).boxed().collect(Collectors.toList());
     }
 
 
