@@ -12,7 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -97,22 +99,47 @@ public class FaqController {
 
 //     delete - 게시글 조회한 페이지 faq_view.jsp에서 삭제 작업
 //     관리자만 FAQ 게시글 삭제 가능
-    @DeleteMapping("/remove")
-    @ResponseBody       // 메서드 반환값이 HTTP 응답 본문이 되게 함
-    public ResponseEntity<String> delete(@RequestParam Integer faq_no) {
-        try {
+//    @DeleteMapping("/remove")
+//    @ResponseBody       // 메서드 반환값이 HTTP 응답 본문이 되게 함
+//    public ResponseEntity<String> delete(@RequestParam Integer faq_no) {
+//        try {
+//
+//            if (faq_no == null || faq_no <= 0) {
+//                return ResponseEntity.badRequest().body("유효하지 않은 FAQ 번호");
+//            }
+//            if (faqService.deleteFaq(faq_no) != 1) {
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("FAQ 하나 삭제 실패");
+//            }
+//            return ResponseEntity.ok("FAQ 삭제 성공");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("FAQ 삭제 중 오류 발생");
+//        }
+//    }
 
+    @DeleteMapping("/remove")
+    public void remove(@RequestParam Integer faq_no, HttpServletResponse response) throws IOException {
+        try {
             if (faq_no == null || faq_no <= 0) {
-                return ResponseEntity.badRequest().body("유효하지 않은 FAQ 번호");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("Invalid FAQ number");
+                return;
             }
             if (faqService.deleteFaq(faq_no) != 1) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("FAQ 하나 삭제 실패");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().write("FAQ deletion failed");
+                return;
             }
-            return ResponseEntity.ok("FAQ 삭제 성공");
+            // 설정된 문자 인코딩과 Content-Type을 사용하여 응답 작성
+            response.setContentType("text/plain;charset=UTF-8");
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().write("FAQ successfully deleted");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("FAQ 삭제 중 오류 발생");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.setContentType("text/plain;charset=UTF-8");
+            response.getWriter().write("FAQ deletion error");
         }
-}
+    }
 
 }
