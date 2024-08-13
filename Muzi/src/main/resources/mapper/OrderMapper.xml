@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cart.dao.OrderDao">
+    <!-- ORDER_DETAIL -->
+    <!-- 주문에 대한 주문상세 출력 제품번호로 가격과 배송비 입력-->
+    <insert id="orderDetailInsert" parameterType="orderDetailDto" useGeneratedKeys="true" keyProperty="orderDetailNo">
+        insert into `toy2`.`ORDER_DELT`
+        (or_no, pdt_no, od_cnt, od_pdtname, od_price, od_delv, od_stat_cd, od_option, od_delvinfo, od_date)
+        values
+        (
+            #{orderNo},
+            #{productNo},
+            #{orderDetailCnt},
+            (select pdt_name from toy2.Product where pdt_no = #{productNo}),
+            (select pdt_price from toy2.Product where pdt_no = #{productNo}),
+            (select delivery_tip from toy2.Product where pdt_no = #{productNo}),
+            "OC1",
+            #{orderDetailOption},
+            "일반상품",
+            now()
+        );
+    </insert>
+    <!-- 주문상세에 대한 주문상태코드 변경 -->
+    <update id="orderDetailUpdate" parameterType="map">
+        update ORDER_DELT
+        set od_stat_cd = #{orderDetailStatus}
+        where od_no = #{orderDetailNo}
+    </update>
+    <!-- 주문상품에 대한 내역
+        주문리스트 -> 주문클릭 -> 주문상품들 출력하니깐
+        이 주문번호의
+        주문상품을 출력해야하는데 제품번호, *(제품번호로 join해서 제품이름 출력), 주문수량, 주문가격, 주문 배송비, 주문상태, 주문옵션, 주문배송정보 주문날짜 출력 -->
+
+    <resultMap id="OrderDetailResultMap" type="com.Toy2.order.entity.OrderDetailDto">
+        <result property="productNo" column="pdt_no"/>
+        <result property="orderDetailCnt" column="od_cnt"/>
+        <result property="orderDetailProductName" column="od_pdtname"/>
+        <result property="orderDetailPrice" column="od_price"/>
+        <result property="orderDetailDeliveryPrice" column="od_delv"/>
+        <result property="orderDetailStatus" column="od_stat_cd"/>
+        <result property="orderDetailOption" column="od_option"/>
+        <result property="orderDetailDeliveryInfo" column="od_delvinfo"/>
+        <result property="orderDetailDate" column="od_date"/>
+    </resultMap>
+
+    <select id="orderDetailList" parameterType="int" resultMap="OrderDetailResultMap">
+        select pdt_no,
+               od_cnt,
+               od_pdtname,
+               od_price,
+               od_delv,
+               od_stat_cd,
+               od_option,
+               od_delvinfo,
+               od_date
+        from ORDER_DELT
+        where or_no = #{orderNo};
+    </select>
+
+
+    <delete id="orderDetailDeleteAll">
+        delete from ORDER_DELT
+    </delete>
+
+    <!-- ORDER -->
+    <!-- ORDER
+    주문이 되면 order 에 대한 값 입력
+    order insert -> order_detail insert -> order update ->
+    order order_detail pdt_no count(*) -> 판매량 -> top10 -->
+    <insert id="orderInsert" parameterType="orderDto" useGeneratedKeys="true" keyProperty="orderNo">
+        insert into ORDERS
+            (c_email)
+        values
+            (#{customerEmail})
+    </insert>
+
+    <!-- order 이후 order_detail값이 들어오고 update문 실행을 하여 총가격과 총 배송비를 수정
+        배송비가 30000원 이상이면 배송비는 0원으로 출력-->
+    <update id="orderUpdate" parameterType="int">
+        UPDATE ORDERS o
+            JOIN (
+            SELECT
+            or_no,
+            SUM(od_price * od_cnt) AS total_price,  -- 가격과 수량을 곱한 값을 합산
+            CASE
+            WHEN SUM(od_price * od_cnt) > 30000 THEN 0  -- 곱한 총합이 30000원을 초과하면 배송비 0원
+            ELSE 3000  -- 아니면 3000원
+            END AS total_delv
+            FROM
+            toy2.ORDER_DELT
+            GROUP BY
+            or_no
+            ) od_summary ON o.or_no = od_summary.or_no
+            SET
+                o.or_prices = od_summary.total_price,
+                o.or_delvs = od_summary.total_delv
+        WHERE o.or_no =  #{orderNo}
+    </update>
+    <!-- 주문한 리스트들을 출력 총가격, 총배송비, 주문일시  parm : email, result : (map or dto) -->
+    <select id="orderList" parameterType="string" resultType="com.Toy2.order.entity.OrderResponseDto">
+        SELECT
+            o.or_no,
+            od.od_pdtname,
+            o.or_prices,
+            o.or_delvs,
+            o.or_date
+        FROM
+            orders o,
+            order_delt od
+        WHERE
+            o.or_no = od.or_no and
+            o.c_email = #{customerEmail}
+          AND od.od_no = (
+            SELECT MIN(od2.od_no)
+            FROM order_delt od2
+            WHERE od2.or_no = o.or_no
+        );
+    </select>
+
+    <delete id="orderDelete">
+        delete from ORDERS
+    </delete>
+
+</mapper>

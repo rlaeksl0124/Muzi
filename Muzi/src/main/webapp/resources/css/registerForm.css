@@ -1,0 +1,232 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 14px;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+    margin: 50px auto;
+    background-color: white;
+    padding: 30px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #444;
+}
+
+.signup-form {
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+label {
+    width: 110px;
+    margin-right: 10px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.required {
+    color: red;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #525252;
+    outline: none;
+}
+
+/* 기존 가입하기 버튼 스타일링 (넓게 유지) */
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #525252;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: black;
+    transform: scale(1.05);
+}
+
+/* 인증번호 받기 및 우편번호 버튼 스타일링 (밝은 회색) */
+.verify-btn, .zip-btn {
+    padding: 10px 15px;
+    background-color: #e0e0e0; /* 밝은 회색 배경 */
+    color: #333; /* 다크 그레이 텍스트 색상 */
+    border: 1px solid #bdbdbd; /* 다소 진한 회색 테두리 */
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.verify-btn {
+    margin-left: 10px; /* 왼쪽에 10px의 간격 추가 */
+}
+
+.verify-btn:hover, .zip-btn:hover {
+    background-color: #d6d6d6; /* 약간 더 진한 회색 */
+    transform: scale(1.05);
+}
+
+.verify-btn:active, .zip-btn:active {
+    background-color: #e0e0e0; /* 기본 밝은 회색 */
+    transform: scale(1);
+}
+
+/* 도메인 선택 리스트 */
+select.domain_list {
+    width: 35%;
+    height: 40px;
+    box-sizing: border-box;
+    margin-left: 5px;
+    padding: 5px 0 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #d9d6d6;
+    color: #383838;
+}
+
+/* 생년월일 선택 그룹 */
+.birth-date-group {
+    display: flex;
+}
+
+.birth-date-group > select {
+    margin-left : 7px;
+}
+
+.birth-date-group > select:first-child {
+    margin-left : 0px;
+}
+
+.birth-date-group > select, select.gnd_list {
+    height: 35px;
+    margin-left: 5px;
+}
+
+/* 주소 입력 부분 스타일링 */
+.address-inputs {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.zip-search {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.zip-search input[type="text"] {
+    flex: 1;
+    margin-right: 10px;
+}
+
+input#c_road_a,
+input#c_det_a {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 100%;
+}
+
+/* 생년월일과 성별 선택 그룹 */
+.birth-gender-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px; /* 각 요소 사이의 간격 추가 */
+}
+
+.birth-date-group {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* 생년월일 선택 필드 사이 간격 */
+}
+
+.birth-date-group > select {
+    width: 70px; /* 선택 박스 너비 조정 */
+    height: 40px; /* 높이 통일 */
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #d9d6d6;
+    background-color: #fff;
+    color: #383838;
+    font-size: 14px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.gender-select-group {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    margin-left: 20px;
+}
+
+select.c_gnd {
+    width: 70px;
+    height: 40px;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #d9d6d6;
+    background-color: #fff;
+    color: #383838;
+    font-size: 14px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s
+}
+
+.gender-select-group label {
+    width: auto; /* 자동 너비로 설정하여 레이블이 콘텐츠에 맞게 조정되도록 함 */
+    margin-right: 5px; /* 성별 선택 필드와의 간격 조정 */
+    font-weight: bold;
+    white-space: nowrap; /* 레이블이 한 줄에 표시되도록 함 */
+}
+
+.hiddenmsg {
+    width: 78%;
+    height: 20px;
+    display: flex;
+    justify-content: left;
+    font-size: 12px;
+    margin-left: auto;
+}

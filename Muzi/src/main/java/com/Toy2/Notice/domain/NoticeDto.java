@@ -2,67 +2,77 @@ package com.Toy2.Notice.domain;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class NoticeDto {
-    private Long noticeNum;
-    private String title;
-    private String contents;
+    private Long notice_no;
+    private String n_title;
+    private String n_contents;
+    private String c_email = "admin";
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date createDate;
-    private int ViewCnt;
-    private String state;
-    private String frst_reg_id;
+    private Date n_createDate = new Date();
+    private int n_ViewCnt;
+    private String n_state;
+    private String frst_reg_id = "admin";
     private Date frst_reg_dt;
-    private String last_mod_id;
+    private String last_mod_id = "admin";
     private Date last_mod_dt;
     public NoticeDto() {}
-    public Long getNoticeNum() {
-        return noticeNum;
+
+    public Long getNotice_no() {
+        return notice_no;
     }
 
-    public void setNoticeNum(Long noticeNum) {
-        this.noticeNum = noticeNum;
+    public void setNotice_no(Long notice_no) {
+        this.notice_no = notice_no;
     }
 
-    public String getTitle() {
-        return title;
+    public String getN_title() {
+        return n_title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setN_title(String n_title) {
+        this.n_title = n_title;
     }
 
-    public String getContents() {
-        return contents;
+    public String getN_contents() {
+        return n_contents;
     }
 
-    public void setContents(String contents) {
-        this.contents = contents;
+    public void setN_contents(String n_contents) {
+        this.n_contents = n_contents;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public String getC_email() {
+        return c_email;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setC_email(String c_email) {
+        this.c_email = c_email;
     }
 
-    public int getViewCnt() {
-        return ViewCnt;
+    public Date getN_createDate() {
+        return n_createDate;
     }
 
-    public void setViewCnt(int viewCnt) {
-        ViewCnt = viewCnt;
+    public void setN_createDate(Date n_createDate) {
+        this.n_createDate = n_createDate;
     }
 
-    public String getState() {
-        return state;
+    public int getN_ViewCnt() {
+        return n_ViewCnt;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setN_ViewCnt(int n_ViewCnt) {
+        this.n_ViewCnt = n_ViewCnt;
+    }
+
+    public String getN_state() {
+        return n_state;
+    }
+
+    public void setN_state(String n_state) {
+        this.n_state = n_state;
     }
 
     public String getFrst_reg_id() {
@@ -100,12 +110,13 @@ public class NoticeDto {
     @Override
     public String toString() {
         return "NoticeDto{" +
-                "noticeNum=" + noticeNum +
-                ", title='" + title + '\'' +
-                ", contents='" + contents + '\'' +
-                ", createDate=" + createDate +
-                ", ViewCnt=" + ViewCnt +
-                ", state='" + state + '\'' +
+                "notice_No=" + notice_no +
+                ", n_title='" + n_title + '\'' +
+                ", n_contents='" + n_contents + '\'' +
+                ", n_writer='" + c_email + '\'' +
+                ", n_createDate=" + n_createDate +
+                ", n_ViewCnt=" + n_ViewCnt +
+                ", n_state='" + n_state + '\'' +
                 ", frst_reg_id='" + frst_reg_id + '\'' +
                 ", frst_reg_dt=" + frst_reg_dt +
                 ", last_mod_id='" + last_mod_id + '\'' +

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="order.dao.DeliveryDao">
+    <!-- 배송지 입력 배송지는 1개만 저장 -->
+    <insert id="deliveryInsert" parameterType="deliveryDto">
+        insert into delv
+        (or_no, delv_name, delv_nname, delv_phone,
+         delv_road_a, delv_street_a, delv_det_a, delv_msg)
+        values
+            (#{orderNo}, #{deliveryName}, #{deliveryAddressName}, #{deliveryPhone},
+             #{deliveryRoadAddress},#{deliveryStreetAddress},#{deliveryDetailAddress},#{deliveryMessage});
+    </insert>
+    <!-- 주문에서 배송지 출력 -->
+    <select id="deliverySelect" parameterType="int" resultType="DeliveryDto">
+        select delv_name as deliveryName,
+               delv_nname as deliveryAddressName,
+               delv_phone as deliveryPhone,
+               delv_road_a as deliveryRoadAddress,
+               delv_det_a as deliveryDetailAddress,
+               delv_msg as deliveryMessage
+        from delv
+        where or_no = #{orderNo};
+    </select>
+</mapper>

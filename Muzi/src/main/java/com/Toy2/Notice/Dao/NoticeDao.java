@@ -8,4 +8,9 @@ import java.util.List;
 public interface NoticeDao {
     public int count();
     public List<NoticeDto> selectNoticePage(PageHandler pagehandler);
+    public int insertNotice(NoticeDto notice);
+    public NoticeDto selectById(int notice_no);
+    public int updateContents(NoticeDto notice);
+    public int deleteById(int notice_no);
+    public int updateState(NoticeDto notice);
 }
