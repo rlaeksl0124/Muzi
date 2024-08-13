@@ -71,7 +71,7 @@ public class KakaoLogin {
             if(custDto!=null){
                 custDao.updateLogin(custEmail);
                 HttpSession session = request.getSession();
-                session.setAttribute("c_id", custDto.getC_admin());
+                session.setAttribute("c_email", custDto.getC_admin());
                 return "redirect:/";
             }
 
@@ -94,7 +94,7 @@ public class KakaoLogin {
 
             /* 세션을 생성하고 저장한다 */
             HttpSession session = request.getSession();
-            session.setAttribute("c_id", custDto.getC_email());
+            session.setAttribute("c_email", custDto.getC_email());
         }catch (Exception e){
             e.printStackTrace();
             return "errorPageC";
