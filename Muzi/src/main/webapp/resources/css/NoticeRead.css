@@ -4,32 +4,224 @@ ul { list-style: none; }
 a { text-decoration: none; color: black; }
 
 
-header {
-    width: 1200px;
-    height: 70px;
-}
-.mainHeader>ul {
-    display: flex; justify-content:space-between;
-}
+/*header {*/
+/*    width: 1200px;*/
+/*    height: 70px;*/
+/*}*/
+/*.mainHeader>ul {*/
+/*    display: flex; justify-content:space-between;*/
+/*}*/
 
-.mainSearch> form{
-    display: flex;
-    justify-content:space-between;
-    width: 700px;
-    height: 30px;
-}
-.mainSearch {
-    width: 400px;
-}
-.subHeader>ul {
-    display : flex;
-    justify-content: space-evenly;
-}
+/*.mainSearch> form{*/
+/*    display: flex;*/
+/*    justify-content:space-between;*/
+/*    width: 700px;*/
+/*    height: 30px;*/
+/*}*/
+/*.mainSearch {*/
+/*    width: 400px;*/
+/*}*/
+/*.subHeader>ul {*/
+/*    display : flex;*/
+/*    justify-content: space-evenly;*/
+/*}*/
 
 /* main > table{*/
 /*    display: flex;*/
 /*    justify-content:center;*/
 /*}*/
+/* 헤더 기본 스타일 */
+header {
+    background-color: #ffffff; /* 흰색 배경색 */
+    border-bottom: 1px solid #e0e0e0; /* 라이트 그레이 테두리 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 약한 그림자 효과 */
+}
+
+/* 메인 헤더 스타일 */
+header .mainHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+
+/* 메인 헤더의 각 항목을 유연하게 정렬 */
+header .mainHeader ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+/* 로고를 왼쪽에 고정 */
+header .headText {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #000000; /* 검은색 텍스트 */
+    margin-right: auto; /* 자동으로 오른쪽 여백을 줘서 왼쪽에 고정 */
+}
+
+/* 검색 바를 가운데에 배치 */
+header .headerSearch {
+    flex-grow: 2;
+    text-align: center;
+}
+
+header .headerSearch form {
+    display: inline-flex;
+    gap: 0.5rem; /* 폼 요소 사이의 간격 */
+    width: 100%; /* 검색 바의 너비를 100%로 설정 */
+    max-width: 600px; /* 검색 바의 최대 너비 설정 */
+}
+
+header .headerSearch select,
+header .headerSearch input,
+header .headerSearch button {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+header .headerSearch select {
+    background-color: #f9f9f9; /* 라이트 그레이 배경색 */
+}
+
+header .headerSearch input {
+    flex-grow: 1; /* 나머지 공간을 채우도록 설정 */
+}
+
+header .headerSearch button {
+    background-color: #000000; /* 검은색 배경 */
+    color: #ffffff; /* 흰색 텍스트 */
+    border: none;
+    cursor: pointer;
+}
+
+header .headerSearch button:hover {
+    background-color: #333333; /* 검은색 배경의 호버 상태 */
+}
+
+/* 로그인, 주문배송, 장바구니 항목 스타일 */
+header .accountActions {
+    margin-left: auto; /* 자동으로 왼쪽 여백을 줘서 오른쪽에 고정 */
+    display: flex;
+    gap: 30px; /* 각 항목 사이의 간격을 넓힘 */
+}
+
+header .accountActions li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+header .accountActions .material-icons {
+    font-size: 24px; /* 아이콘 크기 */
+    color: #000000; /* 검은색 아이콘 */
+}
+
+/* 서브 헤더 스타일 */
+header .subHeader {
+    background-color: #f4f4f4; /* 라이트 그레이 배경색 */
+    padding: 0.5rem 1rem;
+}
+
+header .subHeader ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* 항목을 가운데에 배치 */
+    gap: 1rem; /* 항목 사이의 간격 */
+}
+
+header .subHeader li {
+    color: #000000; /* 검은색 텍스트 */
+    cursor: pointer;
+}
+
+header .subHeader li:hover {
+    text-decoration: underline; /* 호버 상태에서 밑줄 */
+}
+
+
+/* main 태그를 가운데로 배치하고, 최소 너비 설정 */
+.main-content {
+    width: 100%;
+    max-width: 1200px; /* main의 최대 너비를 설정 */
+    min-width: 800px; /* main의 최소 너비를 800px로 설정 */
+    margin: 0 auto; /* 가운데 정렬 */
+    padding: 1rem; /* 주위에 약간의 여백 */
+}
+
+/* 검색 바를 가운데에 배치 */
+main .mainSearch {
+    flex-grow: 2;
+    text-align: center;
+}
+
+main .mainSearch form {
+    display: inline-flex;
+    gap: 0.5rem; /* 폼 요소 사이의 간격 */
+    width: 100%; /* 검색 바의 너비를 100%로 설정 */
+    max-width: 600px; /* 검색 바의 최대 너비 설정 */
+}
+
+main .mainSearch select,
+main .mainSearch input,
+main .mainSearch button {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+main .mainSearch select {
+    background-color: #f9f9f9; /* 라이트 그레이 배경색 */
+}
+
+main .mainSearch input {
+    flex-grow: 1; /* 나머지 공간을 채우도록 설정 */
+}
+
+main .mainSearch button {
+    background-color: #000000; /* 검은색 배경 */
+    color: #ffffff; /* 흰색 텍스트 */
+    border: none;
+    cursor: pointer;
+}
+
+main .mainSearch button:hover {
+    background-color: #333333; /* 검은색 배경의 호버 상태 */
+}
+
+/* table을 main의 너비를 꽉 채우도록 설정 */
+.notice-table {
+    width: 100%; /* table이 main의 너비를 꽉 채우도록 설정 */
+    border-collapse: collapse; /* 테이블 테두리 겹치기 */
+    margin-top: 1rem; /* table과 상단 요소 간의 간격 */
+}
+
+
+/* 페이징 처리 스타일 */
+.pagination {
+    text-align: center; /* 가운데 정렬 */
+    margin-top: 20px; /* 테이블과의 간격 */
+}
+
+.pagination a {
+    margin: 0 5px; /* 각 페이지 링크 간의 간격 */
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid #ddd; /* 테두리 스타일 */
+    color: #000; /* 텍스트 색상 */
+}
+
+.pagination a:hover {
+    background-color: #f0f0f0; /* 호버 시 배경색 */
+}
+
 
 table {
     width: 1000px;

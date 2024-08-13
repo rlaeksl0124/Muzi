@@ -12,7 +12,8 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NoticeMain</title>
-    <link rel="stylesheet" href="css/NoticeRead.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/css/NoticeRead.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
@@ -52,9 +53,23 @@
                         <button type="submit">입력</button>
                     </form>
                 </li>
-                <li>로그인</li>
-                <li>주문배송</li>
-                <li>장바구니</li>
+                <!-- 로그인/주문배송/장바구니 등을 오른쪽에 배치 -->
+                <li>
+                    <ul class="accountActions">
+                        <li>
+                            <span class="material-icons">login</span>
+                            <span>로그인</span>
+                        </li>
+                        <li>
+                            <span class="material-icons">local_shipping</span>
+                            <span>주문배송</span>
+                        </li>
+                        <li>
+                            <span class="material-icons">shopping_cart</span>
+                            <span>장바구니</span>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </div>
         <div class="subHeader">
@@ -64,62 +79,55 @@
             </ul>
         </div>
     </header>
-    <main>
-        <table>
+    <!-- main 테그의 레이아웃 조정 -->
+    <main class="main-content">
+        <div class="mainSearch">
+            <form action="" method="get">
+                <select>
+                    <option value="title">제목</option>
+                    <option value="contents">내용</option>
+                </select>
+                <input class="mainSearch" type="text" />
+                <button type="submit">입력</button>
+            </form>
+        </div>
+        <a href="/Notice/Write">작성</a>
+        <table class="notice-table">
             <tr>
-                <th class="number">
-                    번호
-                </th>
-                <th class="title">
-                    제목
-                </th>
-                <th class="createDate">
-                    작성일
-                </th>
-                <th class="writer">
-                    작성자
-                </th>
-                <th>
-
-                </th>
+                <th class="number">번호</th>
+                <th class="title">제목</th>
+                <th class="createDate">작성일</th>
+                <th class="writer">작성자</th>
+                <th></th>
             </tr>
             <c:forEach items="${NoticeArr}" var="Notice" varStatus="status">
                 <tr class="Notice">
-                    <td>
-                        ${Notice.notice_no}
-                    </td>
-                    <td class="NoticeTitle">
-                        ${Notice.n_title}
-                    </td>
-                    <td>
-                        <fmt:formatDate value="${Notice.n_createDate}" pattern="yyyy-MM-dd" />
-                    </td>
-                    <td>
-                        ${Notice.c_email}
-                    </td>
-                    <td>
-                        <button class = "deleteModify">수정/삭제</button>
-                    </td>
+                    <td>${Notice.notice_no}</td>
+                    <td class="NoticeTitle">${Notice.n_title}</td>
+                    <td><fmt:formatDate value="${Notice.n_createDate}" pattern="yyyy-MM-dd" /></td>
+                    <td>${Notice.c_email}</td>
+                    <td><button class="deleteModify">수정/삭제</button></td>
                 </tr>
                 <tr class="NoticeContents">
                     <td colspan="5" id="NoticeContents${status.count}"></td>
                 </tr>
-
             </c:forEach>
         </table>
-            <div>
-                <c:if test="${ph.prevPage}">
-                    <a href="/Notice?page=1&cd=${cd}"><<</a>
-                    <a href="/Notice?page=${ph.beginPage-1}"><</a>
-                </c:if>
-                <c:forEach var="page" begin="${ph.beginPage}" end="${ph.endPage}">
-                    <a href="/Notice?page=${page}">${page}</a>
-                </c:forEach>
-                <c:if test="${ph.nextPage}">
-                    <a href="/Notice?page=${ph.endPage+1}">></a>
-                    <a href="/Notice?page=${ph.totalPage}">>></a>
-                </c:if>
-            </div>
+
+        <!-- 페이징 처리 -->
+        <div class="pagination">
+            <c:if test="${ph.prevPage}">
+                <a href="/Notice?page=1&cd=${cd}"><<</a>
+                <a href="/Notice?page=${ph.beginPage-1}"><</a>
+            </c:if>
+            <c:forEach var="page" begin="${ph.beginPage}" end="${ph.endPage}">
+                <a href="/Notice?page=${page}">${page}</a>
+            </c:forEach>
+            <c:if test="${ph.nextPage}">
+                <a href="/Notice?page=${ph.endPage+1}">></a>
+                <a href="/Notice?page=${ph.totalPage}">>></a>
+            </c:if>
+        </div>
     </main>
     <script src="/js/NoticeRead.js"></script>
 

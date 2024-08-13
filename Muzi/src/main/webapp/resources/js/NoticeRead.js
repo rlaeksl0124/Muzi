@@ -17,7 +17,7 @@ $(document).ready(function() {
 
         // Ajax 요청을 보냅니다.
         $.ajax({
-            url: '/Getnotice',
+            url: '/Notice/get',
             type: 'GET',
             data: {no: noticeNo},
             success: function (data) {
@@ -62,7 +62,7 @@ $(document).ready(function() {
 
         // 수정 버튼 클릭 시
         $('#confirmModify').click(function () {
-        window.location.href = `/modify?no=${noticeNo}&page=${page}`;
+        window.location.href = `/Notice/Modify?no=${noticeNo}&page=${page}`;
     });
 
         // 삭제 버튼 클릭 시 삭제 확인 모달을 엽니다.
@@ -73,7 +73,7 @@ $(document).ready(function() {
 
         // 최종 삭제 확인 시
         $('#finalDelete').click(function () {
-        window.location.href = `/noticeDelete?no=${noticeNo}&page=${page}`;
+        window.location.href = `/Notice/Delete?no=${noticeNo}&page=${page}`;
     });
 
         // 삭제 취소 시

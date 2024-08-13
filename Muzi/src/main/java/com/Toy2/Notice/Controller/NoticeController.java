@@ -6,19 +6,17 @@ import com.Toy2.Notice.entity.PageHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/Notice")
 public class NoticeController {
     @Autowired
     private NoticeService noticeService;
 
-    @GetMapping("Notice")
+    @GetMapping("")
     public String notice(Integer page, Model model) throws Exception {
         page = page==null?1:page;
         PageHandler ph =new PageHandler(noticeService.count(),page);
@@ -28,11 +26,11 @@ public class NoticeController {
         return "/Notice/read";
     }
     @ResponseBody
-    @GetMapping("/Getnotice")
+    @GetMapping("get")
     public NoticeDto getNotice(Integer no) throws Exception {
         return noticeService.getNotice(no);
     }
-    @GetMapping("/noticeDelete")
+    @GetMapping("/Delete")
     public String delete(Integer no, Integer page, Model model){
         noticeService.deleteNotice(no);
         page = page==null?1:page;
@@ -42,18 +40,29 @@ public class NoticeController {
         model.addAttribute("ph",ph);
         return "/Notice/read";
     }
-    @GetMapping("/modify")
+    @GetMapping("/Modify")
     public String modify(Integer no, Integer page, Model model) throws Exception {
         page = page==null?1:page;
         NoticeDto dto=noticeService.getNotice(no);
         model.addAttribute("NoticeDto", dto);
         return "/Notice/write";
     }
-    @GetMapping("/write")
+    @PostMapping("/Modify")
+    public String modify(NoticeDto dto, Integer page, Model model) throws Exception {
+        noticeService.updateNotice(dto);
+        System.out.println(dto);
+        System.out.println(page);
+        PageHandler ph =new PageHandler(noticeService.count(),page);
+        List<NoticeDto> dtolist = noticeService.getNoticePage(ph);
+        model.addAttribute("NoticeArr",dtolist);
+        return "/Notice/read";
+    }
+
+    @GetMapping("/Write")
     public String write() throws Exception {
         return "/Notice/write";
     }
-    @PostMapping("/write")
+    @PostMapping("/Write")
     public String write(NoticeDto dto, Model model) throws Exception {
         int success=noticeService.addNotice(dto);
         PageHandler ph =new PageHandler(noticeService.count(),1);
