@@ -98,9 +98,11 @@
             <div class="address-inputs">
                 <div class="zip-search">
                     <input type="text" id="c_zip" name="c_zip" placeholder="우편번호" required>
-                    <input type="button" class="zip-btn" value="우편번호">
+                    <%@ include file="postcode.jsp" %>
+                    <input type="button" class="zip-btn" onclick="postcode()" value="우편번호">
                 </div>
                 <input type="text" id="c_road_a" name="c_road_a" placeholder="기본주소" required>
+                <input type="hidden" id="jibunAddress" name="jibunAddress" placeholder="지번주소" required>
                 <input type="text" id="c_det_a" name="c_det_a" placeholder="나머지주소" required>
             </div>
         </div>
@@ -294,8 +296,6 @@
             }
         });
     });
-
-
 </script>
 </body>
 </html>

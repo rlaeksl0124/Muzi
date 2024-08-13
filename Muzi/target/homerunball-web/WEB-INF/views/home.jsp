@@ -14,7 +14,6 @@
 
 <P>  The time on the server is ${serverTime}. </P>
 <a class="cart_link" id="logoutLink" href="<c:url value='${loginOutLink}'/>">${loginOut}</a>
-<a href="/signup/add">회원가입</a>
 
 </body>
 </html>
