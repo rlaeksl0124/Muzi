@@ -145,11 +145,11 @@
             <label for="faq_content">FAQ 내용</label>
             <textarea id="faq_content" name="faq_content" rows="5" required></textarea>
         </div>
-        <div class="form-group">
-            <label for="faq_closing">FAQ 끝맺음말</label>
-            <p>미입력 시 자동값이 채워집니다.</p>
-            <textarea id="faq_closing" name="faq_closing" rows="3"></textarea>
-        </div>
+<%--        <div class="form-group">--%>
+<%--            <label for="faq_closing">FAQ 끝맺음말</label>--%>
+<%--            <p>미입력 시 자동값이 채워집니다.</p>--%>
+<%--            <textarea id="faq_closing" name="faq_closing" rows="3"></textarea>--%>
+<%--        </div>--%>
         <div class="form-group">
             <label for="faq_writer">FAQ 작성자</label>
             <input type="text" id="faq_writer" name="faq_writer" required>
@@ -188,11 +188,11 @@
             return;
         }
 
-        if (faqClosing.length > 100) {
-            alert("FAQ 끝맺음말은 100자 이내로 입력해 주세요.");
-            event.preventDefault(); // Prevent form submission
-            return;
-        }
+        // if (faqClosing.length > 100) {
+        //     alert("FAQ 끝맺음말은 100자 이내로 입력해 주세요.");
+        //     event.preventDefault(); // Prevent form submission
+        //     return;
+        // }
 
         if (faqOrder.length > 10) {
             alert("FAQ 순서는 100자 이내로 입력해 주세요.");
