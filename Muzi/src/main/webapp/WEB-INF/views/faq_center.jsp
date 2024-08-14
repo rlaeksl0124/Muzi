@@ -54,10 +54,12 @@
         .checkbox {
             text-align: center;
         }
+
     </style>
+    <link rel="stylesheet" href="/css/Header.css">
 </head>
 <body>
-
+<%@ include file="header.jspf"%>
 <div class="container">
     <div class="header">
         <div>

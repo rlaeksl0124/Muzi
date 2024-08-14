@@ -44,24 +44,26 @@ public class LoginController {
     }
 
     @GetMapping("/logout")
-    public String logOut(HttpSession session){
+    public String logOut(HttpSession session, String toURL){
         session.invalidate();
-        return "redirect:/";
+        toURL = toURL==null || toURL.equals("") ? "/" : toURL;
+        return "redirect:"+toURL;
     }
 
     @PostMapping("/login")
     public String login(String c_email, String c_pwd, String toURL, HttpServletRequest request, RedirectAttributes rattr){
         try {
+            /* 세션생성 */
+            HttpSession session = request.getSession();
             /* 로그인실패: 로그인체크를통해 email과 pwd를 받아서 DB에 있는 정보와 일치한지 확인 */
             /* 메시지 출력후 login 페이지로 redirect */
-            if(!loginCheck(c_email, c_pwd)){
+            if(!loginCheck(c_email, c_pwd, session)){
                 rattr.addFlashAttribute("loginFail", "msg");
                 return "redirect:/login";
             }
 
             /* 로그인성공시 */
-            /* 세션생성 */
-            HttpSession session = request.getSession();
+
             session.setAttribute("c_email", c_email);
 
             /* 마지막 로그인일자를 업데이트하는 Dao 호출 */
@@ -78,10 +80,8 @@ public class LoginController {
     }
 
     /* 로그인체크메서드 - 아이디가 null 인지, pwd가 일치하는지 확인 */
-    private boolean loginCheck(String c_email, String c_pwd){
+    private boolean loginCheck(String c_email, String c_pwd, HttpSession session){
         CustDto cust = null;
-        System.out.println(c_email);
-        System.out.println(c_pwd);
         try {
             /* email로 DB 고객 조회 */
             cust = custDao.selectEmail(c_email);
@@ -90,6 +90,8 @@ public class LoginController {
         }
 
         /* 고객이 null이 아니면서 비밀번호가 일치한지 비교후 return */
+        if(cust!=null && cust.getC_pwd().equals(c_pwd))
+            session.setAttribute("c_admin", cust.getC_admin());
         return cust!=null && cust.getC_pwd().equals(c_pwd);
     }
 

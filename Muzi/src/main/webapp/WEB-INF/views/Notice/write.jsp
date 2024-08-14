@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
@@ -7,36 +7,13 @@
     <meta charset="UTF-8">
     <title>작성</title>
     <link rel="stylesheet" href="/css/NoticeWrite.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/css/Header.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <header>
-        <div class="mainHeader">
-            <ul>
-                <li class="headText">Muji 無印良品</li>
-                <li class="headerSearch">
-                    <form action="" method="get">
-                        <select>
-                            <option value="title">제목</option>
-                            <option value="contents">내용</option>
-                        </select>
-                        <input class="mainSearch" type="text" />
-                        <button type="submit">입력</button>
-                    </form>
-                </li>
-                <li>로그인</li>
-                <li>주문배송</li>
-                <li>장바구니</li>
-            </ul>
-        </div>
-        <div class="subHeader">
-            <ul>
-                <li>상품</li>
-                <li>고객 센터</li>
-            </ul>
-        </div>
-    </header>
+    <%@include file="header.jspf"%>
     <main>
         <form id="form" action="${requestScope['javax.servlet.forward.servlet_path']=='/Notice/Modify'?'/Notice/Modify':'/Notice/Write'}" method="post">
             <div class="form-group">
