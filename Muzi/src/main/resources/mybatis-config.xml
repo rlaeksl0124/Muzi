@@ -6,5 +6,33 @@
 	<typeAliases>
 		<typeAlias type="com.Toy2.Notice.domain.NoticeDto" alias="NoticeDto" />
 		<typeAlias type="com.Toy2.Notice.entity.PageHandler" alias="pageHandler" />
+
+		<typeAlias type="com.Toy2.order.entity.OrderDetailDto" alias="OrderDetailDto"/>
+		<typeAlias type="com.Toy2.order.entity.OrderDto" alias="OrderDto"/>
+		<typeAlias type="com.Toy2.order.entity.DeliveryDto" alias="DeliveryDto"/>
+		<typeAlias type="com.Toy2.Cust.Domain.CustDto" alias="CustDto" />
+
+		<typeAlias type="com.Toy2.cart.entity.CartDto" alias="CartDto"/>
+
+		<typeAlias type="com.Toy2.order.entity.OrderDetailDto" alias="OrderDetailDto"/>
+		<typeAlias type="com.Toy2.order.entity.OrderDto" alias="OrderDto"/>
+		<typeAlias type="com.Toy2.order.entity.DeliveryDto" alias="DeliveryDto"/>
+
+		<typeAlias type="com.Toy2.Cust.Domain.CustDto" alias="CustDto" />
+
+		<!--K-KY-->
+		<typeAlias type="com.Toy2.product.db.dto.ProductDto" alias="ProductDto"/>
+		<typeAlias type="com.Toy2.product.db.dto.request.ProductUpdateRequestDto" alias="ProductUpdateRequestDto"/>
+		<typeAlias type="com.Toy2.product.db.dto.request.ProductPageRequestDto" alias="ProductPageRequestDto"/>
+		<typeAlias type="com.Toy2.product.productdetail.db.dto.ProductPictureDto" alias="ProductPictureDto"/>
+		<typeAlias type="com.Toy2.product.productdetail.db.dto.DetailPictureDto" alias="DetailPictureDto"/>
+		<typeAlias type="com.Toy2.product.productdetail.db.dto.ProductSizeDto" alias="ProductSizeDto"/>
+		<typeAlias type="com.Toy2.productcategory.db.dto.ProductCategoryDto" alias="ProductCategoryDto"/>
+		<typeAlias type="com.Toy2.productcategory.db.dto.request.ProductCategoryUpdateRequestDto" alias="ProductCategoryUpdateRequestDto"/>
+		<typeAlias type="com.Toy2.productcategory.categoryclosure.db.dto.ProductCategoryClosureDto" alias="ProductCategoryClosureDto"/>
+		<typeAlias type="com.Toy2.productcategory.categoryclosure.db.dto.request.CategoryClosureInsertRequestDto" alias="CategoryClosureInsertRequestDto"/>
+
+		<typeAlias type="com.Toy2.Faq.Domain.FaqDto" alias="FaqDto" />
+		<typeAlias type="com.Toy2.Faq.Domain.InqDto" alias="InqDto" />
 	</typeAliases>
 </configuration>

@@ -24,6 +24,12 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+		
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
 	<!-- 한글 변환 필터 시작 -->
 	<filter>
 		<filter-name>encodingFilter</filter-name>
@@ -43,9 +49,5 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<!-- 한글 변환 필터 끝 -->
-	<servlet-mapping>
-		<servlet-name>appServlet</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
 
 </web-app>

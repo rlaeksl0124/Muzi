@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cart.dao.CartDao">
+    <!-- 장바구니 삽입 : 제품번호로 가격과 배송비는 자동 삽입  -->
+    <insert id="cartInsert" parameterType="com.Toy2.cart.entity.CartDto" useGeneratedKeys="true" keyProperty="cartNo">
+        INSERT INTO `toy2`.`CART`
+            (`pdt_no`,`ca_cnt`, `ca_price`, `ca_option`, `ca_delv`, `c_email`)
+        VALUES
+               (#{cartProductNo},
+                #{cartProductCnt},
+                (select pdt_price from toy2.Product where pdt_no = #{cartProductNo}),
+                #{cartProductOption},
+                (select delivery_tip from toy2.Product where pdt_no = #{cartProductNo}),
+                #{customerEmail})
+    </insert>
+
+<!--    <resultMap id="CartDtoResultMap" type="com.Toy2.cart.entity.CartDto">-->
+<!--        <result property="cartNo" column="ca_no" />-->
+<!--        <result property="cartProductNo" column="pdt_no" />-->
+<!--        <result property="cartProductCnt" column="ca_cnt" />-->
+<!--        <result property="cartProductPrice" column="ca_price" />-->
+<!--        <result property="cartProductOption" column="ca_option" />-->
+<!--        <result property="cartDelivery" column="ca_delv" />-->
+<!--    </resultMap>-->
+    <!-- 이메일로 유저의 장바구니 목록 출력 결과를 map으로 묶어서 전달 resultMap="CartDtoResultMap"-->
+    <select id="cartSelectAll" parameterType="string" resultType="CartDto">
+        select ca_no as cartNo,
+            pdt_no as cartProductNo,
+            ca_cnt as cartProductCnt,
+            ca_price as cartProductPrice,
+            ca_option as cartProductOption,
+            ca_delv as cartDelivery
+        from `toy2`.`CART`
+        where c_email = #{customerEmail}
+        order by ca_no desc
+    </select>
+
+    <!-- 이메일로 유저의 장바구니안에 몇개가 들어있는지에 대한 개수-->
+    <select id="cartCount" parameterType="string" resultType="int">
+        select count(*)
+        from `toy2`.`CART`
+        where c_email= #{email}
+    </select>
+
+    <!-- 장바구니의 번호로 제품의 수량과 옵션 변경-->
+    <update id="cartUpdate" parameterType="map">
+        update `toy2`.`CART`
+        set
+            ca_cnt = #{cartProductCnt},
+            ca_option = #{cartProductOption}
+        where ca_no = #{cartNo}
+    </update>
+
+    <!-- 장바구니 번호로 선택 삭제-->
+    <delete id="cartDelete" parameterType="int">
+        delete from
+            `toy2`.`CART`
+        where ca_no = #{cartNo}
+    </delete>
+
+    <!-- 장바구니 번호로 하나 출력-->
+    <select id="cartSelect" parameterType="int" resultType="cartDto">
+        select ca_no, pdt_no, ca_cnt, ca_price,ca_option, ca_delv
+        from `toy2`.`CART`
+        where ca_no = #{cartNo}
+    </select>
+
+    <!-- 전부 삭제-->
+    <delete id="cartDeleteAll" >
+        delete from `toy2`.`CART`
+    </delete>
+</mapper>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductMapper">
+
+    <!--카운트-->
+    <select id="countProduct" resultType="int">
+        SELECT count(*) FROM product
+    </select>
+
+    <!--상품 선택-->
+    <select id="selectProduct" parameterType="int" resultType="ProductDto">
+        SELECT * FROM product where pdt_no = #{productNumber}
+    </select>
+
+    <!--페이지 선택-->
+    <select id="selectProductPage" parameterType="ProductPageRequestDto" resultType="ProductDto">
+        SELECT * FROM product ORDERS LIMIT #{limit} OFFSET #{page};
+    </select>
+
+    <!--상품 삽입-->
+    <insert id="insertProduct" parameterType="ProductDto">
+        INSERT INTO product
+        (pdt_no, pdt_price, pdt_name, new_item, pst_status
+        , discountable, pdt_amount, notice, delivery_fee, pdt_private)
+        VALUES(
+        #{productNumber}, #{productPrice},
+        #{productName}, #{newItem},
+        #{postingStatus}, #{discountable},
+        #{productAmount}, #{notice}, #{deliveryFee}, #{privateProduct})
+    </insert>
+
+    <!--상품 업데이트-->
+    <update id="updateProduct" parameterType="ProductUpdateRequestDto">
+        UPDATE product
+        SET pdt_price = #{productPrice},
+        pdt_name = #{productName},
+        new_item = #{newItem},
+        discountable = #{discountable},
+        pdt_amount = #{productAmount},
+        notice = #{notice},
+        pdt_code = #{productCode},
+        delivery_fee = #{deliveryFee},
+        pdt_private = #{privateProduct}
+        WHERE pdt_no = #{productNumber}
+    </update>
+
+    <!--상품 비활성화-->
+    <update id="disableProduct" parameterType="int">
+        UPDATE product
+        SET pst_status = false
+        WHERE pdt_no = #{productNumber}
+    </update>
+
+    <!--상품 삭제-->
+    <delete id="deleteProduct" parameterType="int">
+        DELETE FROM product WHERE pdt_no=#{productNumber}
+    </delete>
+
+
+<!--  상품 디테일  -->
+    <!--상품 이미지-->
+    <select id="selectProductImage" parameterType="int" resultType="ProductPictureDto">
+        select pd.pdt_detail_title, pd.pdt_detail_content, pic.*
+        from product_detail pd
+        left join picture pic
+        on pd.pdt_detail_no = pic.pdt_detail_no
+        where pd.pdt_no = #{productNumber} And pd.pdt_detail_title like "productImage%";
+    </select>
+
+    <!--상품 디테일 이미지-->
+    <select id="selectProductDetailImage" parameterType="int" resultType="ProductPictureDto">
+        select pd.pdt_detail_title, pd.pdt_detail_content, pic.*
+        from product_detail pd
+        left join picture pic
+        on pd.pdt_detail_no = pic.pdt_detail_no
+        where pd.pdt_no = #{productNumber} And pd.pdt_detail_title like "detailImage%";
+    </select>
+
+    <select id="selectProductSize" parameterType="int" resultType="ProductSizeDto">
+        select * from product_detail pd
+        left join pdt_size ps
+        on pd.pdt_detail_no = ps.pdt_detail_no
+        where pd.pdt_no = #{productNumber} And pd.pdt_detail_title like "productSize%";
+
+    </select>
+
+
+
+</mapper>

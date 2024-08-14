@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ProductCategoryClosureMapper">
+
+    <select id="countCategoryClosure" resultType="int">
+        SELECT count(*) FROM closure
+    </select>
+
+    <insert id="insertCategoryClosure" parameterType="ProductCategoryClosureDto">
+        INSERT INTO closure (cate_parent, cate_child, depth) VALUES(#{categoryParent}, #{categoryChild}, #{depth})
+    </insert>
+
+    <insert id="insertCategoryClosures" parameterType="list">
+        INSERT INTO closure (cate_parent, cate_child, depth)
+        VALUES
+        <foreach item="item" collection="list" separator=", ">
+            (#{item.categoryParent}, #{item.categoryChild}, #{item.depth})
+        </foreach>
+    </insert>
+
+    <select id="selectCategoryClosure" resultType="ProductCategoryClosureDto" parameterType="int">
+        SELECT * from closure where cate_parent = #{categoryNumber} AND cate_child = #{categoryNumber}
+    </select>
+
+    <select id="findByParentsCategoryNumber" resultType="ProductCategoryClosureDto" parameterType="int">
+        SELECT * from closure where cate_child = #{parentCategoryNumber}
+    </select>
+
+    <select id="findAllClosure">
+        SELECT * FROM closure;
+    </select>
+
+    <select id="findDirectChildren" parameterType="ProductCategoryDto" resultType="ProductCategoryDto">
+        SELECT c.* FROM category c JOIN closure cl ON c.cate_no = cl.cate_child where cl.cate_parent = #{categoryNumber} and cl.depth = 1;
+    </select>
+
+
+    <delete id="deleteCategoryClosure" parameterType="int">
+
+        DELETE FROM closure
+        WHERE cate_child IN (
+        SELECT cate_child
+        FROM (
+
+        SELECT cate_child
+        FROM closure
+        WHERE cate_parent = #{categoryNumber}
+        UNION
+
+        SELECT cate_parent AS cate_child
+        FROM closure
+        WHERE cate_child = #{categoryNumber}
+        ) AS subquery
+        );
+    </delete>
+</mapper>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mapper 태그에 namespace 등록하기 -->
+<mapper namespace="com.Toy2.Notice.Dao.FaqMapper">
+
+<!--    보이는 거 관리 하기-->
+
+    <!-- count - 행 개수 셈  -->
+    <!-- parameter : 없음 , result: int -->
+    <select id="count" resultType="int">
+        SELECT count(*) FROM FAQ
+    </select>
+
+
+    <!--   deleteAll - FAQ 테이블 행 전제 삭제 -->
+    <!-- parameter : 없음 , result: 없음 -->
+    <delete id="deleteAll">
+        DELETE FROM FAQ
+    </delete>
+
+
+    <!--   delete - 특정 FAQ 게시글을 하나 삭제; 담당자가 글을 삭제(컨트롤러) -->
+    <!-- parameter : map, result: 없음 -->
+    <delete id="delete" parameterType="int">
+        DELETE FROM FAQ
+        WHERE faq_no = #{faq_no}
+    </delete>
+
+
+    <!-- insert - FAQ 게시글로 FaqDto를 등록 -->
+    <!-- parameter : FaqDto, result: 없음 -->
+    <insert id="insert" parameterType="FaqDto" useGeneratedKeys="true" keyProperty="faq_no">
+        INSERT INTO FAQ (cate_no, faq_order, faq_title, faq_content, faq_att_file, faq_writer)
+        VALUES (#{cate_no}, #{faq_order}, #{faq_title}, #{faq_content},  #{faq_att_file}, #{faq_writer})
+    </insert>
+
+
+    <!--     selectAll   -->
+    <!--     parameter : 없음 , result: FaqDto -->
+    <select id="selectAll" resultType="FaqDto">
+        SELECT *
+        FROM FAQ
+        ORDER BY faq_no ASC;
+    </select>
+
+
+    <sql id="selectFromFaq">
+        SELECT faq_no, cate_no, faq_order, faq_title, faq_content, faq_closing, FAQ.faq_writer, faq_att_file, faq_reg_date, faq_view_cnt
+        FROM FAQ
+    </sql>
+
+    <!--    select - 선택한 FAQ 게시글을 하나 조회 -->
+    <!-- parameter : faq_no(int), result: 없음 -->
+    <select id="select" parameterType="int" resultType="FaqDto">
+        <include refid="selectFromFaq"/>
+        WHERE faq_no = #{faq_no}
+    </select>
+
+
+    <!--    update - FAQ에 등록된 게시글을 수정; 게시글의 번호와 담당자가 맞는지 확인 -->
+    <!--    담당자만 게시글 삭제 가능-->
+    <!--    parameter : FaqDto, result : 없음-->
+
+    <!-- 로그인 되면 faq_writer, last_mod_id 추가하기
+    <update id="update" parameterType="FaqDto">
+        UPDATE FAQ
+        #  faq_writer, faq_admin은 바꾸지 못함
+        SET cate_no = #{cate_no},
+            faq_order = #{faq_order},
+            is_top = #{is_top},
+            faq_title = #{faq_title},
+            faq_content = #{faq_content},
+            faq_closing = #{faq_closing},
+            faq_att_file = #{faq_att_file},
+            faq_view_cnt = #{faq_view_cnt},
+            last_mod_date = CURRENT_TIMESTAMP,
+            last_mod_id = #{last_mod_id}
+        WHERE faq_no = #{faq_no}
+    </update>
+    -->
+
+    <update id="update" parameterType="FaqDto">
+        UPDATE FAQ
+        #  faq_writer, faq_admin은 바꾸지 못함
+        SET cate_no = #{cate_no},
+            faq_order = #{faq_order},
+            is_top = #{is_top},
+            faq_title = #{faq_title},
+            faq_content = #{faq_content},
+            faq_closing = #{faq_closing},
+            faq_att_file = #{faq_att_file},
+            faq_view_cnt = #{faq_view_cnt},
+            last_mod_date = CURRENT_TIMESTAMP,
+            last_mod_id = 'admin'
+        WHERE faq_no = #{faq_no}
+    </update>
+
+
+    <!-- increaseViewCnt - 조회수 올리기 -->
+    <!-- parameter : Integer faq_no, result :  없음 -->
+    <update id="increaseViewCnt" parameterType="int">
+        UPDATE FAQ
+        SET faq_view_cnt = faq_view_cnt + 1
+        WHERE faq_no = #{faq_no}
+    </update>
+
+</mapper>
+

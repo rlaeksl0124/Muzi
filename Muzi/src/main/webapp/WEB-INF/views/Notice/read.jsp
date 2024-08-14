@@ -5,7 +5,7 @@
   Time: 오전 11:17
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="utf-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
@@ -14,6 +14,7 @@
     <title>NoticeMain</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="/css/NoticeRead.css" />
+    <link rel="stylesheet" href="/css/Header.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
@@ -39,46 +40,7 @@
         </div>
     </div>
 
-    <header>
-        <div class="mainHeader">
-            <ul>
-                <li class="headText">Muji 無印良品</li>
-                <li class="headerSearch">
-                    <form action="" method="get">
-                        <select>
-                            <option value="title">제목</option>
-                            <option value="contents">내용</option>
-                        </select>
-                        <input class="mainSearch" type="text" />
-                        <button type="submit">입력</button>
-                    </form>
-                </li>
-                <!-- 로그인/주문배송/장바구니 등을 오른쪽에 배치 -->
-                <li>
-                    <ul class="accountActions">
-                        <li>
-                            <span class="material-icons">login</span>
-                            <span>로그인</span>
-                        </li>
-                        <li>
-                            <span class="material-icons">local_shipping</span>
-                            <span>주문배송</span>
-                        </li>
-                        <li>
-                            <span class="material-icons">shopping_cart</span>
-                            <span>장바구니</span>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div class="subHeader">
-            <ul>
-                <li>상품</li>
-                <li>고객 센터</li>
-            </ul>
-        </div>
-    </header>
+    <%@include file="header.jspf"%>
     <!-- main 테그의 레이아웃 조정 -->
     <main class="main-content">
         <div class="mainSearch">
@@ -91,7 +53,9 @@
                 <button type="submit">입력</button>
             </form>
         </div>
+        <c:if test="${sessionScope.c_admin=='Y'}">
         <a href="/Notice/Write">작성</a>
+        </c:if>
         <table class="notice-table">
             <tr>
                 <th class="number">번호</th>
@@ -106,7 +70,9 @@
                     <td class="NoticeTitle">${Notice.n_title}</td>
                     <td><fmt:formatDate value="${Notice.n_createDate}" pattern="yyyy-MM-dd" /></td>
                     <td>${Notice.c_email}</td>
-                    <td><button class="deleteModify">수정/삭제</button></td>
+                    <c:if test="${sessionScope.c_admin=='Y'}">
+                        <td><button class="deleteModify">수정/삭제</button></td>
+                    </c:if>
                 </tr>
                 <tr class="NoticeContents">
                     <td colspan="5" id="NoticeContents${status.count}"></td>

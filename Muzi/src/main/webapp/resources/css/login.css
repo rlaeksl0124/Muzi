@@ -1,0 +1,222 @@
+/* 공통 스타일 */
+body {
+    font-family: 'Noto Sans', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#snap-sync-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#snap-sync-wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.snap-sync-container {
+    display: flex;
+    width: 100%;
+    padding: 50px;
+}
+
+.snap-sync-content {
+    width: 50%;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.sync-content-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.sync-info-area {
+    margin-bottom: 30px;
+}
+
+.sync-info-text {
+    margin-bottom: 20px;
+}
+
+.sync-info-tit {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.sync-info-con {
+    font-size: 16px;
+    color: #333;
+}
+
+.sync-buttons {
+    margin-top: 20px;
+}
+
+.sync-common-btn {
+    display: inline-block;
+    padding: 15px 20px;
+    background-color: #FFEB3B;
+    color: #000;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.sync-info-image {
+    margin-top: 20px;
+}
+
+.sync-info-img img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+/* 가운데 선 */
+.snap-sync-line.vertical {
+    width: 1px;
+    background-color: #ddd;
+    margin: 0 20px;
+    height: auto;
+}
+
+/* 로그인 폼 스타일 */
+.sync-login-area {
+    width: 50%;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.sync-login-tab {
+    margin-bottom: 30px;
+}
+
+.tab-button {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.sync-input-box {
+    margin-bottom: 20px;
+}
+
+.sync-form-input {
+    margin-bottom: 20px;
+}
+
+.sync-form-input input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.loginBtn {
+    width: 100%;
+    padding: 15px;
+    background-color: #000;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.searchId_pwd {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.searchId_pwd a {
+    color: #333;
+    text-decoration: none;
+}
+
+.searchId_pwd .division {
+    margin: 0 10px;
+    color: #ddd;
+}
+
+/* SNS 로그인 버튼 스타일 */
+.sync-sns-login {
+    margin-top: 30px;
+}
+
+.sync-sns-tit {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.sync-sns-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.sns-btn {
+    width: 45%;
+    padding: 10px;
+    font-size: 14px;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+}
+
+.sync-sns-naver {
+    background-color: #03C75A;
+}
+
+.sync-sns-apple {
+    background-color: #000;
+}
+
+/* 회원가입 버튼 스타일 */
+.sync-join-button-area {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.sync-join-button {
+    display: inline-block;
+}
+
+.sync-join-btn {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: #f5f5f5;
+    color: #000;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.sync-join-btn .move-arrow {
+    font-weight: bold;
+    font-size: 18px;
+    margin-left: 10px;
+}
