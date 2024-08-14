@@ -127,20 +127,27 @@ public class FaqController {
     /* update - 등록된 FAQ 수정 */
     // faq_view.jsp 페이지에서 수정
     // 작성자 & 관리자 수정 가능
-    @PatchMapping("/modify")        // PatchMapping 사용
-    public void update(@RequestParam FaqDto faqDto, HttpServletResponse response) {      // 어떤 FAQ글인지 faq_no 전달
-        // 로그인 시 관리자/작성자인지 확인
-        try{
+    // 수정은 FAQ 등록 페이지에서 기존 데이터를 가지고 수정
+    @PatchMapping("/modify")  // PatchMapping 사용
+    public String update(@RequestParam FaqDto faqDto, RedirectAttributes rdr, Model m) {
+        // 로그인 시 관리자/작성자인지 확인 - 추후 구현
+        try {
             if (faqDto == null) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("유효하지 않은 FAQ 번호");
-                return;
+                throw new Exception("유효하지 않은 FAQ 번호");
             }
 
-            if (faqService.updateFaq(faqDto) != 1)
+            if (faqService.updateFaq(faqDto) != 1) {
                 throw new Exception("수정 실패했습니다.");
-        } catch(Exception e){
+            }
+
+            rdr.addFlashAttribute("msg", "MOD_OK");
+            return "redirect:/faq";  // 수정 성공 후 FAQ 목록 페이지로 리다이렉트
+
+        } catch (Exception e) {
             e.printStackTrace();
+            m.addAttribute("faqDto", faqDto);  // 기존 데이터를 다시 폼에 전달
+            m.addAttribute("msg", "MOD_ERR");
+            return "faq";  // 수정 실패 시 수정 페이지로 이동
         }
     }
 

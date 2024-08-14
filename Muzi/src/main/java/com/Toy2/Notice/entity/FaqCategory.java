@@ -66,4 +66,8 @@ public class FaqCategory {
         return categoryMap.get(cate_no);
     }
 
+
+
+    /* DB 끊은 상태에서 테스트 하기 */
+
 }

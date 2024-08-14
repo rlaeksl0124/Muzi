@@ -113,9 +113,12 @@
         <button class="back-button" onclick="location.href='${pageContext.request.contextPath}/faq'">목록으로 돌아가기</button>
         <div>
             <%--  클릭 가능한 버튼 : 이동 경로 localhost:8080 + /faq/edit?faq_no=${faqDto.faq_no}, 버튼 이름 "수정"--%>
+            <%-- 수정은 FAQ 등록 페이지에서 기존 데이터를 가지고 수정  --%>
             <button class="edit-button" onclick="location.href='${pageContext.request.contextPath}/faq/modify?faq_no=${faqDto.faq_no}'">수정</button>
 
+
             <%--  클릭 가능한 버튼 : deleteFaq() 함수 실행 - 매개변수로 faq_no 넘김; 버튼 이름 "삭제"--%>
+            <!-- 삭제는 alert 창으로 확인 후 삭제하면 됨 -->
             <button class="delete-button" onclick="deleteFaq(${faqDto.faq_no})">삭제</button>
         </div>
     </div>
