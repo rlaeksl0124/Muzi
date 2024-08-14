@@ -15,7 +15,7 @@
             #{orderDetailCnt},
             (select pdt_name from toy2.Product where pdt_no = #{productNo}),
             (select pdt_price from toy2.Product where pdt_no = #{productNo}),
-            (select delivery_tip from toy2.Product where pdt_no = #{productNo}),
+            (select delivery_fee from toy2.Product where pdt_no = #{productNo}),
             "OC1",
             #{orderDetailOption},
             "일반상품",

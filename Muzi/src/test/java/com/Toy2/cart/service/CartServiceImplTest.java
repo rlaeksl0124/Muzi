@@ -7,12 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
-@Transactional
+//@Transactional
 public class CartServiceImplTest {
     @Autowired
     private CartService cartService;
@@ -21,7 +20,7 @@ public class CartServiceImplTest {
     private static final String failEmail = "failEmail";
     @Test
     public void 장바구니_추가_성공() throws Exception {
-        CartDto dto = new CartDto(3, 30, "XL", "admin@");
+        CartDto dto = new CartDto(1, 10, "XL", "admin@");
         int result = cartService.addCart(dto); //성공적인 장바구니에 물건넣기
         assertEquals(1, result);
     }

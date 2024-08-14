@@ -5,7 +5,7 @@
         <div class="mainHeader">
 
                 <ul>
-                        <a id="headers" href="/">
+                        <a href="/">
                         <li class="headText">Muji 無印良品</li>
                         </a>
                         <li class="headerSearch">
@@ -23,24 +23,24 @@
                                 <ul class="accountActions">
                                         <li>
                                                 <c:if test="${sessionScope.c_email == null}">
-                                                        <a  href="/login?toURL=${requestScope['javax.servlet.forward.request_uri']}">
+                                                        <a href="/login?toURL=${requestScope['javax.servlet.forward.request_uri']}">
                                                                 <span class="material-icons">login</span>
                                                         </a>
                                                         <span>로그인</span>
                                                 </c:if>
                                                 <c:if test="${sessionScope.c_email != null}">
-                                                        <a       href="/logout">
+                                                        <a href="/logout">
                                                                 <span class="material-icons">logout</span>
                                                         </a>
                                                         <span>로그아웃</span>
                                                 </c:if>
                                         </li>
                                         <li>
-                                                <a id="headers" href="/orders/orderList">
+                                                <a href="/orders/orderList">
                                                 <span class="material-icons">local_shipping</span><br>
                                                 <span>주문배송</span></a>
                                         </li>
-                                        <li>    <a id="headers" href="/cart/cart">
+                                        <li>    <a href="/cart/cart">
                                                 <span class="material-icons">shopping_cart</span><br>
                                                 <span>장바구니</span></a>
                                         </li>
@@ -50,8 +50,8 @@
         </div>
         <div class="subHeader">
                 <ul>
-                        <li><a id="headers" href="/product/"> 상품</a></li>
-                        <li><a id="headers" href=""> 고객 센터</a></li>
+                        <li><a href="/product/"> 상품</a></li>
+                        <li><a href=""> 고객 센터</a></li>
                 </ul>
         </div>
 </header>

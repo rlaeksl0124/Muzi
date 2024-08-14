@@ -12,7 +12,7 @@
                 #{cartProductCnt},
                 (select pdt_price from toy2.Product where pdt_no = #{cartProductNo}),
                 #{cartProductOption},
-                (select delivery_tip from toy2.Product where pdt_no = #{cartProductNo}),
+                (select delivery_fee from toy2.Product where pdt_no = #{cartProductNo}),
                 #{customerEmail})
     </insert>
 

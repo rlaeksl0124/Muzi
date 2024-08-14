@@ -80,8 +80,6 @@ public class LoginController {
     /* 로그인체크메서드 - 아이디가 null 인지, pwd가 일치하는지 확인 */
     private boolean loginCheck(String c_email, String c_pwd){
         CustDto cust = null;
-        System.out.println(c_email);
-        System.out.println(c_pwd);
         try {
             /* email로 DB 고객 조회 */
             cust = custDao.selectEmail(c_email);

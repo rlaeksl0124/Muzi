@@ -4,13 +4,11 @@ import com.Toy2.cart.entity.CartDto;
 import com.Toy2.cart.service.CartService;
 import com.Toy2.order.entity.OrderDetailDto;
 import com.Toy2.order.entity.OrderDto;
+import com.Toy2.product.db.dto.ProductDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -41,17 +39,23 @@ public class CartController {
     }
 
     /**
-     * 장바구니에서 장바구니 수량과 옵션을 변경하여 DB에 저장
+     * 장바구니에서 장바구니 수량과 옵션을 변경하여 DB에 저장(지금 productOption 수정이
      * @param cartNo
-     * @param cartDto
+     * @param productCnt
+     * @param productOption
      * @return "redirect:/cart"
      * @throws Exception
      */
     @PostMapping("/modify")
-    public String modifyCart(@RequestParam(name = "cartNo") Integer cartNo, CartDto cartDto) throws Exception {
-        System.out.println(cartNo + cartDto.getCartProductCnt()+cartDto.getCartProductOption());
+    public String modifyCart(@RequestParam(name = "cartNo") int cartNo,
+                             @RequestParam(name = "productCnt") int productCnt,
+                             @RequestParam(name = "productOption") String productOption) throws Exception {
+        System.out.println(productOption);
+        CartDto cartDto = new CartDto(productCnt, productOption);
+        System.out.println(cartDto.getCartProductOption());
+        cartDto.setCartNo(cartNo);
         cartService.modifyCart(cartNo, cartDto);
-        return "redirect:/cart";
+        return "redirect:cart";
     }
 
     /**
@@ -100,15 +104,24 @@ public class CartController {
     }
 
     /**
-     * 장바구니 번호로 장바구니 한개 삭제
-     * @param cartNo
-     * @return
+     * 장바구니 번호로 장바구니 선택삭제
+     * 전체삭제를 위해 리스트로 받아서 하나씩 삭제
+     * @param cartNos
+     * @return "redirect:/cart/cart"
      * @throws Exception
      */
     @PostMapping("/remove")
-    public String removeCart(@RequestParam(name = "cartNo") Integer cartNo) throws Exception {
-        System.out.println(cartNo);
-        cartService.removeCart(cartNo);
-        return "redirect:/cart";
+    public String removeSelectedItems(@RequestParam(name = "cartNo") List<Integer> cartNos) throws Exception {
+        for (Integer cartNo : cartNos) {
+            cartService.removeCart(cartNo);
+        }
+        return "redirect:/cart/cart";
+    }
+
+    @PostMapping("add")
+    public String addCart(@RequestParam ProductDto productDto) throws Exception{
+        CartDto cartDto = null;
+        cartService.addCart(cartDto);
+        return "";
     }
 }
