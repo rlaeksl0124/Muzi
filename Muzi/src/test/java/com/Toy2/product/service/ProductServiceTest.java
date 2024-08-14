@@ -48,6 +48,8 @@ public class ProductServiceTest {
                 .discountable(true)
                 .newItem(true)
                 .viewCount(0)
+                .deliveryFee(3000)
+                .privateProduct(false)
                 .productCode("")
                 .notice("없음").build();
         boolean b = productService.insertProduct(build);
@@ -66,6 +68,8 @@ public class ProductServiceTest {
                 .discountable(true)
                 .newItem(true)
                 .viewCount(0)
+                .privateProduct(false)
+                .deliveryFee(3000)
                 .productCode("")
                 .notice("없음").build());
 
@@ -78,6 +82,7 @@ public class ProductServiceTest {
                 .amount(10000)
                 .notice("없음")
                 .productCode("qqqqqq")
+                .deliveryFee(50000)
                 .privateProduct(true)
                 .build();
 
@@ -101,6 +106,8 @@ public class ProductServiceTest {
                     .discountable(true)
                     .newItem(true)
                     .viewCount(0)
+                    .privateProduct(false)
+                    .deliveryFee(100000)
                     .productCode("")
                     .notice("없음").build();
             productDtos.add(build);

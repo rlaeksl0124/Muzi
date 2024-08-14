@@ -39,6 +39,7 @@ public class ProductTest {
 
     //assert문이 있어야함
     @Test
+    @Transactional
     public void insertDummiesData() {
         int count = 0;
 
@@ -53,7 +54,8 @@ public class ProductTest {
                         .discountable(true)
                         .newItem(true)
                         .viewCount(0)
-                        .deliveryFee(1000)
+                        .deliveryFee(30000)
+                        .privateProduct(false)
                         .productCode("")
                         .notice("없음").build();
                 productDao.insert(build);
@@ -80,6 +82,8 @@ public class ProductTest {
                 .discountable(true)
                 .newItem(true)
                 .viewCount(0)
+                .deliveryFee(30000)
+                .privateProduct(false)
                 .productCode("")
                 .notice("없음").build();
         assertThat(productDao.insert(build)).isTrue();
@@ -98,6 +102,8 @@ public class ProductTest {
                 .discountable(true)
                 .newItem(true)
                 .viewCount(0)
+                .deliveryFee(30000)
+                .privateProduct(false)
                 .productCode("")
                 .notice("없음").build();
         productDao.insert(build);
@@ -117,14 +123,15 @@ public class ProductTest {
     @Transactional
     public void productUpdateTest() {
         ProductUpdateRequestDto build = new ProductUpdateRequestDto.Builder()
-                .productNumber(999999998)
+                .productNumber(0)
                 .productPrice(999999)
                 .productName("테스트 수정 상품")
                 .newItem(false)
                 .discountable(true)
                 .amount(10000)
                 .notice("없음")
-                .privateProduct(true)
+                .deliveryFee(30000)
+                .privateProduct(false)
                 .productCode("qqqqqq")
                 .build();
         assertThat(productDao.update(build)).isTrue();
@@ -142,7 +149,8 @@ public class ProductTest {
                 .amount(10000)
                 .notice("없음")
                 .productCode("qqqqqq")
-                .privateProduct(true)
+                .deliveryFee(30000)
+                .privateProduct(false)
                 .build();
         assertThat(productDao.update(build)).isFalse();
     }
@@ -150,7 +158,7 @@ public class ProductTest {
     @Test
     @Transactional
     public void productDeleteTest() {
-        boolean delete = productDao.delete(999999998);
+        boolean delete = productDao.delete(0);
         System.out.println("delete = " + delete);
         assertThat(delete).isTrue();
     }
@@ -166,7 +174,7 @@ public class ProductTest {
     @Test
     @Transactional
     public void 데이터_비활성화() {
-        boolean disable = productDao.disable(999999998);
+        boolean disable = productDao.disable(0);
         assertThat(disable).isTrue();
     }
 
