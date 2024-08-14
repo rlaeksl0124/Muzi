@@ -113,17 +113,35 @@ public class FaqController {
                 response.getWriter().write("삭제 실패했습니다.");
                 return;
             }
-            // 설정된 문자 인코딩과 Content-Type을 사용하여 응답 작성
-            response.setContentType("text/plain;charset=UTF-8");
+//            response.setContentType("text/plain;charset=UTF-8");      // 설정된 문자 인코딩과 Content-Type을 사용하여 응답 작성
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write("성공적으로 삭제되었습니다.");
         } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.setContentType("text/plain;charset=UTF-8");
+//            response.setContentType("text/plain;charset=UTF-8");
             response.getWriter().write("FAQ 삭제 에러");
         }
     }
 
+    /* update - 등록된 FAQ 수정 */
+    // faq_view.jsp 페이지에서 수정
+    // 작성자 & 관리자 수정 가능
+    @PatchMapping("/modify")        // PatchMapping 사용
+    public void update(@RequestParam FaqDto faqDto, HttpServletResponse response) {      // 어떤 FAQ글인지 faq_no 전달
+        // 로그인 시 관리자/작성자인지 확인
+        try{
+            if (faqDto == null) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("유효하지 않은 FAQ 번호");
+                return;
+            }
+
+            if (faqService.updateFaq(faqDto) != 1)
+                throw new Exception("수정 실패했습니다.");
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 
 }

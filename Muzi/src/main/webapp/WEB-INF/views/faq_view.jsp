@@ -90,28 +90,32 @@
 
 <div class="container">
     <div class="header">
-        <h2 class="faq-title">${faqDto.faq_title}</h2>
+        <h2 class="faq-title">${faqDto.faq_title}</h2>                      <!-- faqDto에서 faq_title 값 가져옴 -->
     </div>
 
     <div class="faq-meta">
-        <div><strong>분류유형:</strong> ${faqDto.categoryName}</div>
-        <div><strong>작성자:</strong> ${faqDto.faq_writer}</div>
-        <div><strong>작성일:</strong> ${faqDto.formattedRegDate}</div>
+        <div><strong>분류유형:</strong> ${faqDto.categoryName}</div>            <!-- faqDto에서 (cate_no를 대응하는 categoryName으로 변환) categoryName 받아옴 -->
+        <div><strong>작성자:</strong> ${faqDto.faq_writer}</div>               <!--faqDto에서 faq_writer 값 가져옴 -->
+        <div><strong>작성일:</strong> ${faqDto.formattedRegDate}</div>         <!-- faqDto에서 formattedRegDate(변환된 LocalTimeStamp 형식 "yyyy-MM-dd" 받아옴 -->
     </div>
 
     <div class="faq-content">
-        ${faqDto.faq_content}
+        ${faqDto.faq_content}           <!-- faqDto에서 faq_content 값 받아옴-->
     </div>
 
     <div class="faq-closing">
-        ${faqDto.faq_closing}
+        ${faqDto.faq_closing}           <!-- faqDto에서 faq_closing 값 받아옴 (더 정확히는 default값인 "더 자세한 답변 ~ 1:1" 문구가 노출됨 -->
     </div>
 
     <!-- 버튼 그룹 -->
     <div class="button-group">
+        <!-- localhost:8080/faq FAQ 목록 보여주는 faq_center.jsp로 이동 -->
         <button class="back-button" onclick="location.href='${pageContext.request.contextPath}/faq'">목록으로 돌아가기</button>
         <div>
-            <button class="edit-button" onclick="location.href='${pageContext.request.contextPath}/faq/edit?faq_no=${faqDto.faq_no}'">수정</button>
+            <%--  클릭 가능한 버튼 : 이동 경로 localhost:8080 + /faq/edit?faq_no=${faqDto.faq_no}, 버튼 이름 "수정"--%>
+            <button class="edit-button" onclick="location.href='${pageContext.request.contextPath}/faq/modify?faq_no=${faqDto.faq_no}'">수정</button>
+
+            <%--  클릭 가능한 버튼 : deleteFaq() 함수 실행 - 매개변수로 faq_no 넘김; 버튼 이름 "삭제"--%>
             <button class="delete-button" onclick="deleteFaq(${faqDto.faq_no})">삭제</button>
         </div>
     </div>

@@ -60,6 +60,8 @@ public class FaqCategory {
         categoryMap.put(802, "MUJI 고객센터 이용 안내");
     }
 
+
+    // cate_no를 매개변수로 받아서 categoryMap에서 대응하는 번호의 카테고리 이름을 받아오기
     public static String getCategoryName(Integer cate_no) {
         return categoryMap.get(cate_no);
     }
