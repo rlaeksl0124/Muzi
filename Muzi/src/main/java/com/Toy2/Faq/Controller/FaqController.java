@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -17,7 +20,6 @@ import java.util.List;
 public class FaqController {
 
     @Autowired FaqService faqService;       // FaqService 주입 받기
-
 
     /* READ - FAQ 리스트 보여줌 */
     @RequestMapping("")
@@ -37,6 +39,8 @@ public class FaqController {
         }
         return "faq_center";
     }
+
+
 
 
     /* READ - 선택한 FAQ 게시글 조회 */

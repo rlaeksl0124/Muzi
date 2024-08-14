@@ -1,4 +1,9 @@
 /* 헤더 기본 스타일 */
+@charset "utf-8";
+* { margin: 0; padding: 0; border: 0; box-sizing: border-box; }
+ul { list-style: none; }
+a { text-decoration: none; color: black; }
+
 header {
     background-color: #ffffff; /* 흰색 배경색 */
     border-bottom: 1px solid #e0e0e0; /* 라이트 그레이 테두리 */

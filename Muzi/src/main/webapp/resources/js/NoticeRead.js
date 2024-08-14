@@ -62,7 +62,7 @@ $(document).ready(function() {
 
         // 수정 버튼 클릭 시
         $('#confirmModify').click(function () {
-        window.location.href = `/Notice/Modify?no=${noticeNo}&page=${page}`;
+        window.location.href = '/Notice/Modify?no=${noticeNo}&page=${page}';
     });
 
         // 삭제 버튼 클릭 시 삭제 확인 모달을 엽니다.
