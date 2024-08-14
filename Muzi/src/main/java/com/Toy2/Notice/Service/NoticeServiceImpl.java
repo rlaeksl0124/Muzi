@@ -27,7 +27,7 @@ public class NoticeServiceImpl implements NoticeService {
     public int deleteNotice(int id) {
         return noticeDao.deleteById(id);
     }
-//
+    //
     @Override
     public int updateNotice(NoticeDto notice) {
         Date now = new Date(System.currentTimeMillis());

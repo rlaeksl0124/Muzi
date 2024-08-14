@@ -32,5 +32,7 @@
 		<typeAlias type="com.Toy2.productcategory.categoryclosure.db.dto.ProductCategoryClosureDto" alias="ProductCategoryClosureDto"/>
 		<typeAlias type="com.Toy2.productcategory.categoryclosure.db.dto.request.CategoryClosureInsertRequestDto" alias="CategoryClosureInsertRequestDto"/>
 
+		<typeAlias type="com.Toy2.Notice.domain.FaqDto" alias="FaqDto" />
+		<typeAlias type="com.Toy2.Notice.domain.InqDto" alias="InqDto" />
 	</typeAliases>
 </configuration>

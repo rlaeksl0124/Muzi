@@ -33,7 +33,7 @@ public class NoticeDaoImpl implements NoticeDao{
     }
     @Override
     public int updateContents(NoticeDto noticeDto){
-       return sqlSession.update(namespace+"updateContents", noticeDto);
+        return sqlSession.update(namespace+"updateContents", noticeDto);
     }
 
     @Override
