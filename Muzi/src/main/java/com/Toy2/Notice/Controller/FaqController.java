@@ -120,58 +120,25 @@ public class FaqController {
         }
     }
 
-    /* update - 등록된 FAQ 수정 */
-    // faq_view.jsp 페이지에서 수정
-    // 작성자 & 관리자 수정 가능
-    // 수정은 FAQ 등록 페이지에서 기존 데이터를 가지고 수정
-//    @PostMapping("/modify")public String modifyFaq(@RequestParam("faq_no") int faq_no, FaqDto faqDto, RedirectAttributes rdr) {
-//        try {
-//            faqDto.setFaq_no(faq_no);  // Ensure the FAQ number is set in the DTO
-//
-//            if (faqService.updateFaq(faqDto) != 1) {
-//                throw new Exception("수정 실패했습니다.");
-//            }
-//
-//            rdr.addFlashAttribute("msg", "MOD_OK");
-//            return "redirect:/faq";  // Redirect to FAQ list page after success
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            rdr.addFlashAttribute("msg", "MOD_ERR");
-//            return "redirect:/faq/modify?faq_no=" + faq_no;  // Redirect back to edit page on failure
-//        }
-//    }
-//
-//
-//    @GetMapping("/modify")          // 수정할 때 faq_register 페이지에 기존 데이터를 보내줄 메서드 필요
-//    public String showFaqEditForm(@RequestParam("faq_no") int faq_no, Model model) throws Exception {
-//        FaqDto faqDto = faqService.selectFaq(faq_no);
-//        model.addAttribute("faqDto", faqDto);
-//        return "faq_register";  // This assumes faq_register.jsp is the form page for FAQ registration and modification
-//    }
+
+    /* update - 등록된 FAQ 수정 (작성자 & 관리자 수정 가능) */
+    // faq_view.jsp 페이지에서 수정 버튼 클릭 -> faq_modify 페이지에서 기존 데이터를 가지고 수정
+    @PostMapping("/modify")         // PostMapping 사용
+    public String updateFaq(FaqDto faqDto) throws Exception {
+        faqService.updateFaq(faqDto);           // faqDto 객체 보내서 업데이트
+        return "redirect:/faq";             // /faq로 리다이렉트
+    }
 
 
-    // Method to display the FAQ modification form
+    //  faq_modify.jsp 페이지에 faqDto를 전달하는 메서드
     @GetMapping("/modify")
-    public String modifyFaq(@RequestParam("faq_no") int faqNo, Model model) throws Exception {
-        // Retrieve the FAQ entry by its ID
-        FaqDto faqDto = faqService.selectFaq(faqNo);
-
-        // Add the FAQ data to the model to pre-fill the form
-        model.addAttribute("faqDto", faqDto);
-
-        // Return the JSP page for FAQ modification
-        return "faq_modify"; // Assuming faq_modify.jsp is located under /WEB-INF/views/
+    public String updateFaq(@RequestParam("faq_no") int faq_no, Model model) throws Exception {
+        FaqDto faqDto = faqService.selectFaq(faq_no);           // 선택한 FAQ 게시글(일치하는 faq_no) 조회 후 저장
+        model.addAttribute("faqDto", faqDto);       // Model에 가져온 faqDto 저장
+        return "faq_modify";        // faq_modify 페이지로 이동
     }
 
     // Method to handle the submission of the modified FAQ
-    @PostMapping("/modify")
-    public String updateFaq(FaqDto faqDto) throws Exception {
-        // Update the FAQ entry in the database
-        faqService.updateFaq(faqDto);
 
-        // Redirect to a confirmation page or FAQ list
-        return "redirect:/faq"; // Redirect to FAQ list page after modification
-    }
 
 }
