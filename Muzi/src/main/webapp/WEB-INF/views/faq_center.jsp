@@ -55,9 +55,12 @@
             text-align: center;
         }
     </style>
+    <link rel="stylesheet" href="/css/Headers.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 
+<%@include file="header.jspf"%>
 <div class="container">
     <div class="header">
         <div>
@@ -66,7 +69,8 @@
         </div>
         <div>
             <span>사용자: <strong>${faq_writer}</strong> 님</span>
-            <button onclick="location.href='logout.jsp'">로그아웃</button>
+<%--            <button onclick="location.href='logout.jsp'">로그아웃</button>--%>
+            <button onclick="location.href='/logout'">로그아웃</button>
         </div>
     </div>
 
