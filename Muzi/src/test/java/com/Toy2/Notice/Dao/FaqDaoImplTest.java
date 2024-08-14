@@ -1,7 +1,7 @@
 package com.Toy2.Notice.Dao;
 
-import com.Toy2.Notice.domain.FaqDto;
-import kotlin.jvm.Synchronized;
+import com.Toy2.Faq.Dao.FaqDao;
+import com.Toy2.Faq.Domain.FaqDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,8 @@ import static org.junit.Assert.*;
 public class FaqDaoImplTest {
 
     /* FaqDao 주입 받기 */
-    @Autowired FaqDao faqDao;
+    @Autowired
+    FaqDao faqDao;
 
     /* 메서드 이름으로 테스트 구분 */
 

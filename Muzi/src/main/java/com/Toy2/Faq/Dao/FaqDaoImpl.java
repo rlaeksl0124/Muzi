@@ -1,14 +1,11 @@
-package com.Toy2.Notice.Dao;
+package com.Toy2.Faq.Dao;
 
-import com.Toy2.Notice.domain.FaqDto;
-import kotlin.jvm.Synchronized;
+import com.Toy2.Faq.Domain.FaqDto;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /* Bean 등록해야 함 */
 @Repository

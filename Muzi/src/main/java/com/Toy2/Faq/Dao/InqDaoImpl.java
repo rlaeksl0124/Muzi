@@ -1,7 +1,6 @@
-package com.Toy2.Notice.Dao;
+package com.Toy2.Faq.Dao;
 
-import com.Toy2.Notice.domain.FaqDto;
-import com.Toy2.Notice.domain.InqDto;
+import com.Toy2.Faq.Domain.InqDto;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

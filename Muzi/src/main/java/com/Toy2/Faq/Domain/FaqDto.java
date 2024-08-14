@@ -1,4 +1,4 @@
-package com.Toy2.Notice.domain;
+package com.Toy2.Faq.Domain;
 
 import org.springframework.format.annotation.DateTimeFormat;
 

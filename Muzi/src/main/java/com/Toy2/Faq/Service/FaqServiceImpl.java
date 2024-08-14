@@ -1,7 +1,7 @@
-package com.Toy2.Notice.service;
+package com.Toy2.Faq.Service;
 
-import com.Toy2.Notice.Dao.FaqDao;
-import com.Toy2.Notice.domain.FaqDto;
+import com.Toy2.Faq.Dao.FaqDao;
+import com.Toy2.Faq.Domain.FaqDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

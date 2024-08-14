@@ -1,8 +1,7 @@
-package com.Toy2.Notice.domain;
+package com.Toy2.Faq.Domain;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 

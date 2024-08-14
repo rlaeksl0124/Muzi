@@ -1,7 +1,7 @@
 package com.Toy2.Notice.service;
 
-import com.Toy2.Notice.Dao.FaqDao;
-import com.Toy2.Notice.domain.FaqDto;
+import com.Toy2.Faq.Dao.FaqDao;
+import com.Toy2.Faq.Domain.FaqDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

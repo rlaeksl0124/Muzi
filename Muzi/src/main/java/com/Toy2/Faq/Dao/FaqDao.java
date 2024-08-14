@@ -1,6 +1,6 @@
-package com.Toy2.Notice.Dao;
+package com.Toy2.Faq.Dao;
 
-import com.Toy2.Notice.domain.FaqDto;
+import com.Toy2.Faq.Domain.FaqDto;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.Toy2.Notice.entity;
+package com.Toy2.Faq.Entity;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,6 +1,7 @@
 package com.Toy2.Notice.Dao;
 
-import com.Toy2.Notice.domain.InqDto;
+import com.Toy2.Faq.Dao.InqDao;
+import com.Toy2.Faq.Domain.InqDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,8 @@ import static org.junit.Assert.assertTrue;
 public class InqDaoImplTest {
 
     /* InqDao 주입 받기 */
-    @Autowired InqDao inqDao;
+    @Autowired
+    InqDao inqDao;
 
 
     // 개수_테스트 - Inq 게시글 개수 세기
