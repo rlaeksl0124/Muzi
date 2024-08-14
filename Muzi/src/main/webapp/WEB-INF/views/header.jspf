@@ -1,0 +1,57 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<header>
+        <link rel="stylesheet" href="/css/Header.css" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <div class="mainHeader">
+
+                <ul>
+                        <a id="headers" href="/">
+                        <li class="headText">Muji 無印良品</li>
+                        </a>
+                        <li class="headerSearch">
+                                <form action="" method="get">
+                                        <select>
+                                                <option value="title">제목</option>
+                                                <option value="contents">내용</option>
+                                        </select>
+                                        <input class="mainSearch" type="text" />
+                                        <button <%--type="submit"--%>>입력</button>
+                                </form>
+                        </li>
+                        <!-- 로그인/주문배송/장바구니 등을 오른쪽에 배치 -->
+                        <li>
+                                <ul class="accountActions">
+                                        <li>
+                                                <c:if test="${sessionScope.c_email == null}">
+                                                        <a  href="/login?toURL=${requestScope['javax.servlet.forward.request_uri']}">
+                                                                <span class="material-icons">login</span>
+                                                        </a>
+                                                        <span>로그인</span>
+                                                </c:if>
+                                                <c:if test="${sessionScope.c_email != null}">
+                                                        <a       href="/logout">
+                                                                <span class="material-icons">logout</span>
+                                                        </a>
+                                                        <span>로그아웃</span>
+                                                </c:if>
+                                        </li>
+                                        <li>
+                                                <a id="headers" href="/orders/orderList">
+                                                <span class="material-icons">local_shipping</span><br>
+                                                <span>주문배송</span></a>
+                                        </li>
+                                        <li>    <a id="headers" href="/cart/cart">
+                                                <span class="material-icons">shopping_cart</span><br>
+                                                <span>장바구니</span></a>
+                                        </li>
+                                </ul>
+                        </li>
+                </ul>
+        </div>
+        <div class="subHeader">
+                <ul>
+                        <li><a id="headers" href="/product/"> 상품</a></li>
+                        <li><a id="headers" href=""> 고객 센터</a></li>
+                </ul>
+        </div>
+</header>

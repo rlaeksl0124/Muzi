@@ -81,7 +81,6 @@ public class OrderController {
     public String orderDetailList(@RequestParam("orderNo") int orderNo, Model model, HttpSession session) throws Exception {
         if(session.getAttribute("c_email") == null)
             throw new Exception("로그인을 해주세요");
-        orderService.getOrderList(session.getAttribute("c_email").toString()).get(orderNo);
         model.addAttribute("orderDetailList",orderService.getOrderDetailList(orderNo));//주문상세에 대한 정보
         model.addAttribute("delivery",orderService.getDeliveryList(orderNo));//배송지에대한정보
         return "orderDetail";

@@ -28,7 +28,7 @@ public class CartController {
     private static final String customerEmail = "admin@";
 
     /**
-     * 장바구니 페이지 출력
+     * 회원의 장바구니 페이지 출력
      * @param model
      * @return "cart"
      * @throws Exception
@@ -41,7 +41,7 @@ public class CartController {
     }
 
     /**
-     * 장바구니에서 장바구니 수량과 옵션을 변경
+     * 장바구니에서 장바구니 수량과 옵션을 변경하여 DB에 저장
      * @param cartNo
      * @param cartDto
      * @return "redirect:/cart"
@@ -56,7 +56,7 @@ public class CartController {
 
     /**
      * 장바구니 페이지에 제품 정보를 주문페이지로 이동
-     * 제품에 대한 Dto가 없어서 이렇게 작성
+     * 제품에 대한 Dto가 없어서 이렇게 작성 추후 변경 예정
      * @param request
      * @param model
      * @return order
@@ -98,6 +98,13 @@ public class CartController {
 
         return "order";
     }
+
+    /**
+     * 장바구니 번호로 장바구니 한개 삭제
+     * @param cartNo
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/remove")
     public String removeCart(@RequestParam(name = "cartNo") Integer cartNo) throws Exception {
         System.out.println(cartNo);
