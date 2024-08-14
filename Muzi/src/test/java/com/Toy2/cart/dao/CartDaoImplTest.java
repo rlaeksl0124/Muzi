@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
-@Transactional
+//@Transactional
 public class CartDaoImplTest {
     @Autowired
     private CartDao cartDao;
@@ -20,7 +20,7 @@ public class CartDaoImplTest {
     public void cartInsert() throws Exception {
         /* 장바구니에 제품이 잘 들어가고 삭제가 잘되는지  */
         cartDao.cartDeleteAll();
-        CartDto dto = new CartDto(1, 1, "XL", "admin@");
+        CartDto dto = new CartDto(2, 1, "XL", "admin@");
         // 카트 삽입 테스트
         int insertResult = cartDao.cartInsert(dto);
         assertEquals("Insert return 1", 1, insertResult);

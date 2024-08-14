@@ -18,6 +18,7 @@
     </style>
 </head>
 <body>
+<%@ include file="header.jspf" %>
 <h2>주문상세 페이지</h2>
 
 <h4>1. 주문상품</h4>

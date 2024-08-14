@@ -25,6 +25,7 @@
     </style>
 </head>
 <body>
+<%@ include file="header.jspf" %>
 <h2>주문내역 페이지</h2>
 
 <!-- 주문 번호를 서버로 전달하기 위한 form -->

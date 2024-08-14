@@ -84,8 +84,6 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public List<OrderResponseDto> getOrderList(String customerEmail) throws Exception {
         List<OrderResponseDto> orderList = orderDao.orderList(customerEmail);
-        if(orderList.isEmpty())
-            throw new Exception("OrderList is empty");
         return orderList;
     }
 

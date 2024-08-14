@@ -21,7 +21,7 @@ public class CartServiceImplTest {
     private static final String failEmail = "failEmail";
     @Test
     public void 장바구니_추가_성공() throws Exception {
-        CartDto dto = new CartDto(1, 15, "XL", "admin@");
+        CartDto dto = new CartDto(3, 30, "XL", "admin@");
         int result = cartService.addCart(dto); //성공적인 장바구니에 물건넣기
         assertEquals(1, result);
     }

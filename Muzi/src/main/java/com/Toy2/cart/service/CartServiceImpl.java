@@ -42,8 +42,6 @@ public class CartServiceImpl implements CartService{
     @Override
     public List<CartDto> getCarts(String customerEmail) throws Exception {
         List<CartDto> emptyCheck = cartDao.cartSelectAll(customerEmail);
-        if(emptyCheck.size() == 0) //주문이 없으면 예외
-            throw new Exception("cartGets is empty");
         return emptyCheck;
     }
 

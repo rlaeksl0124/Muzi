@@ -5,6 +5,7 @@
     <title>Title</title>
 </head>
 <body>
+<%@ include file="header.jspf" %>
     <h2> 주문완료 </h2>
     <tr>
         <th>

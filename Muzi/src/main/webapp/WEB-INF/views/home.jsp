@@ -15,6 +15,7 @@
 	<title>Home</title>
 </head>
 <body>
+<%@ include file="header.jspf" %>
 <h1>
 	Hello world!  
 </h1>

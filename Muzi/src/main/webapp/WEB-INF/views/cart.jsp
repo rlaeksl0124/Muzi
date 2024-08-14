@@ -146,8 +146,10 @@
 <head>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/cart.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery 사용 -->
+
 </head>
 <body>
+<%@ include file="header.jspf" %>
 <h2>장바구니 페이지</h2>
 <form action="${pageContext.request.contextPath}/cart/order" method="post">
     <table>
@@ -180,8 +182,17 @@
                     <input type="text" name="productOption" value="${item.cartProductOption}" id="productOption_${item.cartProductNo}">
                 </td>
                 <td>
-                    <input type="hidden" name="productDeliveryPrice" value="${item.cartDelivery}" readonly>
-                        ${item.cartDelivery}
+                    <c:set var="totalAmount" value="${item.cartProductPrice * item.cartProductCnt}" />
+                    <c:choose>
+                        <c:when test="${totalAmount >= 30000}">
+                            <input type="hidden" name="productDeliveryPrice" value="0" readonly>
+                            <span>0원</span>
+                        </c:when>
+                        <c:otherwise>
+                            <input type="hidden" name="productDeliveryPrice" value="${item.cartDelivery}" readonly>
+                            <span>${item.cartDelivery}원</span>
+                        </c:otherwise>
+                    </c:choose>
                 </td>
                 <td>
                     <button type="button" onclick="modifyCart(${item.cartProductNo})">수정</button>
@@ -194,5 +205,6 @@
     </table>
     <input type="submit" value="주문하기">
 </form>
+
 </body>
 </html>

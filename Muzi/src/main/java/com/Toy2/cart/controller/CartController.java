@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +34,8 @@ public class CartController {
      * @throws Exception
      */
     @GetMapping("/cart")
-    public String cartPage(Model model) throws Exception {
-        List<CartDto> cartDto = cartService.getCarts(customerEmail);
+    public String cartPage(Model model, HttpSession session) throws Exception {
+        List<CartDto> cartDto = cartService.getCarts((String) session.getAttribute("c_email"));
         model.addAttribute("cartDto", cartDto);
         return "cart";
     }
@@ -62,8 +63,8 @@ public class CartController {
      * @throws Exception
      */
     @PostMapping("/order")
-    public String orderPageGo(HttpServletRequest request, Model model) throws Exception {
-        OrderDto orDto = new OrderDto(customerEmail);
+    public String orderPageGo(HttpServletRequest request, Model model, HttpSession session) throws Exception {
+        OrderDto orDto = new OrderDto((String) session.getAttribute("c_email"));
         List<OrderDetailDto> orderDetailList = new ArrayList<>();
         //제품을 담을 dto가 없어서 이렇게 우선 작성 차후에 변경 예정
         String[] productPrice = request.getParameterValues("productPrice");

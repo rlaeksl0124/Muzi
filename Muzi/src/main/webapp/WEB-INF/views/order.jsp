@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/styles.css">
 </head>
 <body>
+<%@ include file="header.jspf" %>
 <h2>주문 상세 정보</h2>
 <h3>
     <input type="hidden" name="customerEmail" value="${orderDto.customerEmail}">
