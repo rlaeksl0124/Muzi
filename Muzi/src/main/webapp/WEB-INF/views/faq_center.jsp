@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,11 +65,11 @@
     <div class="header">
         <div>
             <button onclick="location.href='${pageContext.request.contextPath}/faq/register'">FAQ 등록</button>
-<%--            <button type="button" onclick="deleteFaq()">FAQ 삭제</button>--%>
+            <%--            <button type="button" onclick="deleteFaq()">FAQ 삭제</button>--%>
         </div>
         <div>
             <span>사용자: <strong>${faq_writer}</strong> 님</span>
-<%--            <button onclick="location.href='logout.jsp'">로그아웃</button>--%>
+            <%--            <button onclick="location.href='logout.jsp'">로그아웃</button>--%>
             <button onclick="location.href='/logout'">로그아웃</button>
         </div>
     </div>

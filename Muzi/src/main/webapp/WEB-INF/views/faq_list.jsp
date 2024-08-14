@@ -20,12 +20,29 @@
             font-size: 24px;
             margin-bottom: 20px;
         }
+        .category-tabs {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+        .category-tabs li {
+            margin-right: 20px;
+        }
+        .category-tabs a {
+            text-decoration: none;
+            color: #333;
+            padding: 10px 15px;
+            display: inline-block;
+        }
+        .category-tabs a.active {
+            border-bottom: 3px solid #333;
+            font-weight: bold;
+        }
         .faq-item {
             border-bottom: 1px solid #ccc;
             padding: 10px 0;
-        }
-        .faq-item td {
-            padding: 5px;
         }
         .faq-question {
             font-weight: bold;
@@ -35,36 +52,51 @@
             display: none;
             padding-left: 20px;
         }
-        .faq-reply {
-            color: #666;
-            margin-top: 10px;
-        }
     </style>
+
 </head>
 <body>
 
 <div class="faq-container">
+
     <div class="faq-header">FAQ 빠른검색</div>
 
-    <table class="faq-table">
-        <tbody>
+    <!-- 카테고리 탭 -->
+    <ol class="category-tabs">          <!-- ordered list 사용 : 목록 클래스 이름은 "category-tabs"-->
+        <li>        <!-- list item으로 목록의 단일 항목 - 여기서는 FAQ 카테고리 선택에 있는 탭 중 하나를 나타냄  -->
+            <%-- cate_no 매개변수가 URL ('${empty param.cate_no}')에 없는 경우 class 속성은 "active" 클래스에 동적으로 할당됨  --%>
+            <%-- 즉 특정 카테고리를 선택하지 않으면 TOP 10 탭이 활성화 됨  --%>
+            <a href="${pageContext.request.contextPath}/faq/showFaq" class="<c:if test='${empty param.cate_no}'>active</c:if>">TOP 10</a>
+        </li>
 
-        <c:forEach var="faqDto" items="${list}">
-            <tr class="faq-item">
-                <td class="select"> </td>
-                <td class="faq-question" onclick="toggleAnswer(${faqDto.faq_no})">
-                        ${faqDto.faq_title}
-                </td>
-            </tr>
-            <tr class="replies" style="display: none;" id="answer-${faqDto.faq_no}">
-                <td colspan="2">
-                    <input type="hidden" name="faq_no" value="${faqDto.faq_no}">
-                    <div class="faq_content">${faqDto.faq_content}</div>
-                    <p class="faq_closing">${faqDto.faq_closing}</p>
-                </td>
-            </tr>
+        <c:forEach var="faq" items="${list}">       <!-- 루프의 각 항목은 faq 변수에 저장됨; items="${list}" 는 FAQ 카테고리를 나타내는 FaqDto 객체의 목록 list -->
+            <li>
+                <a href="${pageContext.request.contextPath}/faq/showFaq?cate_no=${faq.cate_no}"
+                   class="<c:if test='${param.cate_no == faq.cate_no}'>active</c:if>">
+                        ${faq.categoryName}
+                </a>
+            </li>
         </c:forEach>
 
+    </ol>
+
+    <!-- FAQ 리스트 -->
+    <table class="faq-table">
+        <tbody>
+        <c:forEach var="faqDto" items="${list}">
+            <c:if test="${empty param.cate_no || param.cate_no == faqDto.cate_no}">
+                <tr class="faq-item">
+                    <td class="faq-question" onclick="toggleAnswer(${faqDto.faq_no})">
+                            ${faqDto.faq_title}
+                    </td>
+                </tr>
+                <tr class="faq-answer" id="answer-${faqDto.faq_no}">
+                    <td colspan="2">
+                            ${faqDto.faq_content}
+                    </td>
+                </tr>
+            </c:if>
+        </c:forEach>
         </tbody>
     </table>
 </div>
