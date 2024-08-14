@@ -22,6 +22,7 @@ public class ProductUpdateRequestDto {
     private final int productAmount;
     private final String notice;
     private final String productCode;
+    private final int deliveryFee;
     private final boolean privateProduct;
 
     public ProductUpdateRequestDto(Builder builder) {
@@ -33,6 +34,7 @@ public class ProductUpdateRequestDto {
         this.productAmount = builder.productAmount;
         this.notice = builder.notice;
         this.productCode = builder.productCode;
+        this.deliveryFee = builder.deliveryFee;
         this.privateProduct = builder.privateProduct;
     }
 
@@ -69,6 +71,10 @@ public class ProductUpdateRequestDto {
         return productCode;
     }
 
+    public int getDeliveryFee() {
+        return deliveryFee;
+    }
+
     public boolean isPrivateProduct() {
         return privateProduct;
     }
@@ -82,6 +88,7 @@ public class ProductUpdateRequestDto {
         private int productAmount;
         private String notice;
         private String productCode;
+        private int deliveryFee;
         private boolean privateProduct;
 
         public Builder productNumber(int productNumber) {
@@ -121,6 +128,11 @@ public class ProductUpdateRequestDto {
 
         public Builder productCode(String productCode) {
             this.productCode = productCode;
+            return this;
+        }
+
+        public Builder deliveryFee(int deliveryFee) {
+            this.deliveryFee = deliveryFee;
             return this;
         }
 

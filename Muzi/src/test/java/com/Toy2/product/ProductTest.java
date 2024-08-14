@@ -39,9 +39,9 @@ public class ProductTest {
 
     //assert문이 있어야함
     @Test
-    @Transactional
     public void insertDummiesData() {
         int count = 0;
+
         for (int i = 0; i < 100; i++) {
             try {
                 ProductDto build = new ProductDto.Builder()
@@ -53,11 +53,13 @@ public class ProductTest {
                         .discountable(true)
                         .newItem(true)
                         .viewCount(0)
+                        .deliveryFee(1000)
                         .productCode("")
                         .notice("없음").build();
                 productDao.insert(build);
 
             } catch (IllegalArgumentException e) {
+                System.out.println("");
                 count++;
                 i--;
             }

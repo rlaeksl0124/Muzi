@@ -23,12 +23,12 @@
     <insert id="insertProduct" parameterType="ProductDto">
         INSERT INTO product
         (pdt_no, pdt_price, pdt_name, new_item, pst_status
-        , discountable, pdt_amount, notice, pdt_private)
+        , discountable, pdt_amount, notice, delivery_fee, pdt_private)
         VALUES(
         #{productNumber}, #{productPrice},
         #{productName}, #{newItem},
         #{postingStatus}, #{discountable},
-        #{productAmount}, #{notice}, #{privateProduct})
+        #{productAmount}, #{notice}, #{deliveryFee}, #{privateProduct})
     </insert>
 
     <!--상품 업데이트-->
@@ -41,6 +41,7 @@
         pdt_amount = #{productAmount},
         notice = #{notice},
         pdt_code = #{productCode},
+        delivery_fee = #{deliveryFee},
         pdt_private = #{privateProduct}
         WHERE pdt_no = #{productNumber}
     </update>
