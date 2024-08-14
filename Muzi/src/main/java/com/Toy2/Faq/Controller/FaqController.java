@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -19,11 +17,12 @@ import java.util.List;
 @RequestMapping( "/faq")
 public class FaqController {
 
-    @Autowired FaqService faqService;       // FaqService 주입 받기
+    @Autowired
+    FaqService faqService;       // FaqService 주입 받기
 
     /* READ - FAQ 리스트 보여줌 */
     @RequestMapping("")
-    public String faqCenter(Model model){
+    public String faqCenter(Model model) {
         try {
             List<FaqDto> faqList = faqService.selectAll();      // 서비스에서 모든 FAQ 게시글을 List로 가져온다
 
@@ -33,7 +32,7 @@ public class FaqController {
             }
 
             model.addAttribute("list", faqList);        // model에 FAQ 목록을 추가하여 view에서 사용할 수 있도록 함
-        } catch (Exception e){              // 예외가 발생하면
+        } catch (Exception e) {              // 예외가 발생하면
             e.printStackTrace();
             //model.addAttribute("msg", "LIST_ERR");          // 에러 메시지를 model에 추가
         }
@@ -41,10 +40,8 @@ public class FaqController {
     }
 
 
-
-
     /* READ - 선택한 FAQ 게시글 조회 */
-//    @RequestMapping("/view")
+    //    @RequestMapping("/view")
     @GetMapping("/view")
     public String viewFaq(@RequestParam("faq_no") Integer faq_no, Model model) throws Exception {       // 매개변수로 조회할 faq_no 넘김
         FaqDto faqDto = faqService.selectFaq(faq_no);           // 매개변수로 받은 faq_no를 가진 게시글을 faqDto로 저장
@@ -72,7 +69,7 @@ public class FaqController {
     @PostMapping("/register")
     public String registerFAQ(
             @RequestParam("cate_no") Integer cate_no, @RequestParam("faq_order") Integer faq_order, @RequestParam("faq_title") String faq_title,
-            @RequestParam("faq_content") String faq_content, @RequestParam("faq_writer") String faq_writer, Model model){       // faq_reg_date는 사용자가 입력하는게 아니라 FAQ 등록 시점을 저장하는 거
+            @RequestParam("faq_content") String faq_content, @RequestParam("faq_writer") String faq_writer, Model model) {       // faq_reg_date는 사용자가 입력하는게 아니라 FAQ 등록 시점을 저장하는 거
 
         FaqDto faqDto = new FaqDto();           // 새로운 FaqDto 객체 생성
         faqDto.setCate_no(cate_no);             // 매개변수로 넘어온 값을 Setter를 이용해서 객체에 저장
@@ -140,7 +137,13 @@ public class FaqController {
         return "faq_modify";        // faq_modify 페이지로 이동
     }
 
-    // Method to handle the submission of the modified FAQ
 
-
+    // showFaq - 클라이언트에게 보여주는 펼쳐지는 FAQ 페이지 맵핑
+    //로그인은 FaqController에서 고려하지 않음
+    @GetMapping("/showFaq")
+    public String showFaq(Model model) throws Exception {
+        List<FaqDto> faqList = faqService.selectAll(); // Replace this with your actual service call
+        model.addAttribute("list", faqList);
+        return "faq_list"; // Ensure this matches the name of your JSP file (without the .jsp extension)
+    }
 }
