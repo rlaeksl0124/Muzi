@@ -141,9 +141,16 @@ public class FaqController {
     // showFaq - 클라이언트에게 보여주는 펼쳐지는 FAQ 페이지 맵핑
     //로그인은 FaqController에서 고려하지 않음
     @GetMapping("/showFaq")
-    public String showFaq(Model model) throws Exception {
-        List<FaqDto> faqList = faqService.selectAll(); // Replace this with your actual service call
-        model.addAttribute("list", faqList);
-        return "faq_list"; // Ensure this matches the name of your JSP file (without the .jsp extension)
+    public String showFaq(Model model) {
+        try {
+            List<FaqDto> faqList = faqService.selectAll();          // 등록된 모든 FAQ 게시글 가져오기
+            if (faqList.size() == 0){
+                return "redirect:/faq";
+            }
+            model.addAttribute("list", faqList);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return "faq_list";          // faq_list.jsp 페이지 보여줌
     }
 }
