@@ -5,16 +5,12 @@ import com.Toy2.Notice.domain.FaqDto;
 import com.Toy2.Notice.entity.FaqCategory;
 import com.Toy2.Notice.service.FaqService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -128,27 +124,54 @@ public class FaqController {
     // faq_view.jsp 페이지에서 수정
     // 작성자 & 관리자 수정 가능
     // 수정은 FAQ 등록 페이지에서 기존 데이터를 가지고 수정
-    @PatchMapping("/modify")  // PatchMapping 사용
-    public String update(@RequestParam FaqDto faqDto, RedirectAttributes rdr, Model m) {
-        // 로그인 시 관리자/작성자인지 확인 - 추후 구현
-        try {
-            if (faqDto == null) {
-                throw new Exception("유효하지 않은 FAQ 번호");
-            }
+//    @PostMapping("/modify")public String modifyFaq(@RequestParam("faq_no") int faq_no, FaqDto faqDto, RedirectAttributes rdr) {
+//        try {
+//            faqDto.setFaq_no(faq_no);  // Ensure the FAQ number is set in the DTO
+//
+//            if (faqService.updateFaq(faqDto) != 1) {
+//                throw new Exception("수정 실패했습니다.");
+//            }
+//
+//            rdr.addFlashAttribute("msg", "MOD_OK");
+//            return "redirect:/faq";  // Redirect to FAQ list page after success
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            rdr.addFlashAttribute("msg", "MOD_ERR");
+//            return "redirect:/faq/modify?faq_no=" + faq_no;  // Redirect back to edit page on failure
+//        }
+//    }
+//
+//
+//    @GetMapping("/modify")          // 수정할 때 faq_register 페이지에 기존 데이터를 보내줄 메서드 필요
+//    public String showFaqEditForm(@RequestParam("faq_no") int faq_no, Model model) throws Exception {
+//        FaqDto faqDto = faqService.selectFaq(faq_no);
+//        model.addAttribute("faqDto", faqDto);
+//        return "faq_register";  // This assumes faq_register.jsp is the form page for FAQ registration and modification
+//    }
 
-            if (faqService.updateFaq(faqDto) != 1) {
-                throw new Exception("수정 실패했습니다.");
-            }
 
-            rdr.addFlashAttribute("msg", "MOD_OK");
-            return "redirect:/faq";  // 수정 성공 후 FAQ 목록 페이지로 리다이렉트
+    // Method to display the FAQ modification form
+    @GetMapping("/modify")
+    public String modifyFaq(@RequestParam("faq_no") int faqNo, Model model) throws Exception {
+        // Retrieve the FAQ entry by its ID
+        FaqDto faqDto = faqService.selectFaq(faqNo);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            m.addAttribute("faqDto", faqDto);  // 기존 데이터를 다시 폼에 전달
-            m.addAttribute("msg", "MOD_ERR");
-            return "faq";  // 수정 실패 시 수정 페이지로 이동
-        }
+        // Add the FAQ data to the model to pre-fill the form
+        model.addAttribute("faqDto", faqDto);
+
+        // Return the JSP page for FAQ modification
+        return "faq_modify"; // Assuming faq_modify.jsp is located under /WEB-INF/views/
+    }
+
+    // Method to handle the submission of the modified FAQ
+    @PostMapping("/modify")
+    public String updateFaq(FaqDto faqDto) throws Exception {
+        // Update the FAQ entry in the database
+        faqService.updateFaq(faqDto);
+
+        // Redirect to a confirmation page or FAQ list
+        return "redirect:/faq"; // Redirect to FAQ list page after modification
     }
 
 }

@@ -80,7 +80,7 @@
             <input type="text" id="faq_title" name="faq_title" required>
         </div>
 
-        <!-- Dropdown for selecting category -->
+        <!-- 드롭다운으로 카테고리 선택 -->
         <div class="form-group">
             <label for="cate_no">카테고리 선택</label>
             <select id="cate_no" name="cate_no" required>

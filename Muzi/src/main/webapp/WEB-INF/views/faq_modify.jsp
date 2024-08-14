@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ 등록</title>
+    <title>FAQ 수정</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -71,14 +71,18 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>FAQ 등록</h1>
+        <h1>FAQ 수정</h1>
     </div>
 
-    <form id="faqForm" action="${pageContext.request.contextPath}/faq/register" method="POST">
+    <form id="faqForm" action="${pageContext.request.contextPath}/faq/modify" method="POST">
+
+        <input type="hidden" name="faq_no" value="${faqDto.faq_no}">            <!-- faq_no 전달은 hidden으로 안 보이게-->
+
         <div class="form-group">
             <label for="faq_title">FAQ 제목</label>
-            <input type="text" id="faq_title" name="faq_title" required>
+            <input type="text" id="faq_title" name="faq_title" value="${faqDto.faq_title}" required>
         </div>
+
 
         <!-- 드롭다운으로 카테고리 선택 -->
         <div class="form-group">
@@ -141,30 +145,26 @@
             </select>
         </div>
 
+
         <div class="form-group">
             <label for="faq_content">FAQ 내용</label>
-            <textarea id="faq_content" name="faq_content" rows="5" required></textarea>
+            <textarea id="faq_content" name="faq_content" rows="5" required>${faqDto.faq_content}</textarea>
         </div>
-<%--        <div class="form-group">--%>
-<%--            <label for="faq_closing">FAQ 끝맺음말</label>--%>
-<%--            <p>미입력 시 자동값이 채워집니다.</p>--%>
-<%--            <textarea id="faq_closing" name="faq_closing" rows="3"></textarea>--%>
-<%--        </div>--%>
+
         <div class="form-group">
-            <label for="faq_writer">FAQ 작성자</label>
-            <input type="text" id="faq_writer" name="faq_writer" required>
+            <label for="faq_closing">FAQ 끝맺음말</label>
+            <p>미입력 시 자동값이 채워집니다.</p>
+            <textarea id="faq_closing" name="faq_closing" rows="3"></textarea>
         </div>
 
         <div class="form-group">
             <label for="faq_order">FAQ 순서</label>
-            <input type="number" id="faq_order" name="faq_order" required>
+            <input type="number" id="faq_order" name="faq_order" value="${faqDto.faq_order}" required>
         </div>
 
         <div class="button-group">
-            <button type="submit">등록</button>           <!-- type="submit" : form data를 제출하는 버튼-->
-
+            <button type="submit">수정</button> <!-- Submit button for modifying FAQ -->
         </div>
-
     </form>
 </div>
 
@@ -172,8 +172,6 @@
     document.getElementById('faqForm').addEventListener('submit', function(event) {
         // Get the form elements
         var faqTitle = document.getElementById('faq_title').value;
-        var faqWriter = document.getElementById('faq_writer').value;
-        // var faqClosing = document.getElementById('faq_closing').value;
         var faqOrder = document.getElementById('faq_order').value;
 
         // Validate lengths
@@ -183,20 +181,14 @@
             return;
         }
 
-        if (faqWriter.length > 10) {
-            alert("FAQ 작성자는 10자 이내로 입력해 주세요.");
+        if (faqClosing.length > 100) {
+            alert("FAQ 끝맺음말은 100자 이내로 입력해 주세요.");
             event.preventDefault(); // Prevent form submission
             return;
         }
 
-        // if (faqClosing.length > 100) {
-        //     alert("FAQ 끝맺음말은 100자 이내로 입력해 주세요.");
-        //     event.preventDefault(); // Prevent form submission
-        //     return;
-        // }
-
         if (faqOrder.length > 10) {
-            alert("FAQ 순서는 100자 이내로 입력해 주세요.");
+            alert("FAQ 순서는 10자 이내로 입력해 주세요.");
             event.preventDefault(); // Prevent form submission
             return;
         }
