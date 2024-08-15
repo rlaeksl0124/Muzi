@@ -3,7 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- mapper 태그에 namespace 등록하기 -->
-<mapper namespace="com.Toy2.Notice.Dao.FaqMapper">
+<!--<mapper namespace="com.Toy2.Notice.Dao.FaqMapper">-->
+<mapper namespace="com.Toy2.Faq.Dao.FaqDao">
 
 <!--    보이는 거 관리 하기-->
 
@@ -42,7 +43,8 @@
     <select id="selectAll" resultType="FaqDto">
         SELECT *
         FROM FAQ
-        ORDER BY faq_no ASC;
+        ORDER BY first_reg_date DESC;
+#         ORDER BY faq_no ASC;
     </select>
 
 

@@ -1,116 +1,62 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<!DOCTYPE html>
-<html lang="ko">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ 페이지</title>
+    <title>FAQ 목록</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+        .faq-content {
+            display: none; /* 기본적으로 숨김 처리 */
+            margin-top: 10px;
+            padding: 5px;
+            border: 1px solid #ddd;
         }
-        .faq-container {
-            width: 60%;
-            margin: 0 auto;
-        }
-        .faq-header {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        .category-tabs {
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ccc;
-            display: flex;
-            list-style: none;
-            padding: 0;
-        }
-        .category-tabs li {
-            margin-right: 20px;
-        }
-        .category-tabs a {
-            text-decoration: none;
-            color: #333;
-            padding: 10px 15px;
-            display: inline-block;
-        }
-        .category-tabs a.active {
-            border-bottom: 3px solid #333;
-            font-weight: bold;
-        }
-        .faq-item {
-            border-bottom: 1px solid #ccc;
-            padding: 10px 0;
-        }
-        .faq-question {
-            font-weight: bold;
+        .faq-title {
             cursor: pointer;
-        }
-        .faq-answer {
-            display: none;
-            padding-left: 20px;
+            font-weight: bold;
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
         }
     </style>
 
 </head>
 <body>
 
-<div class="faq-container">
-
-    <div class="faq-header">FAQ 빠른검색</div>
-
-    <!-- 카테고리 탭 -->
-    <ol class="category-tabs">          <!-- ordered list 사용 : 목록 클래스 이름은 "category-tabs"-->
-        <li>        <!-- list item으로 목록의 단일 항목 - 여기서는 FAQ 카테고리 선택에 있는 탭 중 하나를 나타냄  -->
-            <%-- cate_no 매개변수가 URL ('${empty param.cate_no}')에 없는 경우 class 속성은 "active" 클래스에 동적으로 할당됨  --%>
-            <%-- 즉 특정 카테고리를 선택하지 않으면 TOP 10 탭이 활성화 됨  --%>
-            <a href="${pageContext.request.contextPath}/faq/showFaq" class="<c:if test='${empty param.cate_no}'>active</c:if>">TOP 10</a>
-        </li>
-
-        <c:forEach var="faq" items="${list}">       <!-- 루프의 각 항목은 faq 변수에 저장됨; items="${list}" 는 FAQ 카테고리를 나타내는 FaqDto 객체의 목록 list -->
+<div class="category-tab">
+    <ol class="tabnav">
+        <!-- 카테고리 탭 생성 -->
+        <c:forEach items="${lists}" var="faqDto">
             <li>
-                <a href="${pageContext.request.contextPath}/faq/showFaq?cate_no=${faq.cate_no}"
-                   class="<c:if test='${param.cate_no == faq.cate_no}'>active</c:if>">
-                        ${faq.categoryName}
-                </a>
+                <a href="${pageContext.request.contextPath}/faq/showFaq?cate_no=${faqDto.cate_no}">${faqDto.categoryName}</a>
             </li>
         </c:forEach>
-
     </ol>
-
-    <!-- FAQ 리스트 -->
-    <table class="faq-table">
-        <tbody>
-        <c:forEach var="faqDto" items="${list}">
-            <c:if test="${empty param.cate_no || param.cate_no == faqDto.cate_no}">
-                <tr class="faq-item">
-                    <td class="faq-question" onclick="toggleAnswer(${faqDto.faq_no})">
-                            ${faqDto.faq_title}
-                    </td>
-                </tr>
-                <tr class="faq-answer" id="answer-${faqDto.faq_no}">
-                    <td colspan="2">
-                            ${faqDto.faq_content}
-                    </td>
-                </tr>
-            </c:if>
-        </c:forEach>
-        </tbody>
-    </table>
 </div>
 
+<div class="faq-list">
+    <!-- FAQ 목록 -->
+    <c:forEach items="${lists}" var="faqDto">
+        <div class="faq-item">
+            <!-- FAQ 제목 -->
+            <div class="faq-title" onclick="toggleContent(${faqDto.faq_no})">
+                    ${faqDto.faq_title}
+            </div>
+            <!-- FAQ 내용 (숨김 처리) -->
+            <input type="hidden" id="faq_no" value="${faqDto.faq_no}"/>
+            <div id="content-${faqDto.faq_no}" class="faq-content">
+                    ${faqDto.faq_content}
+            </div>
+        </div>
+    </c:forEach>
+</div>
 <script>
-    function toggleAnswer(id) {
-        var element = document.getElementById('answer-' + id);
-        if (element.style.display === 'none' || element.style.display === '') {
-            element.style.display = 'table-row';
+    function toggleContent(faq_no) {
+        var content = document.getElementById('content-' + faq_no);
+        if (content.style.display === "none" || content.style.display === "") {
+            content.style.display = "block";
         } else {
-            element.style.display = 'none';
+            content.style.display = "none";
         }
     }
 </script>
-
 </body>
 </html>

@@ -13,7 +13,8 @@ public class FaqDaoImpl implements FaqDao{
 
     @Autowired
     SqlSession session;     /* SqlSession 주입 받기 */
-    String namespace = "com.Toy2.Notice.Dao.FaqMapper.";        /* namespace 저장 */
+//    String namespace = "com.Toy2.Notice.Dao.FaqMapper.";        /* namespace 저장 */
+    String namespace= "com.Toy2.Faq.Dao.FaqDao.";
 
     /* count - 행 개수 셈 */
     @Override

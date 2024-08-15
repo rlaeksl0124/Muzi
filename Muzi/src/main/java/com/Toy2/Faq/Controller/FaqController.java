@@ -1,5 +1,6 @@
 package com.Toy2.Faq.Controller;
 
+import com.Toy2.Faq.Domain.FaqCateDto;
 import com.Toy2.Faq.Domain.FaqDto;
 import com.Toy2.Faq.Entity.FaqCategory;
 import com.Toy2.Faq.Service.FaqService;
@@ -19,6 +20,7 @@ public class FaqController {
 
     @Autowired
     FaqService faqService;       // FaqService 주입 받기
+    FaqCateDto faqCateDto;
 
     /* READ - FAQ 리스트 보여줌 */
     @RequestMapping("")
@@ -141,17 +143,12 @@ public class FaqController {
     // showFaq - 클라이언트에게 보여주는 펼쳐지는 FAQ 페이지 맵핑
     //로그인은 FaqController에서 고려하지 않음
     @GetMapping("/showFaq")
-    public String showFaq(@RequestParam(value = "cate_no", required = false) Integer cate_no,  Model model) {
+    public String showFaq(Model model) {
         try {
             List<FaqDto> faqList = faqService.selectAll();          // 등록된 모든 FAQ 게시글 가져오기
 
             if (faqList.isEmpty()){
                 return "redirect:/faq";
-            }
-
-            for (FaqDto faq : faqList) {                            // 가져온 FaqDto의 리스트를 순회
-                String categoryName = FaqCategory.getCategoryName(faq.getCate_no());        // 카테고리 번호를 이용해 카테고리 이름 조회
-                faq.setCategoryName(categoryName);          // 조회한 카테고리 이름을 FAQ 게시글의 카테고리 이름으로 설정
             }
 
             model.addAttribute("list", faqList);
