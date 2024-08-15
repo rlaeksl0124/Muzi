@@ -19,4 +19,7 @@ public interface NoticeService {
 
     /* 삭제 대신 사용할 상태 변경 */
     int deleteContents(NoticeDto notice);
+
+    /* 상단에 올릴 순서 변경 서비스 */
+    int updateN_order(NoticeDto notice);
 }

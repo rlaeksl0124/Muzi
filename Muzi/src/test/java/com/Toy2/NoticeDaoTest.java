@@ -40,7 +40,7 @@ public class NoticeDaoTest {
 
         /* csv 파일에서 읽어오기 */
         try {
-            fr = new FileReader("D:\\Noticedummy.csv");
+            fr = new FileReader("C:\\Users\\jeongha\\Desktop\\개발\\KDT\\Noticedummy.csv");
             while((data=fr.read())!=-1) {
                 str += (char)data;
             }

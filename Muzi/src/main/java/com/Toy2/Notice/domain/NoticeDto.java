@@ -17,6 +17,7 @@ public class NoticeDto {
     private Date frst_reg_dt;
     private String last_mod_id = "admin";
     private Date last_mod_dt;
+    private int n_order = 0;
     public NoticeDto() {}
 
     public Long getNotice_no() {
@@ -107,13 +108,21 @@ public class NoticeDto {
         this.last_mod_dt = last_mod_dt;
     }
 
+    public int getN_order() {
+        return n_order;
+    }
+
+    public void setN_order(int n_order) {
+        this.n_order = n_order;
+    }
+
     @Override
     public String toString() {
         return "NoticeDto{" +
-                "notice_No=" + notice_no +
+                "notice_no=" + notice_no +
                 ", n_title='" + n_title + '\'' +
                 ", n_contents='" + n_contents + '\'' +
-                ", n_writer='" + c_email + '\'' +
+                ", c_email='" + c_email + '\'' +
                 ", n_createDate=" + n_createDate +
                 ", n_ViewCnt=" + n_ViewCnt +
                 ", n_state='" + n_state + '\'' +
@@ -121,6 +130,7 @@ public class NoticeDto {
                 ", frst_reg_dt=" + frst_reg_dt +
                 ", last_mod_id='" + last_mod_id + '\'' +
                 ", last_mod_dt=" + last_mod_dt +
+                ", n_order=" + n_order +
                 '}';
     }
 }

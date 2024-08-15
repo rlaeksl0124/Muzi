@@ -13,4 +13,5 @@ public interface NoticeDao {
     public int updateContents(NoticeDto notice);
     public int deleteById(int notice_no);
     public int updateState(NoticeDto notice);
+    public int updateN_order(NoticeDto notice);
 }
