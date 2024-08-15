@@ -5,7 +5,25 @@
 <html>
 <head>
 	<title>Product-Home</title>
+
+<style>
+        .toggle-content {
+            display: none;
+        }
+        .toggle-button {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
+
+</style>
 <script>
+        function toggleContent(id) {
+            var content = document.getElementById(id);
+            var isVisible = content.style.display === 'block';
+            content.style.display = isVisible ? 'none' : 'block';
+        }
+
 </script>
 </head>
 <body>
@@ -32,6 +50,31 @@
                 </tr>
             </table>
         </c:if>
+
+
+        <form action="/Muzi_project/product/submit" method="post">
+
+                <c:forEach var="option" items="${productOption}">
+                        <label>${option.key} : </label>
+                        <select id="${option.key}" name="${option.key}">
+                            <c:forEach var="detail" items="${option.value}">
+                                <option value="${detail}">${detail}</option>
+                            </c:forEach>
+                        </select>
+                        <br>
+                </c:forEach>
+
+            <br><br>
+
+            <!-- 수량 입력 -->
+            <label for="quantity">수량:</label>
+            <input type="number" id="quantity" name="quantity" min="1" required>
+            <input type ="hidden" id="product" name="product" value="${product}">
+            <br><br>
+
+            <!-- 제출 버튼 -->
+            <button type="submit">제출</button>
+        </form>
 
     <c:forEach var="entry" items="${attribute}">
         <c:if test = "${entry.key==0}">

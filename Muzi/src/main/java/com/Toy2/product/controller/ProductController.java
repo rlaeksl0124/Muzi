@@ -7,10 +7,7 @@ import com.Toy2.product.domain.service.ProductService;
 import com.Toy2.product.productdetail.db.dto.ProductPictureDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -38,9 +35,12 @@ public class ProductController {
     public ModelAndView getProductDetail(@RequestParam int productNumber, ModelAndView modelAndView) {
         Map<Integer, List<ProductPictureDto>> map = productService.selectPictures(productNumber);
         ProductDto productDto = productService.selectProduct(productNumber);
+        Map<String, List<String>> options = productService.selectProductOption(productNumber);
+
         modelAndView.setViewName("product-detail");
         modelAndView.addObject("attribute", map);
         modelAndView.addObject("product", productDto);
+        modelAndView.addObject("productOption", options);
         return modelAndView;
     }
 
@@ -49,5 +49,11 @@ public class ProductController {
     public ResultResponseDto<List<Integer>> getPages(int limit) {
         List<Integer> pages = productService.countPages(limit);
         return new ResultResponseDto<>(pages, pages != null);
+    }
+
+    @PostMapping("/product/submit")
+    public void test(@RequestParam Map<String, String> options) {
+        System.out.println("ProductController.test");;
+        System.out.println(options);
     }
 }

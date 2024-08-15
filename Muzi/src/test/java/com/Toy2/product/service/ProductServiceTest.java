@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -124,5 +125,11 @@ public class ProductServiceTest {
     public void productServiceDeleteTest() {
         boolean delete = productService.deleteService(1);
         assertThat(delete).isTrue();
+    }
+
+    @Test
+    public void productOptionSelectTest() {
+        Map<String, List<String>> stringProductOptionDtoMap = productService.selectProductOption(1);
+        System.out.println("stringProductOptionDtoMap = " + stringProductOptionDtoMap);
     }
 }

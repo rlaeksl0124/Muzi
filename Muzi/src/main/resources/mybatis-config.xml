@@ -31,6 +31,8 @@
 		<typeAlias type="com.Toy2.productcategory.db.dto.request.ProductCategoryUpdateRequestDto" alias="ProductCategoryUpdateRequestDto"/>
 		<typeAlias type="com.Toy2.productcategory.categoryclosure.db.dto.ProductCategoryClosureDto" alias="ProductCategoryClosureDto"/>
 		<typeAlias type="com.Toy2.productcategory.categoryclosure.db.dto.request.CategoryClosureInsertRequestDto" alias="CategoryClosureInsertRequestDto"/>
+		<typeAlias type="com.Toy2.product.option.db.dto.ProductOptionDto" alias="ProductOptionDto"/>
+		<!--K-KY-->
 
 		<typeAlias type="com.Toy2.Faq.Domain.FaqDto" alias="FaqDto" />
 		<typeAlias type="com.Toy2.Faq.Domain.InqDto" alias="InqDto" />

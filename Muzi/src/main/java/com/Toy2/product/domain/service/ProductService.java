@@ -4,6 +4,8 @@ import com.Toy2.product.db.dao.ProductDao;
 import com.Toy2.product.db.dto.ProductDto;
 import com.Toy2.product.db.dto.request.ProductPageRequestDto;
 import com.Toy2.product.db.dto.request.ProductUpdateRequestDto;
+import com.Toy2.product.option.db.dao.ProductOptionDao;
+import com.Toy2.product.option.db.dto.ProductOptionDto;
 import com.Toy2.product.productdetail.db.dao.ProductDetailDao;
 import com.Toy2.product.productdetail.db.dto.ProductPictureDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ public class ProductService {
     private ProductDao productDao;
     @Autowired
     private ProductDetailDao productDetailDao;
+    @Autowired
+    private ProductOptionDao productOptionDao;
 
     public ProductService(ProductDao productDao) {
         this.productDao = productDao;
@@ -119,5 +123,18 @@ public class ProductService {
         map.put(0, productPictures);
         map.put(1, productDetailPicturePictures);
         return map;
+    }
+
+    public Map<String, List<String>> selectProductOption(int productNumber) {
+        List<ProductOptionDto> options = productOptionDao.selectOptions(productNumber);
+        return options.stream()
+                .collect(Collectors.groupingBy(
+                        ProductOptionDto::getOptionName,
+                        Collectors.mapping(
+                                ProductOptionDto::getOptionDetail,
+                                Collectors.toList()
+                        )
+                ));
+
     }
 }
