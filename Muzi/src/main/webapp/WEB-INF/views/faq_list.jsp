@@ -17,18 +17,19 @@
             border-bottom: 1px solid #ddd;
         }
     </style>
-
+    <link rel="stylesheet" href="/css/Headers.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 
 <div class="category-tab">
     <ol class="tabnav">
         <!-- 카테고리 탭 생성 -->
-        <c:forEach items="${lists}" var="faqDto">
-            <li>
-                <a href="${pageContext.request.contextPath}/faq/showFaq?cate_no=${faqDto.cate_no}">${faqDto.categoryName}</a>
-            </li>
-        </c:forEach>
+<%--        <c:forEach items="${category}" var="faqCateDto">--%>
+<%--            <li>--%>
+<%--                <a href="/faq/showFaq?cate_no=${faqCateDto.cate_no}">${faqCateDto.categoryName}</a>--%>
+<%--            </li>--%>
+<%--        </c:forEach>--%>
     </ol>
 </div>
 

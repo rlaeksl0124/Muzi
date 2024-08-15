@@ -1,5 +1,6 @@
 package com.Toy2.Faq.Controller;
 
+import com.Toy2.Faq.Dao.FaqCateDao;
 import com.Toy2.Faq.Domain.FaqCateDto;
 import com.Toy2.Faq.Domain.FaqDto;
 import com.Toy2.Faq.Entity.FaqCategory;
@@ -10,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -18,9 +18,8 @@ import java.util.List;
 @RequestMapping( "/faq")
 public class FaqController {
 
-    @Autowired
-    FaqService faqService;       // FaqService 주입 받기
-    FaqCateDto faqCateDto;
+    @Autowired FaqService faqService;       // FaqService 주입 받기
+    @Autowired FaqCateDao faqCateDao;
 
     /* READ - FAQ 리스트 보여줌 */
     @RequestMapping("")
@@ -146,12 +145,21 @@ public class FaqController {
     public String showFaq(Model model) {
         try {
             List<FaqDto> faqList = faqService.selectAll();          // 등록된 모든 FAQ 게시글 가져오기
+//            List<FaqCateDao> faqCategory = faqCateDao.selectAll();
+
+            List<FaqCateDao> faqCategory = faqCateDao.selectAll();
+
+            System.out.println("FAQ List: " + faqList);
+            System.out.println("FAQ Categories: " + faqCategory);
 
             if (faqList.isEmpty()){
                 return "redirect:/faq";
             }
-
+            if (faqCategory.isEmpty()){
+                return "redirect:/faq";
+            }
             model.addAttribute("list", faqList);
+            model.addAttribute("category", faqCategory);
 
         } catch (Exception e){
             e.printStackTrace();

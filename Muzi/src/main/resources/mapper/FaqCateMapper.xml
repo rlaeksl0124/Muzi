@@ -4,9 +4,11 @@
 
 
 <!-- mapper 태그에 namespace 등록하기 -->
-<mapper namespace="toy2.Faq.Dao.FaqMapper">
+<mapper namespace="toy2.Faq.Dao.FaqCateDao">
 
-<select id = "selectAllNames" resultType="map">
-    SELECT cate_mid, cate_small FROM FAQ_CATE
-    ORDER BY cate_no ASC;
-</select>
+    <select id = "selectAllNames" resultType="map">
+        SELECT cate_name FROM FAQ_CATE
+        ORDER BY cate_no ASC
+    </select>
+
+</mapper>
