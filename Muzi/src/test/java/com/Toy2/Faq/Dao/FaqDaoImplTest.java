@@ -1,6 +1,5 @@
-package com.Toy2.Notice.Dao;
+package com.Toy2.Faq.Dao;
 
-import com.Toy2.Faq.Dao.FaqDao;
 import com.Toy2.Faq.Domain.FaqDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
