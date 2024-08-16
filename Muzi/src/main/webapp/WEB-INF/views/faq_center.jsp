@@ -54,6 +54,9 @@
         .checkbox {
             text-align: center;
         }
+        /*.faq-order {*/
+        /*    text-align: center;*/
+        /*}*/
     </style>
     <link rel="stylesheet" href="/css/Headers.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -65,11 +68,9 @@
     <div class="header">
         <div>
             <button onclick="location.href='${pageContext.request.contextPath}/faq/register'">FAQ 등록</button>
-            <%--            <button type="button" onclick="deleteFaq()">FAQ 삭제</button>--%>
         </div>
         <div>
             <span>사용자: <strong>${faq_writer}</strong> 님</span>
-            <%--            <button onclick="location.href='logout.jsp'">로그아웃</button>--%>
             <button onclick="location.href='/logout'">로그아웃</button>
         </div>
     </div>
@@ -78,6 +79,7 @@
         <thead>
         <tr>
             <th class="checkbox"><input type="checkbox" onclick="selectAll(this)"></th>
+<%--            <th class="faq-order" onclick="selectAll(this)"></th>--%>
             <th>분류유형</th>
             <th>FAQ 제목</th>
             <th>작성자</th>

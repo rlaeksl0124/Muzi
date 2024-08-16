@@ -7,7 +7,7 @@
 <mapper namespace="toy2.Faq.Dao.FaqCateDao">
 
     <select id = "selectAllNames" resultType="map">
-        SELECT cate_name FROM FAQ_CATE
+        SELECT cate_no, cate_name FROM FAQ_CATE
         ORDER BY cate_no ASC
     </select>
 

@@ -1,7 +1,6 @@
 package com.Toy2.Faq.Controller;
 
 import com.Toy2.Faq.Dao.FaqCateDao;
-import com.Toy2.Faq.Domain.FaqCateDto;
 import com.Toy2.Faq.Domain.FaqDto;
 import com.Toy2.Faq.Entity.FaqCategory;
 import com.Toy2.Faq.Service.FaqService;
@@ -145,12 +144,8 @@ public class FaqController {
     public String showFaq(Model model) {
         try {
             List<FaqDto> faqList = faqService.selectAll();          // 등록된 모든 FAQ 게시글 가져오기
-//            List<FaqCateDao> faqCategory = faqCateDao.selectAll();
 
             List<FaqCateDao> faqCategory = faqCateDao.selectAll();
-
-            System.out.println("FAQ List: " + faqList);
-            System.out.println("FAQ Categories: " + faqCategory);
 
             if (faqList.isEmpty()){
                 return "redirect:/faq";
