@@ -10,6 +10,7 @@ public class CartDto {
     private String cartProductOption; //장바구니 선택제품옵션
     private Integer cartDelivery;  //장바구니 예상 배송비
     private String customerEmail; //고객 이메일
+    private String cartProductName;
     //ca_no, pdt_no, ca_cnt, ca_price, ca_option, ca_delv
     public CartDto(){}
     //삽입을 위한 생성자
@@ -31,6 +32,14 @@ public class CartDto {
         this.cartProductPrice = cartProductPrice;
         this.cartProductOption = cartProductOption;
         this.cartDelivery = cartDelivery;
+    }
+
+    public String getCartProductName() {
+        return cartProductName;
+    }
+
+    public void setCartProductName(String cartProductName) {
+        this.cartProductName = cartProductName;
     }
 
     public Integer getCartNo() {

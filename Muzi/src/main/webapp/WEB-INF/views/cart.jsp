@@ -32,8 +32,8 @@
                     <input type="checkbox" name="cartNo" value="${item.cartNo}" class="selectItem">
                 </td>
                 <td>
+                        ${item.cartProductName} <!-- 제품 이름 출력 -->
                     <input type="hidden" name="productNo" value="${item.cartProductNo}">
-                        ${item.cartProductNo}
                 </td>
                 <td>
                     <input type="hidden" name="productPrice" value="${item.cartProductPrice}">

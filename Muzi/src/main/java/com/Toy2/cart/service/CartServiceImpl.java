@@ -3,6 +3,8 @@ package com.Toy2.cart.service;
 import com.Toy2.Cust.Dao.CustDao;
 import com.Toy2.cart.dao.CartDao;
 import com.Toy2.cart.entity.CartDto;
+import com.Toy2.product.db.dao.ProductDao;
+import com.Toy2.product.db.dto.ProductDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,11 +15,13 @@ import java.util.List;
 public class CartServiceImpl implements CartService{
     private CartDao cartDao;
     private CustDao custDao;
+    private ProductDao productDao;
 
     @Autowired
-    public CartServiceImpl(CartDao cartDao, CustDao custDao) {
+    public CartServiceImpl(CartDao cartDao, CustDao custDao, ProductDao productDao) {
         this.cartDao = cartDao;
         this.custDao = custDao;
+        this.productDao = productDao;
     }
     /**
      * 상품추가
@@ -51,6 +55,10 @@ public class CartServiceImpl implements CartService{
     @Override
     public List<CartDto> getCarts(String customerEmail) throws Exception {
         List<CartDto> emptyCheck = cartDao.cartSelectAll(customerEmail);
+        for (CartDto cart : emptyCheck) {
+            ProductDto product = productDao.select(cart.getCartProductNo());
+            cart.setCartProductName(product.getProductName()); // 제품 이름 설정
+        }
         return emptyCheck;
     }
 

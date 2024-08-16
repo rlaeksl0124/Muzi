@@ -47,7 +47,7 @@ public class CartController {
     @PostMapping("/modify")
     public String modifyCart(@RequestParam(name = "cartNo") int cartNo,
                              @RequestParam(name = "productCnt") int productCnt) throws Exception {
-        if(productCnt <= 0) //0이하의 값이 들어갈경우
+        if(productCnt <= 0) //0이하의
             return "redirect:/cart/cart";
         CartDto cartDto = new CartDto(productCnt);
 
