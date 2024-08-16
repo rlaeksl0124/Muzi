@@ -3,23 +3,12 @@
 <html>
 <head>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/styles.css">
-    <style>
-        #orderDetailTable {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        #orderDetailTable, #orderDetailTable th, #orderDetailTable td {
-            border: 1px solid black;
-        }
-        #orderDetailTable th, #orderDetailTable td {
-            padding: 8px;
-            text-align: left;
-        }
-    </style>
+
     <title>주문상세목록</title>
 </head>
 <body>
 <%@ include file="header.jspf" %>
+<link rel="stylesheet" href="/css/orderDetail.css" />
 <h2>주문상세 페이지</h2>
 
 <h4>1. 주문상품</h4>

@@ -6,6 +6,8 @@
 </head>
 <body>
 <%@ include file="header.jspf" %>
+
+<link rel="stylesheet" href="/css/orderSuccess.css" />
     <h2> 주문완료 </h2>
     <tr>
         <th>

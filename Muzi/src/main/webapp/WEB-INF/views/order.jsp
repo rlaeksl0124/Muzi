@@ -8,6 +8,8 @@
 </head>
 <body>
 <%@ include file="header.jspf" %>
+
+<link rel="stylesheet" href="/css/order.css" />
 <h2>주문 상세 정보</h2>
 <h3>
     <input type="hidden" name="customerEmail" value="${orderDto.customerEmail}">

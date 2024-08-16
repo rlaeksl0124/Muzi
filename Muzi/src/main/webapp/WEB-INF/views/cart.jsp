@@ -6,9 +6,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery 사용 -->
     <title>장바구니</title>
 </head>
+
 <body>
 <%@ include file="header.jspf" %>
-
+<link rel="stylesheet" href="/css/cart.css" />
 <h2>장바구니 페이지</h2>
 <form id="cartForm" method="post">
     <table>
