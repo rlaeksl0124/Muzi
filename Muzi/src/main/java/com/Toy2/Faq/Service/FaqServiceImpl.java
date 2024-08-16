@@ -15,25 +15,25 @@ public class FaqServiceImpl implements FaqService {
 
     // 개수 세기
     @Override
-    public int countFaq() throws Exception {
+    public int count() throws Exception {
         return faqDao.count();
     }
 
     // 관리자가 모두 삭제 - 필요한지 다시 생각해보기
-    @Override
-    public int deleteAllFaq() throws Exception {
-        return faqDao.deleteAll();
-    }
+//    @Override
+//    public int deleteAll() throws Exception {
+//        return faqDao.deleteAll();
+//    }
 
     // 관리자가 삭제
     @Override
-    public int deleteFaq(Integer faq_no) throws Exception{
+    public int delete(Integer faq_no) throws Exception{
         return faqDao.delete(faq_no);
     }
 
     // FAQ 등록
     @Override
-    public int insertFaq(FaqDto faqDto) throws Exception{
+    public int insert(FaqDto faqDto) throws Exception{
         return faqDao.insert(faqDto);
     }
 
@@ -45,7 +45,7 @@ public class FaqServiceImpl implements FaqService {
 
     // FAQ 하나 조회
     @Override
-    public FaqDto selectFaq(Integer faq_no) throws Exception{
+    public FaqDto select(Integer faq_no) throws Exception{
         FaqDto faqDto = faqDao.select(faq_no);
         faqDao.increaseViewCnt(faq_no);
         return faqDto;
@@ -53,7 +53,7 @@ public class FaqServiceImpl implements FaqService {
 
     // FAQ 수정
     @Override
-    public int updateFaq(FaqDto faqDto) throws Exception{
+    public int update(FaqDto faqDto) throws Exception{
         return faqDao.update(faqDto);
     }
 }

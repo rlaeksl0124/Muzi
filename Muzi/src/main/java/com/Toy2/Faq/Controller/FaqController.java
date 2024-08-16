@@ -44,7 +44,7 @@ public class FaqController {
     //    @RequestMapping("/view")
     @GetMapping("/view")
     public String viewFaq(@RequestParam("faq_no") Integer faq_no, Model model) throws Exception {       // 매개변수로 조회할 faq_no 넘김
-        FaqDto faqDto = faqService.selectFaq(faq_no);           // 매개변수로 받은 faq_no를 가진 게시글을 faqDto로 저장
+        FaqDto faqDto = faqService.select(faq_no);           // 매개변수로 받은 faq_no를 가진 게시글을 faqDto로 저장
         if (faqDto == null) {               // faqDto가 null이면 해당하는 게시글이 없다는 것
             throw new Exception("FAQ not found");
         }
@@ -79,7 +79,7 @@ public class FaqController {
         faqDto.setFaq_writer(faq_writer);
 
         try {
-            if (faqService.insertFaq(faqDto) != 1)          // != 1이면 insert 안 됐다는 뜻
+            if (faqService.insert(faqDto) != 1)          // != 1이면 insert 안 됐다는 뜻
                 throw new Exception("FAQ registration failed.");
 
             model.addAttribute("faqDto", faqDto);           // == 1이면 insert 된 거니까
@@ -103,7 +103,7 @@ public class FaqController {
                 response.getWriter().write("유효하지 않은 FAQ 번호");
                 return;
             }
-            if (faqService.deleteFaq(faq_no) != 1) {
+            if (faqService.delete(faq_no) != 1) {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.getWriter().write("삭제 실패했습니다.");
                 return;
@@ -124,7 +124,7 @@ public class FaqController {
     // faq_view.jsp 페이지에서 수정 버튼 클릭 -> faq_modify 페이지에서 기존 데이터를 가지고 수정
     @PostMapping("/modify")         // PostMapping 사용
     public String updateFaq(FaqDto faqDto) throws Exception {
-        faqService.updateFaq(faqDto);           // faqDto 객체 보내서 업데이트
+        faqService.update(faqDto);           // faqDto 객체 보내서 업데이트
         return "redirect:/faq";             // /faq로 리다이렉트
     }
 
@@ -132,7 +132,7 @@ public class FaqController {
     //  faq_modify.jsp 페이지에 faqDto를 전달하는 메서드
     @GetMapping("/modify")
     public String updateFaq(@RequestParam("faq_no") int faq_no, Model model) throws Exception {
-        FaqDto faqDto = faqService.selectFaq(faq_no);           // 선택한 FAQ 게시글(일치하는 faq_no) 조회 후 저장
+        FaqDto faqDto = faqService.select(faq_no);           // 선택한 FAQ 게시글(일치하는 faq_no) 조회 후 저장
         model.addAttribute("faqDto", faqDto);       // Model에 가져온 faqDto 저장
         return "faq_modify";        // faq_modify 페이지로 이동
     }
