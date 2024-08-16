@@ -36,7 +36,10 @@
                 <c:choose>
                     <c:when test="${item.orderDetailStatus == 'OC1'}">
                         주문완료
-                        <form action="/order/cancel" method="get">
+                        <form action="/orders/cancelUpdate" method="get">
+                            <!-- 주문 상세 번호와 상태를 숨겨서 전송 -->
+                            <input type="hidden" name="orderDetailNo" value="${item.orderDetailNo}">
+                            <input type="hidden" name="status" value="OC2"> <!-- 상태를 OC2로 변경 -->
                             <input type="submit" value="주문취소">
                         </form>
                     </c:when>

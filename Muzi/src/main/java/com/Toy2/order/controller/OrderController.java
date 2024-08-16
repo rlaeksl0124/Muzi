@@ -95,10 +95,16 @@ public class OrderController {
             model.addAttribute("orderDetailList",orderService.getOrderDetailList(orderNo));//주문상세에 대한 정보
             model.addAttribute("delivery",orderService.getDeliveryList(orderNo));//배송지에대한정보
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return "orderList";
         }
         return "orderDetail";
     }
 
+    @PostMapping("/cancel")
+    public String orderDetailUpdate(int orderDetailNo, String status) throws Exception {
+        System.out.println(orderDetailNo+ status);
+        orderService.updateOrderDetail(orderDetailNo, status);
+        return "redirect:/orderDetailList";
+    }
 
 }

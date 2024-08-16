@@ -47,7 +47,10 @@ public class CartController {
     @PostMapping("/modify")
     public String modifyCart(@RequestParam(name = "cartNo") int cartNo,
                              @RequestParam(name = "productCnt") int productCnt) throws Exception {
+        if(productCnt <= 0) //0이하의 값이 들어갈경우
+            return "redirect:/cart/cart";
         CartDto cartDto = new CartDto(productCnt);
+
         cartDto.setCartNo(cartNo);
         cartService.modifyCart(cartNo, cartDto);
         return "redirect:/cart/cart";
@@ -77,26 +80,30 @@ public class CartController {
         if (customerEmail == null) {
             throw new Exception("로그인이 필요합니다.");
         }
-        if (productNos != null) {
-            for (int i = 0; i < productNos.length; i++) {
-                Long pp  = Long.parseLong(productPrice[i]);
-                Integer dp = Integer.valueOf(productDeliveryPrice[i]);
-                if(Integer.parseInt(productCnts[i]) <= 0)
-                    throw new Exception("0이하의 값 입력 불가");
-                OrderDetailDto odDto = new OrderDetailDto(
-                        orDto.getOrderNo(),
-                        Integer.parseInt(productNos[i]),
-                        Integer.parseInt(productCnts[i]),
-                        "주문완료",
-                        productOptions[i],
-                        "일반배송",
-                        pp,
-                        dp
-                );
-                orderDetailList.add(odDto);
+        try {
+            if (productNos != null) {
+                for (int i = 0; i < productNos.length; i++) {
+                    Long pp  = Long.parseLong(productPrice[i]);
+                    Integer dp = Integer.valueOf(productDeliveryPrice[i]);
+                    if(Integer.parseInt(productCnts[i]) <= 0)
+                        throw new Exception("0이하의 값 입력 불가");
+                    OrderDetailDto odDto = new OrderDetailDto(
+                            orDto.getOrderNo(),
+                            Integer.parseInt(productNos[i]),
+                            Integer.parseInt(productCnts[i]),
+                            "주문완료",
+                            productOptions[i],
+                            "일반배송",
+                            pp,
+                            dp
+                    );
+                    orderDetailList.add(odDto);
+                }
+            }else{
+                throw new NullPointerException();
             }
-        }else{
-            throw new NullPointerException();
+        } catch (Exception e) {
+            return "redirect:/cart/cart";
         }
         model.addAttribute("orderDto", orDto);
         model.addAttribute("orderDetailList", orderDetailList);
