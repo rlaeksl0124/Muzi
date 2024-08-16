@@ -100,11 +100,12 @@ public class OrderController {
         return "orderDetail";
     }
 
-    @PostMapping("/cancel")
-    public String orderDetailUpdate(int orderDetailNo, String status) throws Exception {
-        System.out.println(orderDetailNo+ status);
+    @GetMapping("/cancel")
+    public String orderDetailUpdate(@RequestParam("orderDetailNo") int orderDetailNo,
+                                    @RequestParam("status") String status,
+                                    @RequestParam("orderNo") int orderNo) throws Exception {
         orderService.updateOrderDetail(orderDetailNo, status);
-        return "redirect:/orderDetailList";
+        return "redirect:/orders/orderDetailList?orderNo=" + orderNo;
     }
 
 }

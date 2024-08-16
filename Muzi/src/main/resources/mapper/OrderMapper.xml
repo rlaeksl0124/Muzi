@@ -34,6 +34,8 @@
         주문상품을 출력해야하는데 제품번호, *(제품번호로 join해서 제품이름 출력), 주문수량, 주문가격, 주문 배송비, 주문상태, 주문옵션, 주문배송정보 주문날짜 출력 -->
 
     <resultMap id="OrderDetailResultMap" type="com.Toy2.order.entity.OrderDetailDto">
+        <id property="orderDetailNo" column="od_no"/>
+        <result property="orderNo" column="or_no"/>
         <result property="productNo" column="pdt_no"/>
         <result property="orderDetailCnt" column="od_cnt"/>
         <result property="orderDetailProductName" column="od_pdtname"/>
@@ -46,7 +48,9 @@
     </resultMap>
 
     <select id="orderDetailList" parameterType="int" resultMap="OrderDetailResultMap">
-        select pdt_no,
+        select od_no,
+               or_no,
+               pdt_no,
                od_cnt,
                od_pdtname,
                od_price,

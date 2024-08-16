@@ -7,6 +7,11 @@
     <title>주문상세목록</title>
 </head>
 <body>
+<script type="text/javascript">
+    function confirmCancel() {
+        return confirm("정말 주문을 취소하시겠습니까?");
+    }
+</script>
 <%@ include file="header.jspf" %>
 <link rel="stylesheet" href="/css/orderDetail.css" />
 <h2>주문상세 페이지</h2>
@@ -36,10 +41,11 @@
                 <c:choose>
                     <c:when test="${item.orderDetailStatus == 'OC1'}">
                         주문완료
-                        <form action="/orders/cancelUpdate" method="get">
+                        <form action="/orders/cancel" method="get" onsubmit="return confirmCancel()">
                             <!-- 주문 상세 번호와 상태를 숨겨서 전송 -->
                             <input type="hidden" name="orderDetailNo" value="${item.orderDetailNo}">
                             <input type="hidden" name="status" value="OC2"> <!-- 상태를 OC2로 변경 -->
+                            <input type="hidden" name="orderNo" value="${item.orderNo}"> <!-- 주문 번호 추가 -->
                             <input type="submit" value="주문취소">
                         </form>
                     </c:when>
