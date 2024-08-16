@@ -11,6 +11,7 @@ public class CartDto {
     private Integer cartDelivery;  //장바구니 예상 배송비
     private String customerEmail; //고객 이메일
     //ca_no, pdt_no, ca_cnt, ca_price, ca_option, ca_delv
+    public CartDto(){}
     //삽입을 위한 생성자
     public CartDto(Integer cartProductNo, Integer cartProductCnt, String cartProductOption, String customerEmail) {;
         this.cartProductNo = cartProductNo;
@@ -18,9 +19,9 @@ public class CartDto {
         this.cartProductOption = cartProductOption;
         this.customerEmail = customerEmail;
     }
-    public CartDto(Integer cartProductCnt, String cartProductOption) {//update의 수량과 옵션에 대한 생성자
+    //수정을 위한 생성자
+    public CartDto(Integer cartProductCnt) {//update의 수량과 옵션에 대한 생성자
         this.cartProductCnt = cartProductCnt;
-        this.cartProductOption = cartProductOption;
     }
     //검색을 위한 생성자
     public CartDto(Integer cartNo, Integer cartProductNo, Integer cartProductCnt, Long cartProductPrice, String cartProductOption, Integer cartDelivery) {

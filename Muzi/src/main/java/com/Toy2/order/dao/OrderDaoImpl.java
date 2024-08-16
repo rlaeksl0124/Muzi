@@ -34,4 +34,14 @@ public class OrderDaoImpl implements OrderDao{
     public int orderDelete() throws Exception {
         return session.delete(namespace + "orderDelete");
     }
+
+    @Override
+    public int orderCount(String customerEmail) throws Exception {
+        return session.selectOne(namespace + "orderCount", customerEmail);
+    }
+
+    @Override
+    public OrderDto orderSelect(int orderNo) throws Exception {
+        return session.selectOne(namespace + "orderSelect", orderNo);
+    }
 }

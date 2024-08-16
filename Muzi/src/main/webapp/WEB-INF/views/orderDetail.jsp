@@ -16,6 +16,7 @@
             text-align: left;
         }
     </style>
+    <title>주문상세목록</title>
 </head>
 <body>
 <%@ include file="header.jspf" %>

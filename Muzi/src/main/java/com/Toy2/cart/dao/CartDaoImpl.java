@@ -31,7 +31,6 @@ public class CartDaoImpl implements CartDao{
         Map<String, Object> paramMap = new HashMap<>();//map으로 묶어서 전달
         paramMap.put("cartNo", cartNo);//어떤제품의
         paramMap.put("cartProductCnt", cartDto.getCartProductCnt());//개수를 바꾸고
-        paramMap.put("cartProductOption", cartDto.getCartProductOption());//옵션을 바꿔 던질지
         return session.update(namespace + "cartUpdate",paramMap);
     }
 

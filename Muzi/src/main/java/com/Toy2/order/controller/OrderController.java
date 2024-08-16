@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+//서비스, 컨트롤러 왔다갔다하면서 예외처리
 @Controller
 @RequestMapping("/orders")
 public class OrderController {
@@ -39,22 +40,27 @@ public class OrderController {
         List<OrderDetailDto> orderDetails = orderDto.getOrderDetails();
         orderDto.setCustomerEmail((String) session.getAttribute("c_email"));
 
-        orderService.addOrder(orderDto, orderDetails);
+        try {
+            orderService.addOrder(orderDto, orderDetails);
 
-        deliveryDto.setDeliveryStreetAddress("zz");
+            deliveryDto.setDeliveryStreetAddress("zz");
 
-        deliveryDto.setOrderNo(orderDto.getOrderNo());
-        orderService.addDelivery(deliveryDto);
+            deliveryDto.setOrderNo(orderDto.getOrderNo());
+            orderService.addDelivery(deliveryDto);
 
-        model.addAttribute("orderProductName", orderService.getOrderDetailList(
-                        orderService.getOrderList(customerEmail)
-                                .get(orderService.getOrderList(customerEmail).size()-1).getOrderNo())
-                .get(0).getOrderDetailProductName());
-        model.addAttribute("orderProductPrice",orderService.getOrderList(customerEmail)
-                .get(orderService.getOrderList(customerEmail).size()-1).getOrderPrices());
-        model.addAttribute("orderProductDate",orderService.getOrderList(customerEmail)
-                .get(orderService.getOrderList(customerEmail).size()-1).getOrderDate());
-        return "orderSuccess";
+            model.addAttribute("orderProductName", orderService.getOrderDetailList(
+                            orderService.getOrderList(customerEmail)
+                                    .get(orderService.getOrderList(customerEmail).size()-1).getOrderNo())
+                    .get(0).getOrderDetailProductName());
+            model.addAttribute("orderProductPrice", orderService.getOrderList(customerEmail)
+                    .get(orderService.getOrderList(customerEmail).size()-1).getOrderPrices());
+            model.addAttribute("orderProductDate", orderService.getOrderList(customerEmail)
+                    .get(orderService.getOrderList(customerEmail).size()-1).getOrderDate());
+            return "orderSuccess";
+        } catch (Exception e) {
+
+            return "redirect:/cart/order";
+        }
     }
 
     /**
@@ -65,9 +71,13 @@ public class OrderController {
      */
     @GetMapping("/orderList")
     public String orderList(Model model, HttpSession session) throws Exception {
-        List<OrderResponseDto> orderDto = orderService.getOrderList((String) session.getAttribute("c_email"));
-        model.addAttribute("orderList", orderDto);
-        return "orderList";
+        try {
+            List<OrderResponseDto> orderDto = orderService.getOrderList((String) session.getAttribute("c_email"));
+            model.addAttribute("orderList", orderDto);
+            return "orderList";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -79,10 +89,14 @@ public class OrderController {
      */
     @GetMapping("/orderDetailList")
     public String orderDetailList(@RequestParam("orderNo") int orderNo, Model model, HttpSession session) throws Exception {
-        if(session.getAttribute("c_email") == null)
-            throw new Exception("로그인을 해주세요");
-        model.addAttribute("orderDetailList",orderService.getOrderDetailList(orderNo));//주문상세에 대한 정보
-        model.addAttribute("delivery",orderService.getDeliveryList(orderNo));//배송지에대한정보
+        try {
+            if(session.getAttribute("c_email") == null)
+                throw new Exception("로그인을 해주세요");
+            model.addAttribute("orderDetailList",orderService.getOrderDetailList(orderNo));//주문상세에 대한 정보
+            model.addAttribute("delivery",orderService.getDeliveryList(orderNo));//배송지에대한정보
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return "orderDetail";
     }
 

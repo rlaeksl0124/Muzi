@@ -34,7 +34,6 @@
             ca_delv as cartDelivery
         from `toy2`.`CART`
         where c_email = #{customerEmail}
-        order by ca_no desc
     </select>
 
     <!-- 이메일로 유저의 장바구니안에 몇개가 들어있는지에 대한 개수-->
@@ -48,8 +47,7 @@
     <update id="cartUpdate" parameterType="map">
         update `toy2`.`CART`
         set
-            ca_cnt = #{cartProductCnt},
-            ca_option = #{cartProductOption}
+            ca_cnt = #{cartProductCnt}
         where ca_no = #{cartNo}
     </update>
 

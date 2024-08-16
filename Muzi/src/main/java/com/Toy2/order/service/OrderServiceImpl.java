@@ -35,7 +35,7 @@ public class OrderServiceImpl implements OrderService{
      * @return int
      */
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public int addOrder(OrderDto orderDto, List<OrderDetailDto> orderDetailList){
         try {
             int orderResult = orderDao.orderInsert(orderDto);

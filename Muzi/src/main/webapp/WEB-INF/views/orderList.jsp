@@ -23,6 +23,7 @@
             text-align: left;
         }
     </style>
+    <title>주문목록</title>
 </head>
 <body>
 <%@ include file="header.jspf" %>

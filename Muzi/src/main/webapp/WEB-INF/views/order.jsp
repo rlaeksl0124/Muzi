@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/styles.css">
+    <title>주문중</title>
 </head>
 <body>
 <%@ include file="header.jspf" %>
