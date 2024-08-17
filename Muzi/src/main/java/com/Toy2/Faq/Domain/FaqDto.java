@@ -163,7 +163,7 @@ public class FaqDto {
         return faq_view_cnt;
     }
 
-    public void setView_cnt(int faq_view_cnt) {
+    public void setFaq_View_cnt(int faq_view_cnt) {
         this.faq_view_cnt = faq_view_cnt;
     }
 

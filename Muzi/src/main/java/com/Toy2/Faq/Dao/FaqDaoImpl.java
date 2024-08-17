@@ -63,10 +63,12 @@ public class FaqDaoImpl implements FaqDao{
         return session.update(namespace + "update", faqDto);
     }
 
+
     @Override
     public int increaseViewCnt(Integer faq_no) {
         return session.update(namespace + "increaseViewCnt", faq_no);
     }
+
 
     @Override
     public String joinCategory(Integer faq_no, Integer cate_no) {

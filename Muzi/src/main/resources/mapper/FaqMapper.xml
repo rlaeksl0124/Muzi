@@ -117,5 +117,6 @@
         WHERE faq_no = #{faq_no}
     </update>
 
+
 </mapper>
 

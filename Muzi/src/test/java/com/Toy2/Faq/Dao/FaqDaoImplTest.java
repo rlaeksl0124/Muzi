@@ -384,22 +384,24 @@ public class FaqDaoImplTest {
         assertTrue(faqDao.joinCategory(faq_no, cate_no).equals("침대류"));
     }
 
-//    @Test
-//    public void increaseViewCnt(){
-//        faqDao.deleteAll();     /* 테이블 비우기 */
-//        assertTrue(faqDao.count() == 0);
-//
-//        FaqDto faqDto = new FaqDto(104, 1, 'Y', "title" ,"content");
-//        assertTrue(faqDao.insert(faqDto) == 1);
-//        Integer faq_no = faqDao.selectAll().get(0).getFaq_no();
-//        assertTrue(faqDao.count() == 1);
-//
-//        // 조회수가 올라가는 건 읽을 때 == select할 때 (selectAll은 관리자를 위한 거)
-//        faqDto = faqDao.select(faq_no);
-//        assertTrue(faqDao.increaseViewCnt(faq_no) == 1);
-//        System.out.println(faqDto.getFaq_view_cnt());
-//        assertTrue(faqDto.getFaq_view_cnt() == 1);
-//    }
 
-    // 테이블에 없는 값으로 변경 faqDto.setCate_no(0);
+    // increaseViewCnt - 조회수 올라가는지 테스트
+    @Test
+    public void increaseViewCnt(){
+        faqDao.deleteAll();     /* 테이블 비우기 */
+        assertTrue(faqDao.count() == 0);           // 테이블 행 0개 확인
+
+        FaqDto faqDto = new FaqDto(104, 1, 'Y', "Title1" ,"Content1");      // FaqDto 객체 선언 및 정의
+        assertTrue(faqDao.insert(faqDto) == 1);         // faqDto DB에 추가
+        assertTrue(faqDao.count() == 1);                // 추가되는 행은 1개
+
+        // 조회수가 올라가는 건 읽을 때 == select, selectAll으로 호출할 때
+        Integer faq_no = faqDao.selectAll().get(0).getFaq_no();             // faqDao 조회해서 faq_no 가져와서 저장
+        assertTrue(faqDao.increaseViewCnt(faq_no) == 1);           // faqDao의 조회수를 올리기 - 조회수 올라가는 행은 1개
+
+        faqDto = faqDao.select(faq_no);                                     // DB에서 faq_no에 해당하는 값을 가져와서 faqDto에 저장
+        assertTrue(faqDto != null);                                // DB에서 가져와서 저장한 객체는 null이 아님
+        assertTrue(faqDao.increaseViewCnt(faq_no) == 1);           // faqDao의 조회수를 올리기 - 조회수 올라가는 행은 1개
+        assertTrue(faqDao.select(faq_no).getFaq_view_cnt() == 2);           // faqDao를
+    }
 }
