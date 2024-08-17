@@ -21,7 +21,8 @@ public class FaqController {
     @Autowired FaqService faqService;       // FaqService 주입 받기
     @Autowired FaqCateDao faqCateDao;
 
-    /* READ - FAQ 리스트 보여줌 */
+
+    /* READ - faq_center 관계자가 보는 목록 페이지 보여줌 */
     @RequestMapping("")
     public String faqCenter(Model model) {
         try {

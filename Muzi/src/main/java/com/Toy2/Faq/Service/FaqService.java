@@ -29,4 +29,5 @@ public interface FaqService {
     // FAQ 수정
     int update(FaqDto faqDto) throws Exception;
 
+    String joinCategory(Integer faq_no ,Integer cate_no) throws Exception;
 }

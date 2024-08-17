@@ -44,31 +44,6 @@ public class FaqServiceImplTest {
     }
 
 
-
-    // deleteAllTest1 - 모두 삭제되는지
-    /* 클라이언트에게 FAQ 공지글을 모두 삭제하는 일이 필요한가 */
-//    @Test
-//    public void deleteAllTest() {
-//        faqDao.deleteAll();                             /* 테이블 비우기 */
-//        assertTrue(faqDao.count() == 0);       /* 행 없음 */
-//
-//        FaqDto faqDto = new FaqDto(104, 1, 'Y', "SUS SET 상품 조립시 선반이 잘 끼워지지 않습니다.",
-//                "선반을 끼우기 힘든 상태일때, 선반 상부를 가볍게 두드려 선반을 끼워주십시오." +
-//                        "그래도 끼워지지 않을 때는 전체적으로 조금씩 후크를 느슨하게 풀어주면 끼우기 쉬워집니다." +
-//                        "자세한 내용은 동영상 링크에서 확인 할 수 있습니다.\n" +
-//                        "    [관련 동영상]   https://www.muji.com/kr/mp4_file/sus_asssembly.mp4");
-//        assertTrue(faqDao.insert(faqDto) == 1);     /* 추가되는 행은 1개*/
-//        assertTrue(faqDao.deleteAll() == 1);        /* 행 1개밖에 없음 - 삭제되는 행 1개*/
-//        assertTrue(faqDao.count() == 0);        /* 모두 삭제했으니 행 0개*/
-//
-//        faqDto = new FaqDto(402, 1, 'N', "no content", "asdf");
-//        assertTrue(faqDao.insert(faqDto) == 1);         /* insert 2번 */
-//        assertTrue(faqDao.insert(faqDto) == 1);         /* insert 2번 */
-//        assertTrue(faqDao.deleteAll() == 2);            /* 행 2개 전부 삭제 */
-//        assertTrue(faqDao.count() == 0);
-//    }
-
-
     // deleteTest1 - 지정한 FAQ 게시글 하나씩 삭제
     @Test
     public void deleteTest1() throws Exception {
@@ -198,7 +173,6 @@ public class FaqServiceImplTest {
 
 
     // updateTest
-    // 작성자가 수정할 때 관리자가 삭제하는 경우
     @Test
     public void updateTest() throws Exception {
         faqDao.deleteAll();                             /* 테이블 비우기 */
@@ -218,4 +192,22 @@ public class FaqServiceImplTest {
         assertTrue(faqService.update(faqDto) == 1);         // 수정되는 행은 1개
         assertTrue(faqService.select(faq_no).getFaq_view_cnt() == 0);
     }
+
+    // joinCategoryTest - 카테고리 이름을 가져오는지 확인
+    @Test
+    public void joinCategoryTest() throws Exception{
+        faqDao.deleteAll();         // FAQ 테이블 비우기
+        assertTrue(faqService.count() == 0);        // 데이터 없는거 확인
+
+        FaqDto faqDto = new FaqDto(104, 1, 'Y', "Title",
+                "Content");
+        assertTrue(faqService.insert(faqDto) == 1);     /* 추가되는 행은 1개*/
+        assertTrue(faqService.count() == 1);            /* 행 1개 됨 */
+        Integer faq_no = faqService.selectAll().get(0).getFaq_no();         // 추가한 행의 faq_no 저장
+        Integer cate_no = faqService.selectAll().get(0).getCate_no();       // 추가한 행의 cate_no 저장
+        assertTrue(faqDao.joinCategory(faq_no, cate_no).equals("수납선반류"));       // 카테고리 이름이 "수납선반류"로 동일해야 함
+    }
+
+
+    // 작성자가 수정할 때 관리자가 삭제하는 경우
 }

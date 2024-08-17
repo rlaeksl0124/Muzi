@@ -19,11 +19,6 @@ public class FaqServiceImpl implements FaqService {
         return faqDao.count();
     }
 
-    // 관리자가 모두 삭제 - 필요한지 다시 생각해보기
-//    @Override
-//    public int deleteAll() throws Exception {
-//        return faqDao.deleteAll();
-//    }
 
     // 관리자가 삭제
     @Override
@@ -55,5 +50,10 @@ public class FaqServiceImpl implements FaqService {
     @Override
     public int update(FaqDto faqDto) throws Exception{
         return faqDao.update(faqDto);
+    }
+
+    @Override
+    public String joinCategory(Integer faq_no, Integer cate_no) throws Exception {
+        return faqDao.joinCategory(faq_no, cate_no);
     }
 }
