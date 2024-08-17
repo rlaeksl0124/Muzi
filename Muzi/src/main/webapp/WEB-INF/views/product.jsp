@@ -228,12 +228,6 @@ getProducts(productPage, limit);
 </script>
 </head>
 <body>
-    <h2>Category Bar</h2>
-    <ul id="categoryBar" class="category-bar"></ul>
-
-
-
-
 <%@ include file="header.jspf" %>
 <link rel="stylesheet" href="/css/product.css" />
     <div class="toggle-container">
@@ -244,6 +238,8 @@ getProducts(productPage, limit);
 
 
     <h1>Product List</h1>
+    <ul id="categoryBar" class="category-bar"></ul>
+
     <ul id="productList"></ul>
 
     <h1>Product Pages</h1>
