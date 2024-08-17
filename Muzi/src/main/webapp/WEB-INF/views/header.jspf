@@ -51,6 +51,7 @@
         <ul>
             <li><a id="headers" href="/product/"> 상품</a></li>
             <li><a id="headers" href=""> 고객 센터</a></li>
+<%--            <li><a id="headers" href="/faq/"> FAQ </a></li>--%>
         </ul>
     </div>
 </header>

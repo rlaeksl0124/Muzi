@@ -39,6 +39,7 @@ public class FaqServiceImplTest {
         assertTrue(faqService.count() == 1);
 
         faqDao.deleteAll();
+        // 잘 들어갔는지 확인 - 다시 읽어와서 동일한지 확인
         assertTrue(faqService.count() == 0);
     }
 
@@ -108,7 +109,8 @@ public class FaqServiceImplTest {
         assertTrue(faqService.delete(faq_no) == 1);        // 추가한 행 하나 지정 삭제
         assertTrue(faqService.count() == 0);        /* 삭제했으니 행 0개*/
 
-        // 이미 삭제한 게시글을 또 삭제할 때
+        // 이미 삭제한 게시글을 또 삭제할 때 - return 값으로 컨트롤러에게 주든가, 예외가 발생하든가 -> 케이스 정리하기
+        // return 값이 0이면 삭제 실패 알림할지
         assertFalse(faqService.delete(faq_no) == 1);         // 새로 추가한 행 삭제
         assertTrue(faqService.count() == 0);
     }
@@ -130,6 +132,7 @@ public class FaqServiceImplTest {
         Integer faq_no = faqService.selectAll().get(0).getFaq_no();         // 추가한 행의 faq_no 저장
 
         assertTrue(faqService.select(faq_no).equals(faqDto));       // faq_no로 조회한 faqDto가 동일한지 확인
+        // 다르게 나오는지도 보기 - 다른 테케
         assertTrue(faqService.count() == 1);            // 존재하는 행 1개
     }
 
@@ -166,6 +169,7 @@ public class FaqServiceImplTest {
 
 
     // selectTest - 선택한 FAQ 게시글 조회
+    // 조회시 faq_view_cnt 증가해야 됨
     @Test
     public void selectTest() throws Exception {
         faqDao.deleteAll();                             /* 테이블 비우기 */
@@ -181,6 +185,7 @@ public class FaqServiceImplTest {
         Integer faq_no = faqService.selectAll().get(0).getFaq_no();         // 추가한 행의 faq_no 저장
 
         assertTrue(faqService.select(faq_no).equals(faqDto));       // 조회한 FAQ가 첫 번째로 추가한 faqDto와 동일한지
+        assertTrue(faqService.select(faq_no).getFaq_view_cnt() == 1);       // 조회했으니 faq_view_cnt가 1 증가해서 1
 
         FaqDto faqDto2 = new FaqDto(301, 2, 'N', "Title2", "Content2");       // 새로운 faqDto (FAQ 글) 생성
         assertTrue(faqService.insert(faqDto2) == 1);     /* 추가되는 행은 1개*/
@@ -188,6 +193,7 @@ public class FaqServiceImplTest {
         assertTrue(faqService.count() == 2);            /* 행 2개 됨 */
 
         assertTrue(faqService.select(faq_no).equals(faqDto2));       // 조회한 FAQ가 두 번째로 추가한 faqDto와 동일한지
+        assertTrue(faqService.select(faq_no).getFaq_view_cnt() == 1);       // 조회했으니 faq_view_cnt가 1 증가해서 1
     }
 
 
@@ -205,6 +211,7 @@ public class FaqServiceImplTest {
         Integer faq_no = faqService.selectAll().get(0).getFaq_no();         // 추가한 행의 faq_no 저장
 
         assertTrue(faqService.select(faq_no).equals(faqDto));       // 조회한 FAQ가 추가한 faqDto와 동일한지
+        assertTrue(faqService.select(faq_no).getFaq_view_cnt() == 1);       // 조회했으니 faq_view_cnt가 1 증가해서 1
 
         faqDto.setFaq_order(3);
         faqDto.setFaq_title("Title1");

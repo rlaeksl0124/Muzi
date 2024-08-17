@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+// Service에 Transaction 넣으면 돼
 @Controller
 @RequestMapping( "/faq")
 public class FaqController {
@@ -27,14 +28,24 @@ public class FaqController {
             List<FaqDto> faqList = faqService.selectAll();      // 서비스에서 모든 FAQ 게시글을 List로 가져온다
 
             for (FaqDto faq : faqList) {        // 가져온 FaqDto의 리스트를 순회
+                // Join 해서 카테고리 이름  갖고오기
+                String categoryName = FaqCategory.getCategoryName(faq.getCate_no());        // 카테고리 번호를 이용해 카테고리 이름 조회
+                faq.setCategoryName(categoryName);          // 조회한 카테고리 이름을 FAQ 게시글의 카테고리 이름으로 설정
+            }
+
+
+            for (FaqDto faq : faqList) {        // 가져온 FaqDto의 리스트를 순회
+                // Join 해서 카테고리 이름  갖고오기
                 String categoryName = FaqCategory.getCategoryName(faq.getCate_no());        // 카테고리 번호를 이용해 카테고리 이름 조회
                 faq.setCategoryName(categoryName);          // 조회한 카테고리 이름을 FAQ 게시글의 카테고리 이름으로 설정
             }
 
             model.addAttribute("list", faqList);        // model에 FAQ 목록을 추가하여 view에서 사용할 수 있도록 함
-        } catch (Exception e) {              // 예외가 발생하면
+        } catch (Exception e) {              // 게시글 목록 조회를 요청했는데 예외가 발생하면
             e.printStackTrace();
             //model.addAttribute("msg", "LIST_ERR");          // 에러 메시지를 model에 추가
+
+            // 사용자에게 어떤 행동을 할지 - 게시글 목록이 없다고 뜨기 / 에러 페이지
         }
         return "faq_center";
     }
@@ -46,8 +57,12 @@ public class FaqController {
     public String viewFaq(@RequestParam("faq_no") Integer faq_no, Model model) throws Exception {       // 매개변수로 조회할 faq_no 넘김
         FaqDto faqDto = faqService.select(faq_no);           // 매개변수로 받은 faq_no를 가진 게시글을 faqDto로 저장
         if (faqDto == null) {               // faqDto가 null이면 해당하는 게시글이 없다는 것
+            // 목록 페이지로 돌아가기
             throw new Exception("FAQ not found");
         }
+
+        // 예외처리 빠짐 -> try-catch
+        // 예외 공통처리는 ExceptionHandler로 뽑으면 돼 -> ExceptionHandler에 공통인게 있으면 Advice
 
         // cate_no를 카테고리의 이름으로 표시하기 위한 변환
         String categoryName = FaqCategory.getCategoryName(faqDto.getCate_no());         // FaqCategory에서 번호에 해당하는 카테고리 이름을 저장
@@ -59,6 +74,7 @@ public class FaqController {
 
 
     /* CREATE - FAQ 등록 페이지로 이동 */
+    // 글 등록하다 에러 발생하면 - 화면 뿌리고 작성하던 데이터는 저장되어야 됨
     @GetMapping("/register")
     public String insertFAQ() {
         return "faq_register";
@@ -82,6 +98,7 @@ public class FaqController {
             if (faqService.insert(faqDto) != 1)          // != 1이면 insert 안 됐다는 뜻
                 throw new Exception("FAQ registration failed.");
 
+//    주석 처리해도 동일할듯
             model.addAttribute("faqDto", faqDto);           // == 1이면 insert 된 거니까
 //            model.addAttribute("msg", "REG_OK");
             return "redirect:/faq";                    // /faq로 등록해놓은 faq_center.jsp로 리다이렉트

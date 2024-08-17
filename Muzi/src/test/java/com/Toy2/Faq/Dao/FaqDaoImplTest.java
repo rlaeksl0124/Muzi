@@ -370,6 +370,19 @@ public class FaqDaoImplTest {
         }
     }
 
+    @Test
+    public void joinCategoryTest(){
+        faqDao.deleteAll();     // 테이블 비우기
+        assertTrue(faqDao.count() == 0);        // 행 0개
+
+        FaqDto faqDto = new FaqDto(102, 3, 'Y', "Title1","Content1");
+        assertTrue(faqDao.insert(faqDto) == 1);         // 데이터 추가하는 행 1개
+        Integer faq_no = faqDao.selectAll().get(0).getFaq_no();     // 등록한 FaqDto의 faq_no 저장
+
+        System.out.println(faqDto.getCategoryName());
+        assertTrue(faqDao.select(faq_no).getCategoryName().equals(faqDto.getCategoryName()));
+    }
+
 //    @Test
 //    public void increaseViewCnt(){
 //        faqDao.deleteAll();     /* 테이블 비우기 */

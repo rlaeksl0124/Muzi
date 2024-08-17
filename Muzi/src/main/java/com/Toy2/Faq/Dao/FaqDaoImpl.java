@@ -57,12 +57,17 @@ public class FaqDaoImpl implements FaqDao{
     /* update - FAQ에 등록된 게시글을 수정; 게시글의 번호와 담당자가 같은지 확인 */
     @Override
     public int update(FaqDto faqDto) {
-        System.out.println("Updating FAQ with data: " + faqDto);
+//        System.out.println("Updating FAQ with data: " + faqDto);
         return session.update(namespace + "update", faqDto);
     }
 
     @Override
     public int increaseViewCnt(Integer faq_no) {
         return session.update(namespace + "increaseViewCnt", faq_no);
+    }
+
+    @Override
+    public String joinCategory(Integer cate_no) {
+        return session.selectOne(namespace + "joinCategory", cate_no);
     }
 }

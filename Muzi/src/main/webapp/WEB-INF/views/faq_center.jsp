@@ -29,14 +29,14 @@
         }
         .header button {
             padding: 10px 20px;
-            background-color: #007bff;
+            background-color: black;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
         .header button:hover {
-            background-color: #0056b3;
+            background-color: black;
         }
         .faq-table {
             width: 100%;
@@ -54,9 +54,9 @@
         .checkbox {
             text-align: center;
         }
-        /*.faq-order {*/
-        /*    text-align: center;*/
-        /*}*/
+        .faq-order {
+            text-align: center;
+        }
     </style>
     <link rel="stylesheet" href="/css/Headers.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">

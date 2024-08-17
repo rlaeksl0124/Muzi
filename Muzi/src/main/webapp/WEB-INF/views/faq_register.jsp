@@ -1,74 +1,80 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="<c:url value='/css/Headers.css'/>" type="text/css" rel="stylesheet"/>
     <title>FAQ 등록</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f7f7f7;
-        }
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 20px;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        .form-group textarea {
-            resize: vertical;
-        }
-        .button-group {
-            display: flex;
-            justify-content: flex-end;
-        }
-        .button-group button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .button-group button:hover {
-            background-color: #0056b3;
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f7f7f7;
+            }
+            .container {
+                width: 80%;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #fff;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-bottom: 20px;
+                border-bottom: 1px solid #ddd;
+                margin-bottom: 20px;
+            }
+            .header h1 {
+                margin: 0;
+                font-size: 24px;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+            .form-group input, .form-group textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                font-size: 16px;
+                box-sizing: border-box;
+            }
+            .form-group textarea {
+                resize: vertical;
+            }
+            .button-group {
+                display: flex;
+                justify-content: flex-end;
+            }
+            .button-group button {
+                padding: 10px 20px;
+                /*background-color: #007bff;*/
+                background-color: black;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+            .button-group button:hover {
+                /*background-color: #0056b3;*/
         }
     </style>
+    <%--    <link rel="stylesheet" href="/css/Headers.css" />--%>
+    <%--    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">--%>
 </head>
 <body>
+<%@ include file="header.jspf" %>
 <div class="container">
     <div class="header">
         <h1>FAQ 등록</h1>

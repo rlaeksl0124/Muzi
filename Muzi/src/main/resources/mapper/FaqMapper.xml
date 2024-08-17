@@ -8,6 +8,14 @@
 
 <!--    보이는 거 관리 하기-->
 
+    <!-- category 이름 보이게 join -->
+    <select id="joinCategory" parameterType="int" resultType="String">
+        SELECT c.cate_name
+        FROM FAQ f
+        JOIN FAQ_CATE c
+        ON c.cate_no = f.cate_no;
+    </select>
+
     <!-- count - 행 개수 셈  -->
     <!-- parameter : 없음 , result: int -->
     <select id="count" resultType="int">
