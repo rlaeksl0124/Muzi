@@ -378,9 +378,10 @@ public class FaqDaoImplTest {
         FaqDto faqDto = new FaqDto(102, 3, 'Y', "Title1","Content1");
         assertTrue(faqDao.insert(faqDto) == 1);         // 데이터 추가하는 행 1개
         Integer faq_no = faqDao.selectAll().get(0).getFaq_no();     // 등록한 FaqDto의 faq_no 저장
+        Integer cate_no = faqDao.selectAll().get(0).getCate_no();
 
-        System.out.println(faqDto.getCategoryName());
-        assertTrue(faqDao.select(faq_no).getCategoryName().equals(faqDto.getCategoryName()));
+        System.out.println(faqDao.joinCategory(faq_no, cate_no));       // cate_no에 대응하는 카테고리 이름 "침대류" 출력되어야 함
+        assertTrue(faqDao.joinCategory(faq_no, cate_no).equals("침대류"));
     }
 
 //    @Test

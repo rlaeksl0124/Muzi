@@ -19,5 +19,5 @@ public interface FaqDao {
     FaqDto select(Integer faq_no);
     int increaseViewCnt(Integer faq_no);
 
-    String joinCategory(Integer cate_no);
+    String joinCategory(Integer faq_no, Integer cate_no);
 }

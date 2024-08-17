@@ -5,7 +5,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /* Bean 등록해야 함 */
 @Repository
@@ -67,7 +69,10 @@ public class FaqDaoImpl implements FaqDao{
     }
 
     @Override
-    public String joinCategory(Integer cate_no) {
-        return session.selectOne(namespace + "joinCategory", cate_no);
+    public String joinCategory(Integer faq_no, Integer cate_no) {
+        Map map = new HashMap();
+        map.put("faq_no", faq_no);
+        map.put("cate_no", cate_no);
+        return session.selectOne(namespace + "joinCategory", faq_no);
     }
 }

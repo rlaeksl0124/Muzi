@@ -29,13 +29,10 @@ public class FaqController {
 
             for (FaqDto faq : faqList) {        // 가져온 FaqDto의 리스트를 순회
                 // Join 해서 카테고리 이름  갖고오기
-                String categoryName = FaqCategory.getCategoryName(faq.getCate_no());        // 카테고리 번호를 이용해 카테고리 이름 조회
-                faq.setCategoryName(categoryName);          // 조회한 카테고리 이름을 FAQ 게시글의 카테고리 이름으로 설정
+
             }
 
-
             for (FaqDto faq : faqList) {        // 가져온 FaqDto의 리스트를 순회
-                // Join 해서 카테고리 이름  갖고오기
                 String categoryName = FaqCategory.getCategoryName(faq.getCate_no());        // 카테고리 번호를 이용해 카테고리 이름 조회
                 faq.setCategoryName(categoryName);          // 조회한 카테고리 이름을 FAQ 게시글의 카테고리 이름으로 설정
             }
@@ -55,21 +52,25 @@ public class FaqController {
     //    @RequestMapping("/view")
     @GetMapping("/view")
     public String viewFaq(@RequestParam("faq_no") Integer faq_no, Model model) throws Exception {       // 매개변수로 조회할 faq_no 넘김
-        FaqDto faqDto = faqService.select(faq_no);           // 매개변수로 받은 faq_no를 가진 게시글을 faqDto로 저장
-        if (faqDto == null) {               // faqDto가 null이면 해당하는 게시글이 없다는 것
-            // 목록 페이지로 돌아가기
-            throw new Exception("FAQ not found");
-        }
+        try {
+            FaqDto faqDto = faqService.select(faq_no);           // 매개변수로 받은 faq_no를 가진 게시글을 faqDto로 저장
+            if (faqDto == null) {               // faqDto가 null이면 해당하는 게시글이 없다는 것
+                // 목록 페이지로 돌아가기
+                throw new Exception("FAQ not found");
+            }
 
+            // cate_no를 카테고리의 이름으로 표시하기 위한 변환
+            String categoryName = FaqCategory.getCategoryName(faqDto.getCate_no());         // FaqCategory에서 번호에 해당하는 카테고리 이름을 저장
+            faqDto.setCategoryName(categoryName);           // 저장한 카테고리 이름을 faqDto의 카테고리로 설정
+
+            model.addAttribute("faqDto", faqDto);           // view에 넘기기 위해 faqDto를 model에 추가
+            return "faq_view";          // faq_view.jsp 선택한 게시글 보여주는 페이지로 이동
+        } catch (Exception e){
+            e.printStackTrace();
+            return "faq";
+        }
         // 예외처리 빠짐 -> try-catch
         // 예외 공통처리는 ExceptionHandler로 뽑으면 돼 -> ExceptionHandler에 공통인게 있으면 Advice
-
-        // cate_no를 카테고리의 이름으로 표시하기 위한 변환
-        String categoryName = FaqCategory.getCategoryName(faqDto.getCate_no());         // FaqCategory에서 번호에 해당하는 카테고리 이름을 저장
-        faqDto.setCategoryName(categoryName);           // 저장한 카테고리 이름을 faqDto의 카테고리로 설정
-
-        model.addAttribute("faqDto", faqDto);           // view에 넘기기 위해 faqDto를 model에 추가
-        return "faq_view";          // faq_view.jsp 선택한 게시글 보여주는 페이지로 이동
     }
 
 

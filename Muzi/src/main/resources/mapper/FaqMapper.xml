@@ -8,12 +8,13 @@
 
 <!--    보이는 거 관리 하기-->
 
-    <!-- category 이름 보이게 join -->
+    <!-- category 이름 보이게 join 해서 가져오기 -->
     <select id="joinCategory" parameterType="int" resultType="String">
         SELECT c.cate_name
         FROM FAQ f
         JOIN FAQ_CATE c
-        ON c.cate_no = f.cate_no;
+        ON c.cate_no = f.cate_no
+        WHERE faq_no = #{faq_no};
     </select>
 
     <!-- count - 행 개수 셈  -->
