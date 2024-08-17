@@ -4,10 +4,14 @@ import com.Toy2.cart.entity.CartDto;
 import com.Toy2.cart.service.CartService;
 import com.Toy2.order.entity.OrderDetailDto;
 import com.Toy2.order.entity.OrderDto;
+import com.Toy2.product.domain.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,9 +23,11 @@ import java.util.List;
 @RequestMapping("/cart")
 public class CartController {
     private CartService cartService;
+    private ProductService productService;
     @Autowired
-    public CartController(CartService cartService) {
+    public CartController(CartService cartService, ProductService productService) {
         this.cartService = cartService;
+        this.productService = productService;
     }
 
     /**
@@ -68,24 +74,26 @@ public class CartController {
     @PostMapping("/order")
     public String orderPageGo(HttpServletRequest request, Model model, HttpSession session) throws Exception {
         String customerEmail = (String) session.getAttribute("c_email");
-        if (customerEmail == null || customerEmail.isEmpty()) {
-            model.addAttribute("errorMessage", "로그인이 필요합니다.");
-            return "redirect:/login";
-        }
 
         OrderDto orDto = new OrderDto(customerEmail);
         List<OrderDetailDto> orderDetailList = new ArrayList<>();
+        //제품을 담을 dto가 없어서 이렇게 우선 작성 차후에 변경 예정
         String[] productPrice = request.getParameterValues("productPrice");
         String[] productDeliveryPrice = request.getParameterValues("productDeliveryPrice");
         String[] productNos = request.getParameterValues("productNo");
         String[] productCnts = request.getParameterValues("productCnt");
         String[] productOptions = request.getParameterValues("productOption");
 
+        if (customerEmail == null) {
+            throw new Exception("로그인이 필요합니다.");
+        }
         try {
             if (productNos != null) {
                 for (int i = 0; i < productNos.length; i++) {
                     Long pp  = Long.parseLong(productPrice[i]);
                     Integer dp = Integer.valueOf(productDeliveryPrice[i]);
+                    String productName = productService.selectProduct(Integer.parseInt(productNos[i])).getProductName();
+
                     if(Integer.parseInt(productCnts[i]) <= 0)
                         throw new Exception("0이하의 값 입력 불가");
                     OrderDetailDto odDto = new OrderDetailDto(
@@ -98,6 +106,7 @@ public class CartController {
                             pp,
                             dp
                     );
+                    odDto.setOrderDetailProductName(productName);
                     orderDetailList.add(odDto);
                 }
             }else{
@@ -110,7 +119,6 @@ public class CartController {
         model.addAttribute("orderDetailList", orderDetailList);
 
         return "order";
-
     }
 
     /**

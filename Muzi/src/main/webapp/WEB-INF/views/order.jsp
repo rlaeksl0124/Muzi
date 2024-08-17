@@ -34,7 +34,9 @@
             <tr>
                 <td>
                     <input type="hidden" name="orderDetails[${status.index}].productNo" value="${orderDetail.productNo}">
-                        ${orderDetail.productNo}
+                    <input type="hidden" name="orderDetails[${status.index}].orderDetailProductName"
+                           value="${orderDetail.orderDetailProductName}">
+                        ${orderDetail.orderDetailProductName}
                 </td>
                 <td>
                     <input type="hidden" name="orderDetails[${status.index}].orderDetailPrice" value="${orderDetail.orderDetailPrice}">
