@@ -22,7 +22,6 @@ public class OrderController {
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
-    private static final String customerEmail = "admin@";
 
     /**
      * 주문페이지에서 주문하기 버튼을 클릭하면 주문이 들어가고 주문상세에대한 정보와 배송지 정보가 저장
@@ -39,6 +38,7 @@ public class OrderController {
                            HttpSession session) throws Exception {
         List<OrderDetailDto> orderDetails = orderDto.getOrderDetails();
         orderDto.setCustomerEmail((String) session.getAttribute("c_email"));
+        String customerEmail = (String) session.getAttribute("c_email");
 
         try {
             orderService.addOrder(orderDto, orderDetails);
@@ -71,13 +71,18 @@ public class OrderController {
      */
     @GetMapping("/orderList")
     public String orderList(Model model, HttpSession session) throws Exception {
+        if(session.getAttribute("c_email") == null || session.getAttribute("c_email") == ""){
+            model.addAttribute("errorMessage", "로그인을 해주세요.");
+            return "redirect:/login";
+        }
         try {
             List<OrderResponseDto> orderDto = orderService.getOrderList((String) session.getAttribute("c_email"));
             model.addAttribute("orderList", orderDto);
-            return "orderList";
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            model.addAttribute("errorMessage", "주문 내역을 가져오는 중 문제가 발생했습니다.");
+            return "orderList";
         }
+        return "orderList";
     }
 
     /**

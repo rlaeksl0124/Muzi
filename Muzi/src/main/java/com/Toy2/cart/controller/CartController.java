@@ -32,9 +32,10 @@ public class CartController {
      */
     @GetMapping("/cart")
     public String cartPage(Model model, HttpSession session) throws Exception {
-            List<CartDto> cartDto = cartService.getCarts((String) session.getAttribute("c_email"));
-            model.addAttribute("cartDto", cartDto);
-            return "cart";
+        String customerEmail = (String) session.getAttribute("c_email");
+        List<CartDto> cartDto = cartService.getCarts((String) session.getAttribute("c_email"));
+        model.addAttribute("cartDto", cartDto);
+        return "cart";
     }
 
     /**
@@ -57,8 +58,8 @@ public class CartController {
     }
 
     /**
-     * 장바구니 페이지에 제품 정보를 주문페이지로 이동
-     * 제품에 대한 Dto가 없어서 이렇게 작성 추후 변경 예정
+     * 장바구니 페이지에 제품 정보 그대로를 주문페이지로 이동
+     * 바로구매 페이지에서도 그정보를 그대로 이동
      * @param request
      * @param model
      * @return order
@@ -67,19 +68,19 @@ public class CartController {
     @PostMapping("/order")
     public String orderPageGo(HttpServletRequest request, Model model, HttpSession session) throws Exception {
         String customerEmail = (String) session.getAttribute("c_email");
+        if (customerEmail == null || customerEmail.isEmpty()) {
+            model.addAttribute("errorMessage", "로그인이 필요합니다.");
+            return "redirect:/login";
+        }
 
         OrderDto orDto = new OrderDto(customerEmail);
         List<OrderDetailDto> orderDetailList = new ArrayList<>();
-        //제품을 담을 dto가 없어서 이렇게 우선 작성 차후에 변경 예정
         String[] productPrice = request.getParameterValues("productPrice");
         String[] productDeliveryPrice = request.getParameterValues("productDeliveryPrice");
         String[] productNos = request.getParameterValues("productNo");
         String[] productCnts = request.getParameterValues("productCnt");
         String[] productOptions = request.getParameterValues("productOption");
 
-        if (customerEmail == null) {
-            throw new Exception("로그인이 필요합니다.");
-        }
         try {
             if (productNos != null) {
                 for (int i = 0; i < productNos.length; i++) {
@@ -126,15 +127,17 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public String addCar(HttpServletRequest request) throws Exception{
+    public String addCar(HttpServletRequest request, Model model) throws Exception{
+
         int productNumber = Integer.parseInt(request.getParameter("productNo"));
         int productCnt = Integer.parseInt(request.getParameter("productCnt"));
         String productOption = request.getParameter("productOption");
 
         // 세션에서 사용자 이메일을 가져옴 (예: 로그인된 사용자)
         String customerEmail = (String) request.getSession().getAttribute("c_email");
-        if (customerEmail == null) {
-            throw new Exception("로그인이 필요합니다.");
+        if (customerEmail == null || customerEmail.isEmpty()) {
+            model.addAttribute("errorMessage", "로그인이 필요합니다.");
+            return "redirect:/login";
         }
 
         // CartDto 객체를 생성하고 장바구니에 추가
