@@ -4,20 +4,20 @@ import com.Toy2.Cust.Dao.CustDao;
 import com.Toy2.Cust.Domain.CustDto;
 import com.Toy2.Cust.Service.CustService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/signup")
@@ -77,20 +77,55 @@ public class SignupController {
         }
     }
 
+
+    private final Map<String, String> authCodeStorage = new HashMap<>();
+
+
     /* 이메일인증요청 */
-    @GetMapping("/mailAuth")
+    @GetMapping(value = "/mailAuth",produces ="text/plain;charset=UTF-8")
     public ResponseEntity<String> mailAuth(String email) {
         try {
             System.out.println("이메일 인증요청");
             System.out.println("인증 이메일 : "+email);
+
             /* 이메일 인증번호 생성 및 메일전송하는 service 호출 */
-            String authCode = custService.mailsend(email);
-            return ResponseEntity.ok(authCode);
+            String newAuthCode = custService.mailsend(email);
+            System.out.println("AuthCode:"+newAuthCode);
+
+            authCodeStorage.put(email, newAuthCode);
+
+            return ResponseEntity.ok().body("인증번호가 이메일로 발송되었습니다.");
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이메일 인증 실패");
         }
+    }
 
+    /* 인증번호 검증 */
+    @PostMapping(value = "/verifyAuthCode", produces = "text/plain;charset=UTF-8")
+    public ResponseEntity<String> verifyAuthCode(@RequestBody Map<String, String> requestBody){
+        try {
+            String email = requestBody.get("email");
+            String authCode = requestBody.get("authCode");
+
+
+            String storedCode = authCodeStorage.get(email);
+
+            System.out.println("email: "+ email);
+            System.out.println("authCode :" + authCode);
+            System.out.println("storedCode :" + storedCode);
+
+            if (storedCode == null || (!storedCode.equals(authCode))) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("인증실패: 잘못된 인증번호입니다");
+            }
+
+            return ResponseEntity.ok().body("인증 성공");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("인증과정에서 오류가 발생하였습니다");
+        }
     }
 
 }

@@ -37,7 +37,7 @@
         <div class="form-group">
             <label for="authCode">인증번호 <span class="required">*</span></label>
             <input type="text" id="authCode" class="authCode" name="authCode" maxlength="10" required>
-            <input id="verify" type="button" value="인증번호 받기" class="verify-btn" required>
+            <input type="button" id="verify"  value="인증번호 받기" class="verify-btn" required>
         </div>
         <!-- 비밀번호 유효성 검사 결과를 표시 -->
         <p id="password-check" class="feedback hiddenmsg"></p>
@@ -206,10 +206,6 @@
         emailCheck();
     });
 
-    /* 고객 이메일 인증번호 입력 태그 */
-    $('#authCode').on('input', function() {
-        authNumber();
-    });
 
 
     function emailCheck(){
@@ -220,6 +216,7 @@
         let authCheck = document.getElementById("auth-check");
         /* 인증번호 받기 버튼 */
         let verifyBtn = $('#verify');
+        let submitBtn = $('#submit-btn');
 
 
         /* email이 공백일경우 */
@@ -227,7 +224,8 @@
             authCheck.style.color = "red";
             authCheck.innerHTML = "이메일을 입력해주세요";
             /* 버튼 비활성화 */
-            verifyBtn.prop('disabled', true)
+            verifyBtn.prop('disabled', true);
+            submitBtn.prop('disabled', true);
             return;
         }
 
@@ -243,6 +241,7 @@
             authCheck.innerHTML = "이메일 형식을 다시 확인해주세요";
             /* 버튼 비활성화 */
             verifyBtn.prop('disabled', true);
+            submitBtn.prop('disabled', true);
             return;
         }
 
@@ -266,12 +265,14 @@
                     authCheck.innerHTML = "인증받기를 진행해주세요.";
                     /* 인증번호 받기 버튼 활성화 */
                     verifyBtn.prop('disabled', false);
+                    submitBtn.prop('disabled', false);
                 } else {
                     /* DB에 중복 메일이 있는 경우 result는 false */
                     authCheck.style.color = "red";
                     authCheck.innerHTML = "이미 사용중인 이메일입니다.";
                     /* 버튼 비활성화 */
                     verifyBtn.prop('disabled', true);
+                    submitBtn.prop('disabled', true);
                 }
             },
             error: function (err){
@@ -280,9 +281,28 @@
                 authCheck.innerHTML = "서버에 문제가 발생하였습니다.";
                 /* 버튼 비활성화 */
                 verifyBtn.prop('disabled', true);
+                submitBtn.prop('disabled', true);
             }
-        })
+        });
     }
+
+    $('#submit-btn').on('click', function (e){
+        let authCheck = document.getElementById("auth-check");
+        let resultMessage = document.getElementById("resultMessage");
+        /* 인증번호 받기 버튼이 disabled 일경우 */
+        if(!$('#verify').prop('disabled') || !isAuthVerify){
+            /* 회원가입폼 제출 중단 */
+            e.preventDefault();
+            if(!$('#verify').prop('disabled')) {
+                authCheck.style.color = "red";
+                authCheck.innerHTML = "이메일을 확인해주세요";
+            }
+            if(!isAuthVerify){
+                resultMessage.style.color = "red";
+                resultMessage.innerHTML = "이메일인증을 완료해주세요";
+            }
+        }
+    })
 
     /* 비밀번호 유효성검사 */
     document.getElementById('c_pwd').addEventListener('input', password);
@@ -323,6 +343,10 @@
         }
     }
 
+    /* 이메일 인증 여부를 확인하는 변수 */
+    let isAuthVerify = false;
+
+
     /* 이메일 인증번호 요청 */
     $('#verify').on('click', function(){
         let email = $('#c_email').val(); /* 고객 이메일 */
@@ -335,6 +359,11 @@
             success: function(data) {
                 verify.attr('disabled', true);
                 code = data;
+
+                // 이메일 인증번호 요청 후 인증번호 입력 받기
+                $('#authCode').on('input', function() {
+                    authNumber(); // 인증번호 입력 시 검증 함수 호출
+                });
             }
         })
     });
@@ -342,16 +371,33 @@
     function authNumber(){
         /* 고객이 입력한 인증번호 */
         let inputCode = $('#authCode').val().trim();
-        /* 생성된 인증번호와 비교 */
-        if(inputCode === code){
-            $('#resultMessage').html('인증번호가 일치합니다.');
-            $('#resultMessage').css('color', 'green');
-            return true;
-        }else{
-            $('#resultMessage').html('인증번호를 다시 확인해주세요');
-            $('#resultMessage').css('color', 'red');
-            return false;
-        }
+        let email = $('#c_email').val().trim();
+
+        console.log("전송할 데이터:", JSON.stringify({email: email, authCode: inputCode}));
+
+        $.ajax({
+            type:"POST",
+            url: "/signup/verifyAuthCode",
+            contentType: 'application/json; charset=UTF-8',
+            /* 서버에 전송 */
+            data: JSON.stringify({email: email, authCode: inputCode}),
+            success: function (response){
+                /* 인증성공시 */
+                $('#resultMessage').html(response);
+                $('#resultMessage').css('color', 'green');
+                isAuthVerify=true;
+            },
+            error: function (xhr){
+                /* 인증실패시 */
+                let errorMsg = xhr.responseText;
+                $('#resultMessage').html(errorMsg);
+                $('#resultMessage').css('color', 'red');
+                isAuthVerify=false;
+                console.log('인증실패:', xhr.responseText);
+            }
+        });
+        /* ajax 요청이 비동기이므로 기본폼 제출 막기 */
+        return false;
     }
 
     /* 이름 */
