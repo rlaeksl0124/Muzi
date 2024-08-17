@@ -25,6 +25,8 @@
     </script>
 </head>
 <body>
+<%@ include file="header.jspf" %>
+<link rel="stylesheet" href="/css/productDetail.css" />
 <h1>Product Details</h1>
 <c:if test="${not empty product}">
     <table border="1">
@@ -61,7 +63,7 @@
     <br><br>
     <!-- 수량 입력 -->
     <label for="quantity">수량:</label>
-    <input type="number" id="quantity" name="productCnt" min="1" required>
+    <input type="number" id="quantity" name="productCnt" min="1" value="1" required>
     <input type="hidden" id="productNumber" name="productNo" value="${product.productNumber}">
     <input type="hidden" id="productPrice" name="productPrice" value="${product.productPrice}">
     <th>배송비</th>

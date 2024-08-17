@@ -147,6 +147,7 @@ getProducts(productPage, limit);
 </head>
 <body>
 <%@ include file="header.jspf" %>
+<link rel="stylesheet" href="/css/product.css" />
     <div class="toggle-container">
         <button id="limit-10">10 개씩 보기</button>
         <button id="limit-20">20 개씩 보기</button>
