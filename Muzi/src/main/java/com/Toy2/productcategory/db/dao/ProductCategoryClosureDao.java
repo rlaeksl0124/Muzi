@@ -20,4 +20,5 @@ public interface ProductCategoryClosureDao {
     List<ProductCategoryClosureDto> findByParentCategory(int parentCategory);
 
     List<ProductCategoryDto> findDirectChildren(ProductCategoryDto categories);
+    List<ProductCategoryDto> findRoot();
 }

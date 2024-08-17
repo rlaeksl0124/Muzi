@@ -5,6 +5,56 @@
 <head>
 	<title>Product-Home</title>
 	    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .category-bar {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .category-item {
+            position: relative;
+            display: inline-block;
+        }
+
+        .category-name {
+            font-weight: bold;
+            cursor: pointer;
+            padding: 10px;
+            display: block;
+            background-color: #f2f2f2;
+            margin: 2px;
+        }
+
+        .category-item ul {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            background-color: #f2f2f2;
+            z-index: 1000;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-item:hover > ul {
+            display: block;
+        }
+
+        .category-item ul .category-item {
+            display: block;
+            width: 200px;
+        }
+
+        .category-name:hover {
+            background-color: #e2e2e2;
+        }
+
             .page-list {
                 list-style-type: none;
                 padding: 0;
@@ -93,6 +143,7 @@ getProducts(productPage, limit);
 
 
         function setLimit(newLimit) {
+            productPage = 0;
             limit = newLimit;
             fetchPages(limit)
             getProducts(productPage, limit);
@@ -143,9 +194,46 @@ getProducts(productPage, limit);
                 .catch(error => console.error('Error fetching pages:', error));
         }
 
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('categories')
+                .then(response => response.json())
+                .then(data => {
+                    const categories = data.dto; // Assuming the JSON structure has `data` field
+                    renderCategories(categories, 0, document.getElementById('categoryBar'));
+                })
+                .catch(error => console.error('Error fetching categories:', error));
+        });
+
+        function renderCategories(categories, parentId, parentElement) {
+            if (!categories[parentId]) return;
+
+            categories[parentId].forEach(category => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('category-item');
+
+                const categoryName = document.createElement('div');
+                categoryName.classList.add('category-name');
+                categoryName.textContent = category.categoryName + category.categoryNumber;
+
+                listItem.appendChild(categoryName);
+                parentElement.appendChild(listItem);
+
+                const childList = document.createElement('ul');
+                listItem.appendChild(childList);
+
+                renderCategories(categories, category.categoryNumber, childList);
+            });
+        }
+
 </script>
 </head>
 <body>
+    <h2>Category Bar</h2>
+    <ul id="categoryBar" class="category-bar"></ul>
+
+
+
+
 <%@ include file="header.jspf" %>
 <link rel="stylesheet" href="/css/product.css" />
     <div class="toggle-container">
