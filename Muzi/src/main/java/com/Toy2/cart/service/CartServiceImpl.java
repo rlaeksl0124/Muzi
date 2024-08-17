@@ -101,4 +101,9 @@ public class CartServiceImpl implements CartService{
             throw new Exception("cartModify is not success");
         return modifyCheck;
     }
+
+    @Override
+    public int cartEmailDelete(String email) throws Exception {
+        return cartDao.cartEmailDelete(email);
+    }
 }

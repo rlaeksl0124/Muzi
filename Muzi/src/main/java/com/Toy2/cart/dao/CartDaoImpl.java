@@ -53,4 +53,9 @@ public class CartDaoImpl implements CartDao{
     public int cartDeleteAll() throws Exception {//전부삭제
         return session.delete(namespace + "cartDeleteAll");
     }
+
+    @Override
+    public int cartEmailDelete(String email) throws Exception {
+        return session.delete(namespace + "cartEmailDelete",email);
+    }
 }

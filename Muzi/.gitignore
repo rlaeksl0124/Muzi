@@ -1,5 +1,5 @@
 .smarttomcat
-
+.idea
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

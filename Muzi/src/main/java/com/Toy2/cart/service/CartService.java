@@ -14,4 +14,6 @@ public interface CartService {
 
     //장바구니 옵션 수정
     int modifyCart(int cartNo, CartDto cartDto) throws Exception;
+
+    int cartEmailDelete(String email) throws Exception;
 }

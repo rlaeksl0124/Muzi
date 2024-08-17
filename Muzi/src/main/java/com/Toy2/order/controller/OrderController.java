@@ -1,5 +1,6 @@
 package com.Toy2.order.controller;
 
+import com.Toy2.cart.service.CartService;
 import com.Toy2.order.entity.DeliveryDto;
 import com.Toy2.order.entity.OrderDetailDto;
 import com.Toy2.order.entity.OrderDto;
@@ -18,9 +19,11 @@ import java.util.List;
 @RequestMapping("/orders")
 public class OrderController {
     private OrderService orderService;
+    private CartService cartService;
     @Autowired
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, CartService cartService) {
         this.orderService = orderService;
+        this.cartService = cartService;
     }
 
     /**
@@ -56,6 +59,7 @@ public class OrderController {
                     .get(orderService.getOrderList(customerEmail).size()-1).getOrderPrices());
             model.addAttribute("orderProductDate", orderService.getOrderList(customerEmail)
                     .get(orderService.getOrderList(customerEmail).size()-1).getOrderDate());
+            cartService.cartEmailDelete(customerEmail);
             return "orderSuccess";
         } catch (Exception e) {
 

@@ -20,4 +20,5 @@ public interface CartDao {
     CartDto cartSelect(int cartNo)throws Exception; //장바구니 번호로 검색
     int cartCount(String email)throws Exception; //사용자의 장바구니에 들어있는 개수
     int cartDeleteAll() throws Exception;//카트의 모든 데이터 삭제
+    int cartEmailDelete(String email)throws Exception;
 }

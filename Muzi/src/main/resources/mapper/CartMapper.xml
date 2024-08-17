@@ -69,4 +69,8 @@
     <delete id="cartDeleteAll" >
         delete from `toy2`.`CART`
     </delete>
+
+    <delete id="cartEmailDelete" parameterType="string">
+        delete from cart where c_email = #{customerEmail};
+    </delete>
 </mapper>
