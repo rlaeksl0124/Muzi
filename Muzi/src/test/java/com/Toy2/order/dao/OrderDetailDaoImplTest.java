@@ -20,7 +20,8 @@ public class OrderDetailDaoImplTest {
 
     @Test
     public void 주문상세_추가_성공() throws Exception {
-        OrderDetailDto odd = new OrderDetailDto(52, 2, 1, "주문완료", "L", "일반배송");
+        OrderDetailDto odd = new OrderDetailDto(52, 2,
+                1, "주문완료", "L", "일반배송");
         //DB에 저장되어있는 orderNo와 ProductNo를 입력해야한다.
         assertTrue(odDao.orderDetailInsert(odd) == 1);
         //생성 확인
@@ -28,13 +29,15 @@ public class OrderDetailDaoImplTest {
 
     @Test
     public void 주문상세_추가_실패() {
-        OrderDetailDto odd = new OrderDetailDto(9999, 1, 1, "주문완료", "L", "일반배송");
+        OrderDetailDto odd = new OrderDetailDto(9999, 1,
+                1, "주문완료", "L", "일반배송");
         assertThrows(Exception.class, () -> odDao.orderDetailInsert(odd));
     }
 
     @Test
     public void 주문상세_수정_성공() throws Exception {
-        OrderDetailDto odd = new OrderDetailDto(52, 2, 1, "주문완료", "L", "일반배송");
+        OrderDetailDto odd = new OrderDetailDto(52, 2,
+                1, "주문완료", "L", "일반배송");
         assertTrue(odDao.orderDetailInsert(odd) == 1);
 
         // Insert 후에 생성된 orderDetailNo를 사용하여 업데이트
@@ -46,10 +49,12 @@ public class OrderDetailDaoImplTest {
 
     @Test
     public void 주문상세_수정_실패() throws Exception {
-        OrderDetailDto odd = new OrderDetailDto(52, 2, 1, "주문완료", "L", "일반배송");
+        OrderDetailDto odd = new OrderDetailDto(52, 2,
+                1, "주문완료", "L", "일반배송");
         assertTrue(odDao.orderDetailInsert(odd) == 1);
 
-        assertTrue(odDao.orderDetailUpdate(0, "주문취소") != 1);  // 존재하지 않는 orderDetailNo로 업데이트 시도
+        assertTrue(odDao.orderDetailUpdate(0, "주문취소") != 1);
+        // 존재하지 않는 orderDetailNo로 업데이트 시도
     }
 
     @Test

@@ -20,4 +20,9 @@ public class DeliveryDaoImpl implements DeliveryDao{
     public DeliveryDto deliverySelect(int orderNo) throws Exception {
         return session.selectOne(namespace + "deliverySelect", orderNo);
     }
+
+    @Override
+    public int deliveryDelete() throws Exception {
+        return session.delete(namespace + "deliveryDelete");
+    }
 }

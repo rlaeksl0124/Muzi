@@ -2,9 +2,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
-    <title>Title</title>
+    <title>주문완료</title>
 </head>
 <body>
+<%@ include file="header.jspf" %>
+
+<link rel="stylesheet" href="/css/orderSuccess.css" />
     <h2> 주문완료 </h2>
     <tr>
         <th>

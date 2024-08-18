@@ -54,4 +54,16 @@
         ) AS subquery
         );
     </delete>
+
+    <select id="findRoot" resultType="ProductCategoryDto">
+        SELECT c1.cate_no, c1.cate_name
+        FROM category c1
+        WHERE NOT EXISTS (
+        SELECT 1
+        FROM closure c2
+        WHERE c2.cate_child = c1.cate_no
+        AND c2.cate_parent != c1.cate_no
+        );
+    </select>
+
 </mapper>

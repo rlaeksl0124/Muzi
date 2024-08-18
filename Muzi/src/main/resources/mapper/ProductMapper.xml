@@ -22,13 +22,21 @@
     <!--상품 삽입-->
     <insert id="insertProduct" parameterType="ProductDto">
         INSERT INTO product
-        (pdt_no, pdt_price, pdt_name, new_item, pst_status
+        (pdt_price, pdt_name, new_item, pst_status
         , discountable, pdt_amount, notice, delivery_fee, pdt_private)
-        VALUES(
-        #{productNumber}, #{productPrice},
+        VALUES(#{productPrice},
         #{productName}, #{newItem},
         #{postingStatus}, #{discountable},
         #{productAmount}, #{notice}, #{deliveryFee}, #{privateProduct})
+    </insert>
+    <insert id="insertProduct2" parameterType="ProductInsertRequestDto">
+        INSERT INTO product
+        (pdt_price, pdt_name, new_item, pst_status
+        , discountable, notice, delivery_fee, pdt_private)
+        VALUES(#{productPrice},
+        #{productName}, #{newItem},
+        #{postingStatus}, #{discountable},
+        #{notice}, #{deliveryFee}, #{privateProduct})
     </insert>
 
     <!--상품 업데이트-->

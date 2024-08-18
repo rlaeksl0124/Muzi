@@ -1,0 +1,78 @@
+/* cart.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+table th {
+    background-color: #f1f1f1;
+}
+
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+}
+
+input[type="number"] {
+    width: 50px;
+    text-align: center;
+}
+
+button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+.summary {
+    text-align: right;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.summary span {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.summary strong {
+    font-weight: bold;
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    table, .summary {
+        font-size: 14px;
+    }
+
+    input[type="number"] {
+        width: 40px;
+    }
+}

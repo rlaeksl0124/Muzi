@@ -27,9 +27,10 @@ public class NoticeServiceImpl implements NoticeService {
     public int deleteNotice(int id) {
         return noticeDao.deleteById(id);
     }
-    //
+//
     @Override
     public int updateNotice(NoticeDto notice) {
+        /* 업데이트 시 업데이트 시간을 입력해 주고 업데이트를 한다.*/
         Date now = new Date(System.currentTimeMillis());
         notice.setLast_mod_dt(now);
         return noticeDao.updateContents(notice);
@@ -37,6 +38,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public NoticeDto getNotice(int id) throws IllegalAccessException{
         NoticeDto notice = noticeDao.selectById(id);
+        /* 삭제된 게시글을 상태로 관리 하기 때문에 삭제된 게시글 조회시 예외로 처리한다.*/
         if (notice.getN_state() == "N")
             throw new IllegalAccessException("이미 삭제된 게시글 입니다.");
         return noticeDao.selectById(id);
@@ -49,8 +51,19 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public int deleteContents(NoticeDto notice) {
         notice.setN_state("N");
+        /* 업데이트 시간 현재 시간으로 설정 */
         Date now = new Date(System.currentTimeMillis());
         notice.setLast_mod_dt(now);
         return noticeDao.updateState(notice);
     }
+
+    @Override
+    public int updateN_order(NoticeDto notice){
+        Date now = new Date(System.currentTimeMillis());
+        notice.setLast_mod_dt(now);
+        /* 중복 제거 및 값 관리는 DB 트리거와 제약조건으로 관리 */
+
+        return noticeDao.updateN_order(notice);
+    }
+
 }

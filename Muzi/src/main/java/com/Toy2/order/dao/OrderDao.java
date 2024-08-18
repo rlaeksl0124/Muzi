@@ -14,4 +14,6 @@ public interface OrderDao {
     int orderUpdate(int orderNo) throws Exception;
     List<OrderResponseDto> orderList(String customerEmail) throws Exception;
     int orderDelete() throws Exception;
+    int orderCount(String customerEmail) throws Exception;
+    OrderDto orderSelect (int orderNo) throws Exception;
 }
