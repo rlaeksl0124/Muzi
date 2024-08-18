@@ -44,13 +44,8 @@ public class OrderController {
         String customerEmail = (String) session.getAttribute("c_email");
 
         try {
-            orderService.addOrder(orderDto, orderDetails);
-
             deliveryDto.setDeliveryStreetAddress("zz");
-
-            deliveryDto.setOrderNo(orderDto.getOrderNo());
-            orderService.addDelivery(deliveryDto);
-
+            orderService.addOrder(orderDto, orderDetails, deliveryDto);
             model.addAttribute("orderProductName", orderService.getOrderDetailList(
                             orderService.getOrderList(customerEmail)
                                     .get(orderService.getOrderList(customerEmail).size()-1).getOrderNo())
@@ -59,10 +54,8 @@ public class OrderController {
                     .get(orderService.getOrderList(customerEmail).size()-1).getOrderPrices());
             model.addAttribute("orderProductDate", orderService.getOrderList(customerEmail)
                     .get(orderService.getOrderList(customerEmail).size()-1).getOrderDate());
-            cartService.cartEmailDelete(customerEmail);
             return "orderSuccess";
         } catch (Exception e) {
-
             return "redirect:/cart/order";
         }
     }

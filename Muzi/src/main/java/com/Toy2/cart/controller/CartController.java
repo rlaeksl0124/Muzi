@@ -39,7 +39,7 @@ public class CartController {
     @GetMapping("/cart")
     public String cartPage(Model model, HttpSession session) throws Exception {
         String customerEmail = (String) session.getAttribute("c_email");
-        List<CartDto> cartDto = cartService.getCarts((String) session.getAttribute("c_email"));
+        List<CartDto> cartDto = cartService.getCarts(customerEmail);
         model.addAttribute("cartDto", cartDto);
         return "cart";
     }
