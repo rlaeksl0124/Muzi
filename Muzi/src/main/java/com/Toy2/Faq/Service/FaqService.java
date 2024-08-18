@@ -32,6 +32,6 @@ public interface FaqService {
 
     String joinCategory(Integer faq_no ,Integer cate_no) throws Exception;
 
-    int getSearchResultCnt(SearchCondition sc) throws Exception;
-    List<FaqDto> getSearchResult(SearchCondition sc) throws Exception;
+    int getSearchResultCnt(String option, String keyword) throws Exception;
+    List<FaqDto> getSearchResult(String option, String keyword) throws Exception;
 }

@@ -59,12 +59,18 @@ public class FaqServiceImpl implements FaqService {
     }
 
     @Override
-    public int getSearchResultCnt(SearchCondition sc) throws Exception {
-        return faqDao.searchResultCnt(sc);
+    public int getSearchResultCnt(String option, String keyword) throws Exception {
+        SearchCondition searchCondition = new SearchCondition();
+        searchCondition.setOption(option);
+        searchCondition.setKeyword(keyword);
+        return faqDao.searchResultCnt(searchCondition);
     }
 
     @Override
-    public List<FaqDto> getSearchResult(SearchCondition sc) throws Exception {
-        return faqDao.searchSelected(sc);
+    public List<FaqDto> getSearchResult(String option, String keyword) throws Exception {
+        SearchCondition searchCondition = new SearchCondition();
+        searchCondition.setOption(option);
+        searchCondition.setKeyword(keyword);
+        return faqDao.searchSelected(searchCondition);
     }
 }

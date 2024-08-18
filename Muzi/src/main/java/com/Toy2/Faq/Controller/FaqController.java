@@ -27,7 +27,7 @@ public class FaqController {
 
     /* readList - 관계자가 보는 목록 페이지 faq_list  보여줌 */
     @RequestMapping("")
-    public String readList(Model model, HttpSession session, RedirectAttributes rd) {
+    public String readList(Model model, HttpSession session, RedirectAttributes rd, SearchCondition sc) {
         if (session.getAttribute("c_email") == null || !(session.getAttribute("c_email").equals("admin"))){
             rd.addFlashAttribute("msg", "No_Grant_ERR");
             return "redirect:/login";
@@ -47,7 +47,7 @@ public class FaqController {
 
             // 사용자에게 어떤 행동을 할지 - 게시글 목록이 없다고 뜨기 / 에러 페이지
             rd.addFlashAttribute("msg", "ReadList_ERR");      // 에러 메시지를 RedirectAttributes에 추가
-            return "redirect:/faq";
+            return "redirect:/faq" + sc.getQueryString();
         }
     }
 
@@ -182,21 +182,67 @@ public class FaqController {
     // showFaq - 클라이언트에게 보여주는 펼쳐지는 FAQ 페이지 맵핑
     // 로그인은 FaqController에서 고려하지 않음
     // http://localhost:8080/faq/show/
-    @GetMapping("/show")
-    public String show(Model model) {
-        try {
-            List<FaqDto> faqList = faqService.selectAll();          // 저장된 FaqDto를 전부 조회해서 List에 저장
+//    @GetMapping("/show")
+//    public String show(Model model) {
+//        try {
+//            List<FaqDto> faqList = faqService.selectAll();          // 저장된 FaqDto를 전부 조회해서 List에 저장
+//
+//            for (FaqDto faq : faqList) {        // 가져온 FaqDto의 리스트를 순회
+//                // Join 해서 카테고리 이름  갖고오기
+//                faq.setCategoryName(faqService.joinCategory(faq.getFaq_no(), faq.getCate_no()));
+//            }
+//            model.addAttribute("faqList", faqList);          // model에 FAQ 목록을 추가하여 view에서 사용할 수 있도록 함
+//            return "faq_cust_list";             // 조회 성공하면 faq_cust_list FAQ 보여주는 페이지로 이동
+//        } catch (Exception e){
+//            e.printStackTrace();
+//            model.addAttribute("msg", "faq_cust_list ERROR");
+//            return "redirect:/home";
+//        }
+//    }
 
-            for (FaqDto faq : faqList) {        // 가져온 FaqDto의 리스트를 순회
-                // Join 해서 카테고리 이름  갖고오기
+
+    @GetMapping("/show")
+    public String show(@RequestParam(value = "option", required = false) String option,
+                       @RequestParam(value = "keyword", required = false) String keyword,
+                       Model model) {
+        try {
+            List<FaqDto> faqList;
+
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                faqList = faqService.getSearchResult(option, keyword);
+            } else {
+                faqList = faqService.selectAll();  // Retrieve all FAQs if no search keyword is provided
+            }
+
+            for (FaqDto faq : faqList) {
                 faq.setCategoryName(faqService.joinCategory(faq.getFaq_no(), faq.getCate_no()));
             }
-            model.addAttribute("faqList", faqList);          // model에 FAQ 목록을 추가하여 view에서 사용할 수 있도록 함
-            return "faq_cust_list";             // 조회 성공하면 faq_cust_list FAQ 보여주는 페이지로 이동
-        } catch (Exception e){
+
+            model.addAttribute("faqList", faqList);
+            return "faq_cust_list";  // Forward to the FAQ list view page
+        } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("msg", "faq_cust_list ERROR");
             return "redirect:/home";
         }
+    }
+
+
+
+    @GetMapping("")
+    public String listFaqs(@RequestParam(value = "option", required = false) String option,
+                           @RequestParam(value = "keyword", required = false) String keyword,
+                           Model model) throws Exception {
+
+        List<FaqDto> faqList;
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            faqList = faqService.getSearchResult(option, keyword);
+        } else {
+            faqList = faqService.selectAll();
+        }
+
+        model.addAttribute("list", faqList);
+        return "faq_list";
     }
 }

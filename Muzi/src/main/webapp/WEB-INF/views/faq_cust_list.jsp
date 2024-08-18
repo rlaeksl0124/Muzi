@@ -59,6 +59,16 @@
 <div class="faq-container">
     <h1>FAQ 목록</h1>
 
+    <form action="/faq/show" class="search-form" method="GET" style="display: flex; gap: 10px; align-items: center;">
+        <select class="search-option" name="option">
+            <option value="A" ${param.option == 'A' ? 'selected' : ''}>제목+내용</option>
+            <option value="T" ${param.option == 'T' ? 'selected' : ''}>제목만</option>
+        </select>
+        <input type="text" name="keyword" placeholder="검색어를 입력하세요" value="${param.keyword}" style="padding: 5px;">
+        <button type="submit" style="padding: 5px 10px; background-color: black; color: white; border: none; cursor: pointer;">검색</button>
+    </form>
+
+
     <c:forEach var="faq" items="${faqList}">
         <div class="faq-item" onclick="toggleFaqContent('${faq.faq_no}')">
             <div class="faq-header">${faq.categoryName} | ${faq.faq_title}</div>

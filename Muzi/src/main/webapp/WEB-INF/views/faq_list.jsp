@@ -69,12 +69,22 @@
         </div>
     </div>
 
-    <form action="/faq" class="search-form" method="GET">
-        <select class="search-optoin" name="option">
+<%--    <form action="/faq" class="search-form" method="GET">--%>
+<%--        <select class="search-optoin" name="option">--%>
+<%--            <option value="A">제목+내용</option>--%>
+<%--            <option value="T">제목만</option>--%>
+<%--        </select>--%>
+<%--    </form>--%>
+
+    <form action="/faq" class="search-form" method="GET" style="display: flex; gap: 10px; align-items: center;">
+        <select class="search-option" name="option">
             <option value="A">제목+내용</option>
             <option value="T">제목만</option>
         </select>
+        <input type="text" name="keyword" placeholder="검색어를 입력하세요" value="${param.keyword}" style="padding: 5px;">
+        <button type="submit" style="padding: 5px 10px; background-color: black; color: white; border: none; cursor: pointer;">검색</button>
     </form>
+
 
     <table class="faq-table">
         <thead>
