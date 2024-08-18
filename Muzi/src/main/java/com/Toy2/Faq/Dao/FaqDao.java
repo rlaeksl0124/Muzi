@@ -1,6 +1,7 @@
 package com.Toy2.Faq.Dao;
 
 import com.Toy2.Faq.Domain.FaqDto;
+import com.Toy2.Faq.Domain.SearchCondition;
 
 import java.util.List;
 
@@ -20,4 +21,7 @@ public interface FaqDao {
     int increaseViewCnt(Integer faq_no);
 
     String joinCategory(Integer faq_no, Integer cate_no);
+
+    int searchResultCnt(SearchCondition sc);
+    List<FaqDto> searchSelected(SearchCondition sc);
 }

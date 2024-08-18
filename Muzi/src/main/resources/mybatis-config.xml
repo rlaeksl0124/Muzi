@@ -34,5 +34,6 @@
 
 		<typeAlias type="com.Toy2.Faq.Domain.FaqDto" alias="FaqDto" />
 		<typeAlias type="com.Toy2.Faq.Domain.InqDto" alias="InqDto" />
+		<typeAlias type="com.Toy2.Faq.Domain.SearchCondition" alias="SearchCondition" />
 	</typeAliases>
 </configuration>

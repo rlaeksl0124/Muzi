@@ -69,6 +69,13 @@
         </div>
     </div>
 
+    <form action="/faq" class="search-form" method="GET">
+        <select class="search-optoin" name="option">
+            <option value="A">제목+내용</option>
+            <option value="T">제목만</option>
+        </select>
+    </form>
+
     <table class="faq-table">
         <thead>
         <tr>
@@ -95,6 +102,7 @@
 </body>
 <script>
     let msg = "${msg}";
+    if (msg == "No_Grand_ERR") alert("게시글 조회 권한이 없습니다. 로그인 해주세요.");
     if (msg == "ReadList_ERR") alert("게시글 목록을 가져오는데 실패했습니다. 다시 시도해 주세요.");
     if (msg == "ReadOne_ERR") alert("게시글을 가져오는데 실패했습니다. 다시 시도해 주세요.");
     if (msg == "Write_ERR") alert("게시글을 등록 페이지를 로드하는데 실패했습니다. 다시 시도해 주세요.");

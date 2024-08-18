@@ -129,8 +129,8 @@
 
 <%-- JavaScript로 작성한 코드 --%>
 <script>
-
-
+    let msg = "${msg}";
+    if (msg == "Delete_ERR") alert("게시글을 삭제하는데 실패했습니다. 다시 시도해 주세요.");
 
     function deleteFaq(faq_no) {
         if (confirm("FAQ를 삭제하시겠습니까?")) {
@@ -155,11 +155,6 @@
         }
     }
 </script>
-​
-
-
-
-
 
 </body>
 </html>

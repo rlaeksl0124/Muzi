@@ -1,6 +1,7 @@
 package com.Toy2.Faq.Service;
 
 import com.Toy2.Faq.Domain.FaqDto;
+import com.Toy2.Faq.Domain.SearchCondition;
 
 import java.util.List;
 
@@ -30,4 +31,7 @@ public interface FaqService {
     int update(FaqDto faqDto) throws Exception;
 
     String joinCategory(Integer faq_no ,Integer cate_no) throws Exception;
+
+    int getSearchResultCnt(SearchCondition sc) throws Exception;
+    List<FaqDto> getSearchResult(SearchCondition sc) throws Exception;
 }

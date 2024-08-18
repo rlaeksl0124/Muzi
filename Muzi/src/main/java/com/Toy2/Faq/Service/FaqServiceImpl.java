@@ -2,6 +2,7 @@ package com.Toy2.Faq.Service;
 
 import com.Toy2.Faq.Dao.FaqDao;
 import com.Toy2.Faq.Domain.FaqDto;
+import com.Toy2.Faq.Domain.SearchCondition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,5 +56,15 @@ public class FaqServiceImpl implements FaqService {
     @Override
     public String joinCategory(Integer faq_no, Integer cate_no) throws Exception {
         return faqDao.joinCategory(faq_no, cate_no);
+    }
+
+    @Override
+    public int getSearchResultCnt(SearchCondition sc) throws Exception {
+        return faqDao.searchResultCnt(sc);
+    }
+
+    @Override
+    public List<FaqDto> getSearchResult(SearchCondition sc) throws Exception {
+        return faqDao.searchSelected(sc);
     }
 }

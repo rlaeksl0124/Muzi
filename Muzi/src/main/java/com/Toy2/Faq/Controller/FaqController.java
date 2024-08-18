@@ -1,15 +1,20 @@
 package com.Toy2.Faq.Controller;
 
 import com.Toy2.Faq.Domain.FaqDto;
+import com.Toy2.Faq.Domain.SearchCondition;
 import com.Toy2.Faq.Entity.FaqCategory;
 import com.Toy2.Faq.Service.FaqService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.print.attribute.standard.PresentationDirection;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -19,18 +24,20 @@ import java.util.List;
 public class FaqController {
 
     @Autowired FaqService faqService;       // FaqService 주입 받기
-//    @Autowired FaqCateDao faqCateDao;
-
 
     /* readList - 관계자가 보는 목록 페이지 faq_list  보여줌 */
     @RequestMapping("")
-    public String readList(Model model, RedirectAttributes rd) {
+    public String readList(Model model, HttpSession session, RedirectAttributes rd) {
+        if (session.getAttribute("c_email") == null || !(session.getAttribute("c_email").equals("admin"))){
+            rd.addFlashAttribute("msg", "No_Grant_ERR");
+            return "redirect:/login";
+        }
+
         try {
             List<FaqDto> faqList = faqService.selectAll();      // 서비스에서 모든 FAQ 게시글을 List로 가져옴
 
-            for (FaqDto faq : faqList) {        // 가져온 FaqDto의 리스트를 순회
-                // Join 해서 카테고리 이름  갖고오기
-                faq.setCategoryName(faqService.joinCategory(faq.getFaq_no(), faq.getCate_no()));
+            for (FaqDto faq : faqList) {        // 가져온 FaqDto 리스트를 순회
+                faq.setCategoryName(faqService.joinCategory(faq.getFaq_no(), faq.getCate_no()));        // Join 해서 카테고리 이름  갖고오기
             }
             model.addAttribute("list", faqList);        // model에 FAQ 목록을 추가하여 view에서 사용할 수 있도록 함
             return "faq_list";              // faq_list 조회 페이지로 이동
@@ -91,6 +98,7 @@ public class FaqController {
             @RequestParam("cate_no") Integer cate_no, @RequestParam("faq_order") Integer faq_order, @RequestParam("faq_title") String faq_title,
             @RequestParam("faq_content") String faq_content, @RequestParam("faq_writer") String faq_writer, Model model, RedirectAttributes rd) {       // faq_reg_date는 사용자가 입력하는게 아니라 FAQ 등록 시점을 저장하는 거
 
+        try {
         FaqDto faqDto = new FaqDto();           // 새로운 FaqDto 객체 생성
         faqDto.setCate_no(cate_no);             // 매개변수로 넘어온 값을 Setter를 이용해서 객체에 저장
         faqDto.setFaq_title(faq_title);
@@ -98,10 +106,9 @@ public class FaqController {
         faqDto.setFaq_content(faq_content);
         faqDto.setFaq_writer(faq_writer);
 
-        try {
-            if (faqService.insert(faqDto) != 1)          // != 1이면 insert 안 됐다는 뜻
-                throw new Exception("FAQ registration failed.");
-            return "redirect:/faq";                    // /faq로 등록해놓은 faq_center.jsp로 리다이렉트
+        if (faqService.insert(faqDto) != 1)          // != 1이면 insert 안 됐다는 뜻
+            throw new Exception("FAQ registration failed.");
+        return "redirect:/faq";                    // /faq로 등록해놓은 faq_center.jsp로 리다이렉트
         } catch (Exception e) {
             e.printStackTrace();
             rd.addFlashAttribute("msg", "Submit_Write_ERR");
@@ -135,26 +142,31 @@ public class FaqController {
     }
 
 
+
     /* modify - 등록된 FAQ 수정 (작성자 & 관리자 수정 가능) */
     // faq_one.jsp 페이지에서 수정 버튼 클릭 -> faq_modify 페이지에서 기존 데이터를 가지고 수정
     @PostMapping("/modify")         // PostMapping 사용
-    public String modify(FaqDto faqDto, RedirectAttributes rd) {
-        try {
-            faqService.update(faqDto);
-            return "redirect:/faq";
+    public String modify(FaqDto faqDto, HttpSession session, SearchCondition sc, RedirectAttributes rd) {
+        String c_email = (String) session.getAttribute("c_email");
 
-        } catch (Exception e){
+        try {
+            if (c_email.equals("admin") || c_email.equals(faqDto.getFaq_writer())){
+                faqService.update(faqDto);
+                System.out.println(faqDto);
+                return "redirect:/faq" + sc.getQueryString(faqDto.getFaq_no());
+            }
+            return "redirect:/login";
+        } catch (Exception e) {
             e.printStackTrace();
             rd.addFlashAttribute("msg", "Modify_ERR");
-            return "redirect:/faq";
+            return "redirect:/login";
         }
     }
 
 
-
     //  faq_modify.jsp 페이지에 faqDto를 전달하는 메서드
     @GetMapping("/modify")
-    public String updateFaq(@RequestParam("faq_no") int faq_no, Model model, RedirectAttributes rd) throws Exception {
+    public String modify(@RequestParam("faq_no") int faq_no, Model model, RedirectAttributes rd) throws Exception {
         try{
             FaqDto faqDto = faqService.select(faq_no);           // 선택한 FAQ 게시글(일치하는 faq_no) 조회 후 저장
             model.addAttribute("faqDto", faqDto);       // Model에 가져온 faqDto 저장

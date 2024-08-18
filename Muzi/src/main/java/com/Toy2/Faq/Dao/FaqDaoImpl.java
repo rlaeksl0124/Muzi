@@ -1,6 +1,7 @@
 package com.Toy2.Faq.Dao;
 
 import com.Toy2.Faq.Domain.FaqDto;
+import com.Toy2.Faq.Domain.SearchCondition;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -76,5 +77,17 @@ public class FaqDaoImpl implements FaqDao{
         map.put("faq_no", faq_no);
         map.put("cate_no", cate_no);
         return session.selectOne(namespace + "joinCategory", faq_no);
+    }
+
+    @Override
+    public int searchResultCnt(SearchCondition sc) {
+        System.out.println("sc in searchResultCnt = " + sc);
+        System.out.println("session = " + session);
+        return session.selectOne(namespace + "searchResultCnt", sc);
+    }
+
+    @Override
+    public List<FaqDto> searchSelected(SearchCondition sc) {
+        return session.selectList(namespace + "searchSelected", sc);
     }
 }
