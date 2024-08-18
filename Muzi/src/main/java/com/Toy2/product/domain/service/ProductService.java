@@ -2,6 +2,7 @@ package com.Toy2.product.domain.service;
 
 import com.Toy2.product.db.dao.ProductDao;
 import com.Toy2.product.db.dto.ProductDto;
+import com.Toy2.product.db.dto.request.ProductInsertRequestDto;
 import com.Toy2.product.db.dto.request.ProductPageRequestDto;
 import com.Toy2.product.db.dto.request.ProductUpdateRequestDto;
 import com.Toy2.product.option.db.dao.ProductOptionDao;
@@ -54,6 +55,9 @@ public class ProductService {
      */
     public boolean insertProduct(ProductDto productDto) {
         return productDao.insert(productDto);
+    }
+    public boolean insertProduct(ProductInsertRequestDto productInsertRequestDto) {
+        return productDao.insert(productInsertRequestDto);
     }
 
     /**
@@ -125,16 +129,24 @@ public class ProductService {
         return map;
     }
 
-    public Map<String, List<String>> selectProductOption(int productNumber) {
+    public Map<String, List<ProductOptionDto>> selectProductOption(int productNumber) {
         List<ProductOptionDto> options = productOptionDao.selectOptions(productNumber);
         return options.stream()
                 .collect(Collectors.groupingBy(
                         ProductOptionDto::getOptionName,
                         Collectors.mapping(
-                                ProductOptionDto::getOptionDetail,
+                                po -> po,
                                 Collectors.toList()
                         )
                 ));
 
+    }
+
+    public ProductOptionDto selectOption(int optionNumber) {
+        return productOptionDao.selectOption(optionNumber);
+    }
+
+    public void insertOption(ProductOptionDto productOptionDto) {
+        productOptionDao.insert(productOptionDto);
     }
 }
