@@ -100,7 +100,7 @@
         <h1>FAQ 등록</h1>
     </div>
 
-    <form id="faqForm" action="${pageContext.request.contextPath}/faq/register" method="POST">
+    <form id="faqForm" action="${pageContext.request.contextPath}/faq/write" method="POST">
         <div class="form-group">
             <label for="faq_title">FAQ 제목</label>
             <input type="text" id="faq_title" name="faq_title" required>
@@ -190,6 +190,9 @@
 </div>
 
 <script>
+    let msg = "${msg}";
+    if (msg == "Submit_Write_ERR") alert("게시글을 등록하는데 실패했습니다. 다시 시도해 주세요.");
+
     document.getElementById('faqForm').addEventListener('submit', function(event) {
         // Get the form elements
         var faqTitle = document.getElementById('faq_title').value;

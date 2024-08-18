@@ -61,7 +61,7 @@
 <div class="container">
     <div class="header">
         <div>
-            <button onclick="location.href='${pageContext.request.contextPath}/faq/register'">FAQ 등록</button>
+            <button onclick="location.href='${pageContext.request.contextPath}/faq/write'">FAQ 등록</button>
         </div>
         <div>
             <span>사용자: <strong>${faq_writer}</strong> 님</span>
@@ -82,7 +82,7 @@
             <tr>
                 <td>${faqDto.categoryName}</td>
                 <td class="faq_title">
-                    <a href="${pageContext.request.contextPath}/faq/view?faq_no=${faqDto.faq_no}">
+                    <a href="${pageContext.request.contextPath}/faq/read?faq_no=${faqDto.faq_no}">
                             ${faqDto.faq_title}
                     </a>
                 </td>
@@ -92,6 +92,11 @@
         </tbody>
     </table>
 </div>
-
 </body>
+<script>
+    let msg = "${msg}";
+    if (msg == "ReadList_ERR") alert("게시글 목록을 가져오는데 실패했습니다. 다시 시도해 주세요.");
+    if (msg == "ReadOne_ERR") alert("게시글을 가져오는데 실패했습니다. 다시 시도해 주세요.");
+    if (msg == "Write_ERR") alert("게시글을 등록 페이지를 로드하는데 실패했습니다. 다시 시도해 주세요.");
+</script>
 </html>

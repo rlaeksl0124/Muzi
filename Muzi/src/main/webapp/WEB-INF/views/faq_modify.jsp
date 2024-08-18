@@ -171,6 +171,9 @@
 </div>
 
 <script>
+    let msg = "${msg}";
+    if (msg == "Modify_ERR") alert("게시글을 수정하는데 실패했습니다. 다시 시도해 주세요.");
+
     document.getElementById('faqForm').addEventListener('submit', function(event) {
         // Get the form elements
         var faqTitle = document.getElementById('faq_title').value;

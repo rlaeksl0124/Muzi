@@ -129,6 +129,9 @@
 
 <%-- JavaScript로 작성한 코드 --%>
 <script>
+
+
+
     function deleteFaq(faq_no) {
         if (confirm("FAQ를 삭제하시겠습니까?")) {
             fetch(`/faq/remove?faq_no=${faqDto.faq_no}`, {
