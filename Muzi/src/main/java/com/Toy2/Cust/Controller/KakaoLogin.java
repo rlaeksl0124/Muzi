@@ -25,10 +25,17 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
+/* 목객체 생성해서 테스트 하드코딩 -sns test service */
+
+/* 카카오로그인 */
 @Controller
 public class KakaoLogin {
-    @Value("#{properties['kakao.api_key']}")//confidential.properties에 저장된 키 가져오기
+    
+    /* propertise파일에 api key 가져오기 */
+    @Value("#{properties['kakao.api_key']}") //confidential.properties에 저장된 키 가져오기
     private String kakaoApiKey;
+    
+    /* properties파일에 callback주소 url 가져오기 */
     @Value("#{properties['kakao.redirect_uri']}")
     private String kakaoRedirectUri;
 
@@ -48,7 +55,7 @@ public class KakaoLogin {
 
     /* 콜백 요청 */
     @RequestMapping("/kakao/callback")
-    public String kakaoLogin(@RequestParam String code, Model m, HttpServletRequest request) throws Exception {
+    public String kakaoLogin(@RequestParam String code, Model m, HttpServletRequest request) {
         try{
             /* access Token 얻기 */
             String accessToken = getKakaoAccessToken(code);
@@ -71,11 +78,12 @@ public class KakaoLogin {
             if(custDto!=null){
                 custDao.updateLogin(custEmail);
                 HttpSession session = request.getSession();
-                session.setAttribute("c_email", custDto.getC_admin());
+                session.setAttribute("c_email", custDto.getC_email());
                 return "redirect:/";
             }
 
             /* 고객정보가 DB에 없을경우 */
+            /* 합치던가 분리하던가 */
             custDto = new CustDto();
             custDto.setC_email(custEmail);
             custDto.setC_pwd("");
@@ -157,6 +165,7 @@ public class KakaoLogin {
                 String.class
         );
 
+        /* 고객의 닉네임과 이메일정보를 얻어온다 */
         JsonElement element = JsonParser.parseString(response.getBody());
         JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
         JsonObject kakaoAccount = element.getAsJsonObject().get("kakao_account").getAsJsonObject();

@@ -36,6 +36,7 @@
             <if test="c_phn != null">c_phn = #{c_phn},</if>
             <if test="c_zip != null">c_zip = #{c_zip},</if>
             <if test="c_road_a != null">c_road_a = #{c_road_a},</if>
+            <if test="c_det_a != null">c_det_a = #{c_det_a},</if>
         </set>
         where c_email = #{c_email}
     </update>

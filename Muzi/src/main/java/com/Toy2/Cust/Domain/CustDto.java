@@ -27,7 +27,7 @@ public class CustDto {
     private String c_zip;
     private String c_road_a;
     private String c_det_a;
-    private String c_admin;
+    private char c_admin;
     private char sms_agr;
     private char email_agr;
     private Date reg_date;
@@ -43,10 +43,10 @@ public class CustDto {
 
     /* 고객 생성 */
     public static CustDto custDto(String c_email) {
-        return new CustDto(c_email, "1234", "bbb", "bnick", "19980223", "W", "01027449853", "02001", "Gangnam-gu, Seoul", "8", "N");
+        return new CustDto(c_email, "1234", "bbb", "bnick", "19980223", "W", "01027449853", "02001", "Gangnam-gu, Seoul", "8", 'N');
     }
 
-    public CustDto(String c_email, String c_pwd, String c_name, String c_nick, String c_birth, String c_gnd, String c_phn, String c_zip, String c_road_a, String c_det_a, String c_admin) {
+    public CustDto(String c_email, String c_pwd, String c_name, String c_nick, String c_birth, String c_gnd, String c_phn, String c_zip, String c_road_a, String c_det_a, char c_admin) {
         this.c_email = c_email;
         this.c_pwd = c_pwd;
         this.c_name = c_name;
@@ -60,7 +60,7 @@ public class CustDto {
         this.c_admin = c_admin;
     }
 
-    public CustDto(String c_email, String c_stat_cd, String c_pwd, String c_name, String c_nick, String c_birth, String c_gnd, String c_phn, String c_zip, String c_road_a, String c_det_a, String c_admin, char sms_agr, char email_agr, Date reg_date, Date login_dt, int tot_amt, Date frst_reg_dt, String frst_reg_id, Date last_mod_dt, String last_mod_id) {
+    public CustDto(String c_email, String c_stat_cd, String c_pwd, String c_name, String c_nick, String c_birth, String c_gnd, String c_phn, String c_zip, String c_road_a, String c_det_a, char c_admin, char sms_agr, char email_agr, Date reg_date, Date login_dt, int tot_amt, Date frst_reg_dt, String frst_reg_id, Date last_mod_dt, String last_mod_id) {
         this.c_email = c_email;
         this.c_stat_cd = c_stat_cd;
         this.c_pwd = c_pwd;
@@ -173,11 +173,11 @@ public class CustDto {
         this.c_det_a = c_det_a;
     }
 
-    public String getC_admin() {
+    public char getC_admin() {
         return c_admin;
     }
 
-    public void setC_admin(String c_admin) {
+    public void setC_admin(char c_admin) {
         this.c_admin = c_admin;
     }
 

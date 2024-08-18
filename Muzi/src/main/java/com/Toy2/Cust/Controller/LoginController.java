@@ -16,54 +16,42 @@ public class LoginController {
     @Autowired
     CustDao custDao;
 
-    /* 관리자 등록 */
-
     /* 회원가입 */
-    /* 기본적으로 회원가입정보 미입력시 메시지 출력 */
 
-    /* 이메일 인증 + 길이 최대 30자 */
-    /* 비밀번호 pwd: 영문 대소문자/숫자/특수문자 조합 , service 구현예정, 패스워드는 암호화처리 어떻게할건지 생각 */
-
-    /* 이름: 한글 5자까지 */
-    /* 닉네임: 영문자만 */
-    /* 성별 */
-    /* 전화번호: */
-    /* 집주소: 주소검색 API사용? */
-
-
+    /* 미구현목록 리스트 */
+    /* 패스워드는 암호화처리 */
     /* 장기 미로그인 유저 휴먼처리 → 상태코드 변경 */
     /* 고객이 탈퇴할경우 실제로 DB삭제 X → 상태코드만 변경 */
-
-    /* 로그인 성공할경우 쿠키,세션생성후 마지막로그인기록을 저장하는 update 실행 */
-    /* 로그아웃시 세션삭제 */
+    /* 찜내역 */
 
 
+    /* 로그인폼 보여주기 */
     @GetMapping("/login")
     public String login(){
         return "login";
     }
 
+    /* 로그아웃 처리 */
     @GetMapping("/logout")
-    public String logOut(HttpSession session, String toURL){
+    public String logOut(HttpSession session){
         session.invalidate();
-        toURL = toURL==null || toURL.equals("") ? "/" : toURL;
-        return "redirect:"+toURL;
+        return "redirect:/";
     }
 
+    /* 로그인 POST */
     @PostMapping("/login")
     public String login(String c_email, String c_pwd, String toURL, HttpServletRequest request, RedirectAttributes rattr){
         try {
-            /* 세션생성 */
-            HttpSession session = request.getSession();
             /* 로그인실패: 로그인체크를통해 email과 pwd를 받아서 DB에 있는 정보와 일치한지 확인 */
             /* 메시지 출력후 login 페이지로 redirect */
-            if(!loginCheck(c_email, c_pwd, session)){
+            if(!loginCheck(c_email, c_pwd)){
                 rattr.addFlashAttribute("loginFail", "msg");
                 return "redirect:/login";
             }
 
             /* 로그인성공시 */
-
+            /* 세션생성 */
+            HttpSession session = request.getSession();
             session.setAttribute("c_email", c_email);
 
             /* 마지막 로그인일자를 업데이트하는 Dao 호출 */
@@ -80,18 +68,17 @@ public class LoginController {
     }
 
     /* 로그인체크메서드 - 아이디가 null 인지, pwd가 일치하는지 확인 */
-    private boolean loginCheck(String c_email, String c_pwd, HttpSession session){
+    private boolean loginCheck(String c_email, String c_pwd){
         CustDto cust = null;
         try {
             /* email로 DB 고객 조회 */
             cust = custDao.selectEmail(c_email);
         } catch(Exception e){
             e.printStackTrace();
+            /* DB에 고객이 없을경우 */
         }
 
         /* 고객이 null이 아니면서 비밀번호가 일치한지 비교후 return */
-        if(cust!=null && cust.getC_pwd().equals(c_pwd))
-            session.setAttribute("c_admin", cust.getC_admin());
         return cust!=null && cust.getC_pwd().equals(c_pwd);
     }
 
