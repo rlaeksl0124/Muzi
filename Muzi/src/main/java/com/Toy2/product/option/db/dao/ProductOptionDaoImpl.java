@@ -24,4 +24,14 @@ public class ProductOptionDaoImpl implements ProductOptionDao {
     public List<ProductOptionDto> selectOptions(int productNumber) {
         return sqlSession.selectList(nameSpace + "selectOptions", productNumber);
     }
+
+    @Override
+    public ProductOptionDto selectOption(int optionNumber) {
+        return sqlSession.selectOne(nameSpace + "selectOption", optionNumber);
+    }
+
+    @Override
+    public int insert(ProductOptionDto productOptionDto) {
+        return sqlSession.insert(nameSpace + "insertProductOption", productOptionDto);
+    }
 }

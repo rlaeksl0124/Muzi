@@ -7,4 +7,7 @@ import java.util.List;
 public interface ProductOptionDao {
     int count();
     List<ProductOptionDto> selectOptions(int productNumber);
+
+    ProductOptionDto selectOption(int optionNumber);
+    int insert(ProductOptionDto productOptionDto);
 }

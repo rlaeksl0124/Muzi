@@ -12,4 +12,12 @@
         SELECT * FROM `option` WHERE pdt_no = #{productNumber};
     </select>
 
+    <select id="selectOption" parameterType="int" resultType="ProductOptionDto">
+        SELECT * FROM `option` WHERE opt_no = #{optionNumber};
+    </select>
+
+    <insert id="insertProductOption" parameterType="ProductOptionDto">
+        INSERT INTO `option`(pdt_no, opt_name, opt_detail, status) VALUES(#{productNumber}, #{optionName}, #{optionDetail}, #{status})
+    </insert>
+
 </mapper>
