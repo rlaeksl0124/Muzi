@@ -58,7 +58,6 @@ public class OrderServiceImpl implements OrderService{
             deliveryDto.setOrderNo(orderNo);
             deliveryDao.deliveryInsert(deliveryDto);
             orderDao.orderUpdate(orderNo);
-            cartDao.cartEmailDelete(orderDto.getCustomerEmail());
 
             return 1;
         }catch (Exception e){

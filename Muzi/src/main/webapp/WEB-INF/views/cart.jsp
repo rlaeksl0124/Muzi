@@ -67,7 +67,7 @@
         </c:forEach>
         </tbody>
     </table>
-
+    <input type="hidden" id="orderType" name="orderType" value="장바구니구매">
     <button type="button" onclick="removeSelectedItems('${pageContext.request.contextPath}/cart/remove')">선택삭제</button>
     <button type="button" onclick="submitForm('${pageContext.request.contextPath}/cart/order')">주문하기</button>
 </form>

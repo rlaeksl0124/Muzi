@@ -18,6 +18,7 @@
 <div class="order-section">
     <h3>1. 주문상품</h3>
     <form action="${pageContext.request.contextPath}/orders/complete" method="post">
+        <input type="hidden" id="orderType" name="orderType" value="${orderType}">
     <table>
         <thead>
         <tr>

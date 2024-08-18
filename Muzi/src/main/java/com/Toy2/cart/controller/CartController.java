@@ -74,50 +74,19 @@ public class CartController {
     @PostMapping("/order")
     public String orderPageGo(HttpServletRequest request, Model model, HttpSession session) throws Exception {
         String customerEmail = (String) session.getAttribute("c_email");
-
-        OrderDto orDto = new OrderDto(customerEmail);
-        List<OrderDetailDto> orderDetailList = new ArrayList<>();
-        //제품을 담을 dto가 없어서 이렇게 우선 작성 차후에 변경 예정
-        String[] productPrice = request.getParameterValues("productPrice");
-        String[] productDeliveryPrice = request.getParameterValues("productDeliveryPrice");
-        String[] productNos = request.getParameterValues("productNo");
-        String[] productCnts = request.getParameterValues("productCnt");
-        String[] productOptions = request.getParameterValues("productOption");
-
         if (customerEmail == null) {
             throw new Exception("로그인이 필요합니다.");
         }
         try {
-            if (productNos != null) {
-                for (int i = 0; i < productNos.length; i++) {
-                    Long pp  = Long.parseLong(productPrice[i]);
-                    Integer dp = Integer.valueOf(productDeliveryPrice[i]);
-                    String productName = productService.selectProduct(Integer.parseInt(productNos[i])).getProductName();
-
-                    if(Integer.parseInt(productCnts[i]) <= 0)
-                        throw new Exception("0이하의 값 입력 불가");
-                    OrderDetailDto odDto = new OrderDetailDto(
-                            orDto.getOrderNo(),
-                            Integer.parseInt(productNos[i]),
-                            Integer.parseInt(productCnts[i]),
-                            "주문완료",
-                            productOptions[i],
-                            "일반배송",
-                            pp,
-                            dp
-                    );
-                    odDto.setOrderDetailProductName(productName);
-                    orderDetailList.add(odDto);
-                }
-            }else{
-                throw new NullPointerException();
-            }
+            String orderType = request.getParameter("orderType");
+            OrderDto orDto = new OrderDto(customerEmail);
+            List<OrderDetailDto> orderDetailList = createOrderDetailList(request, orDto);
+            model.addAttribute("orderDto", orDto);
+            model.addAttribute("orderDetailList", orderDetailList);
+            model.addAttribute("orderType", orderType);
         } catch (Exception e) {
             return "redirect:/cart/cart";
         }
-        model.addAttribute("orderDto", orDto);
-        model.addAttribute("orderDetailList", orderDetailList);
-
         return "order";
     }
 
@@ -154,6 +123,42 @@ public class CartController {
         // 장바구니를 담았던 그 화면으로 다시 들어가게
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
+    }
+
+    private List<OrderDetailDto> createOrderDetailList(HttpServletRequest request, OrderDto orDto) throws Exception {
+        String[] productPrice = request.getParameterValues("productPrice");
+        String[] productDeliveryPrice = request.getParameterValues("productDeliveryPrice");
+        String[] productNos = request.getParameterValues("productNo");
+        String[] productCnts = request.getParameterValues("productCnt");
+        String[] productOptions = request.getParameterValues("productOption");
+
+
+        List<OrderDetailDto> orderDetailList = new ArrayList<>();
+        if (productNos != null) {
+            for (int i = 0; i < productNos.length; i++) {
+                Long pp  = Long.parseLong(productPrice[i]);
+                Integer dp = Integer.valueOf(productDeliveryPrice[i]);
+                String productName = productService.selectProduct(Integer.parseInt(productNos[i])).getProductName();
+
+                if(Integer.parseInt(productCnts[i]) <= 0)
+                    throw new Exception("0이하의 값 입력 불가");
+                OrderDetailDto odDto = new OrderDetailDto(
+                        orDto.getOrderNo(),
+                        Integer.parseInt(productNos[i]),
+                        Integer.parseInt(productCnts[i]),
+                        "주문완료",
+                        productOptions[i],
+                        "일반배송",
+                        pp,
+                        dp
+                );
+                odDto.setOrderDetailProductName(productName);
+                orderDetailList.add(odDto);
+            }
+        }else{
+            throw new NullPointerException("상품 번호가 없습니다.");
+        }
+        return orderDetailList;
     }
 
 }

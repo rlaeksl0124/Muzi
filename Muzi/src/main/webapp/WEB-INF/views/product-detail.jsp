@@ -66,6 +66,7 @@
     <input type="number" id="quantity" name="productCnt" min="1" value="1" required>
     <input type="hidden" id="productNumber" name="productNo" value="${product.productNumber}">
     <input type="hidden" id="productPrice" name="productPrice" value="${product.productPrice}">
+    <input type="hidden" id="orderType" name="orderType" value="바로구매">
     <th>배송비</th>
     <td>${product.deliveryFee}</td>
     <c:set var="totalAmount" value="${product.productPrice * 2}" />

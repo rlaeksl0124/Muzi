@@ -37,6 +37,7 @@ public class OrderController {
     @PostMapping("/complete")
     public String addOrder(@ModelAttribute OrderDto orderDto,
                            @ModelAttribute DeliveryDto deliveryDto,
+                           @RequestParam("orderType") String cartOrder,
                            Model model,
                            HttpSession session) throws Exception {
         List<OrderDetailDto> orderDetails = orderDto.getOrderDetails();
@@ -46,6 +47,8 @@ public class OrderController {
         try {
             deliveryDto.setDeliveryStreetAddress("zz");
             orderService.addOrder(orderDto, orderDetails, deliveryDto);
+            if(cartOrder.equals("장바구니구매"))
+                cartService.cartEmailDelete(customerEmail);
             model.addAttribute("orderProductName", orderService.getOrderDetailList(
                             orderService.getOrderList(customerEmail)
                                     .get(orderService.getOrderList(customerEmail).size()-1).getOrderNo())
