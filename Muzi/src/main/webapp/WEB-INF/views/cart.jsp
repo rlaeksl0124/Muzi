@@ -40,7 +40,8 @@
                         ${item.cartProductPrice}
                 </td>
                 <td>
-                    <input type="number" name="productCnt_${item.cartNo}" value="${item.cartProductCnt}" id="productCnt_${item.cartNo}" min="1">
+                    <input type="number" name="productCnt_${item.cartNo}" value="${item.cartProductCnt}"
+                           id="productCnt_${item.cartNo}" min="1" oninput="checkValue(this)">
                     <input type="hidden" name="productCnt" value="${item.cartProductCnt}" id="productCnt_${item.cartNo}" min="1">
                 </td>
                 <td>
@@ -122,6 +123,12 @@
 
         $("#cartForm").attr("action", "/cart/modify");
         $("#cartForm").submit();
+    }
+    function checkValue(input) {
+        if (input.value < 1) {
+            alert("0이하는 불가능합니다.")
+            input.value = 1;  // 만약 값이 1보다 작다면 1로 설정
+        }
     }
 </script>
 </body>

@@ -151,7 +151,9 @@ public class CartController {
         // CartDto 객체를 생성하고 장바구니에 추가
         CartDto cartDto = new CartDto(productNumber, productCnt, productOption, customerEmail);
         cartService.addCart(cartDto);
-        return "redirect:/cart/cart";
+        // 장바구니를 담았던 그 화면으로 다시 들어가게
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
     }
 
 }
