@@ -6,10 +6,7 @@ import com.Toy2.Faq.Domain.SearchCondition;
 import java.util.List;
 
 public interface FaqDao {
-
-
-    /* 필요한 거 */
-    //    exception 제거하기
+    //  throws  Exception 제거하기
     int count();
     int deleteAll();
     List<FaqDto> selectAll();
