@@ -1,0 +1,113 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: left;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* Toggle container for limit buttons */
+.toggle-container {
+    margin-bottom: 20px;
+}
+
+.toggle-container button {
+    padding: 10px 15px;
+    margin-right: 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.toggle-container button:hover {
+    background-color: #555;
+}
+
+/* Product list styles */
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #fff;
+}
+
+.product-table th, .product-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.product-table th {
+    background-color: #f1f1f1;
+    font-weight: bold;
+}
+
+.product-table td a {
+    text-decoration: none;
+    color: #333;
+}
+
+.product-table td a:hover {
+    text-decoration: underline;
+}
+
+/* Pagination styles */
+.page-list {
+    list-style-type: none;
+    padding: 0;
+    text-align: center;
+}
+
+.page-list li {
+    display: inline-block;
+    margin: 5px;
+}
+
+.page-list li a {
+    text-decoration: none;
+    color: #333;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+}
+
+.page-list li a:hover {
+    background-color: #ddd;
+}
+
+.page-list li a.current {
+    font-weight: bold;
+    background-color: #333;
+    color: #fff;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 18px;
+    }
+
+    .toggle-container button {
+        margin-bottom: 10px;
+        width: 100%;
+        font-size: 16px;
+    }
+
+    .product-table, .page-list {
+        font-size: 14px;
+    }
+}

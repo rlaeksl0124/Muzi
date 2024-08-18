@@ -1,6 +1,7 @@
 package com.Toy2.product.db.dao;
 
 import com.Toy2.product.db.dto.ProductDto;
+import com.Toy2.product.db.dto.request.ProductInsertRequestDto;
 import com.Toy2.product.db.dto.request.ProductPageRequestDto;
 import com.Toy2.product.db.dto.request.ProductUpdateRequestDto;
 import org.apache.ibatis.session.SqlSession;
@@ -38,6 +39,17 @@ public class ProductDaoImpl implements ProductDao {
         int insert;
         try {
             insert = sqlSession.insert(nameSpace + "insertProduct", productDto);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("데이터 입력 실패", e);
+        }
+        return insert != 0;
+    }
+
+    @Override
+    public boolean insert(ProductInsertRequestDto productInsertRequestDto) {
+        int insert;
+        try {
+            insert = sqlSession.insert(nameSpace + "insertProduct2", productInsertRequestDto);
         } catch (Exception e) {
             throw new IllegalArgumentException("데이터 입력 실패", e);
         }

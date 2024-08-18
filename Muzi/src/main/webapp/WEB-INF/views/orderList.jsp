@@ -3,28 +3,12 @@
 <html>
 <head>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/styles.css">
-    <style>
-        /* 주문 상세 정보 섹션을 처음에 숨깁니다. */
-        #orderDetailSection {
-            display: none;
-            margin-top: 20px;
-            border: 1px solid #000;
-            padding: 10px;
-        }
-        #orderDetailTable {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        #orderDetailTable, #orderDetailTable th, #orderDetailTable td {
-            border: 1px solid black;
-        }
-        #orderDetailTable th, #orderDetailTable td {
-            padding: 8px;
-            text-align: left;
-        }
-    </style>
+
+    <title>주문목록</title>
 </head>
 <body>
+<%@ include file="header.jspf" %>
+<link rel="stylesheet" href="/css/orderList.css" />
 <h2>주문내역 페이지</h2>
 
 <!-- 주문 번호를 서버로 전달하기 위한 form -->

@@ -114,7 +114,10 @@ header .subHeader li:hover {
     text-decoration: underline; /* 호버 상태에서 밑줄 */
 }
 
-#headers {
+
+@charset "utf-8";
+* { margin: 0; padding: 0; border: 0; box-sizing: border-box; }
+a {
     text-align: center;
     text-decoration: none;
     color: inherit;

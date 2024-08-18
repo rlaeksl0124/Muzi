@@ -15,6 +15,7 @@ public class ProductDto {
     private final boolean privateProduct;
 
 
+
     /**
      *
      * @param productNumber
@@ -48,6 +49,7 @@ public class ProductDto {
         this.deliveryFee = deliveryFee;
         this.privateProduct = privateProduct;
     }
+
 
 
     public ProductDto(Builder builder) {

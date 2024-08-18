@@ -1,5 +1,6 @@
 package com.Toy2.order.service;
 
+import com.Toy2.cart.dao.CartDao;
 import com.Toy2.order.dao.DeliveryDao;
 import com.Toy2.order.dao.OrderDao;
 import com.Toy2.order.dao.OrderDetailDao;
@@ -19,12 +20,15 @@ public class OrderServiceImpl implements OrderService{
     private OrderDao orderDao;
     private OrderDetailDao orderDetailDao;
     private DeliveryDao deliveryDao;
+    private CartDao cartDao;
 
     @Autowired
-    public OrderServiceImpl(OrderDao orderDao, OrderDetailDao orderDetailDao, DeliveryDao deliveryDao) {
+    public OrderServiceImpl(OrderDao orderDao, OrderDetailDao orderDetailDao, DeliveryDao deliveryDao
+    , CartDao cartDao) {
         this.orderDetailDao = orderDetailDao;
         this.orderDao = orderDao;
         this.deliveryDao = deliveryDao;
+        this.cartDao = cartDao;
     }
 
     /**
@@ -35,8 +39,8 @@ public class OrderServiceImpl implements OrderService{
      * @return int
      */
     @Override
-    @Transactional(readOnly = true)
-    public int addOrder(OrderDto orderDto, List<OrderDetailDto> orderDetailList){
+    @Transactional
+    public int addOrder(OrderDto orderDto, List<OrderDetailDto> orderDetailList, DeliveryDto deliveryDto){
         try {
             int orderResult = orderDao.orderInsert(orderDto);
             if(orderResult != 1)
@@ -51,13 +55,17 @@ public class OrderServiceImpl implements OrderService{
                 if(orderDetailResult != 1)
                     throw new Exception("orderDetail insert failed");
             }
+            deliveryDto.setOrderNo(orderNo);
+            deliveryDao.deliveryInsert(deliveryDto);
             orderDao.orderUpdate(orderNo);
+            cartDao.cartEmailDelete(orderDto.getCustomerEmail());
 
             return 1;
         }catch (Exception e){
             throw new UnexpectedRollbackException("RollbackException",e);
         }
         //주문이 들어와 -> 주문이 생성되고 주문번호로 -> 주문상세에 대한값이 들어가고 -> 주문상세가 들어올때마다 주문 update
+        //배송지도 insert -> 장바구니 내역도 삭제
     }
 
 
@@ -84,8 +92,6 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public List<OrderResponseDto> getOrderList(String customerEmail) throws Exception {
         List<OrderResponseDto> orderList = orderDao.orderList(customerEmail);
-        if(orderList.isEmpty())
-            throw new Exception("OrderList is empty");
         return orderList;
     }
 

@@ -11,6 +11,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,5 +49,11 @@ public class ProductCategoryServiceTest {
         assertThat(b).isTrue();
         assertThat(productCategoryDao.findCategoryByParentId(categoryByCategoryName.getCategoryNumber()))
                 .isNull();
+    }
+
+    @Test
+    public void categories() {
+        Map<Integer, List<ProductCategoryDto>> categories = productCategoryService.getCategories();
+        System.out.println("categories = " + categories);
     }
 }

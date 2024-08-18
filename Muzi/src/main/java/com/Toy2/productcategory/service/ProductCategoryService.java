@@ -86,11 +86,14 @@ public class ProductCategoryService {
      */
     public Map<Integer, List<ProductCategoryDto>> getCategories() {
         List<ProductCategoryDto> allCategories = productCategoryDao.findAllCategory();
-        return allCategories.stream()
+        Map<Integer, List<ProductCategoryDto>> collect = allCategories.stream()
                 .collect(Collectors.toMap(
                         ProductCategoryDto::getCategoryNumber,
                         productCategoryDto -> productCategoryClosureDao.findDirectChildren(productCategoryDto)
                 ));
+        collect.put(0, productCategoryClosureDao.findRoot());
+
+        return collect;
     }
     /* expect
      * 0 : {1, 2, 3}

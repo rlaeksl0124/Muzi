@@ -57,4 +57,9 @@ public class ProductCategoryClosureDaoImpl implements ProductCategoryClosureDao{
     public List<ProductCategoryDto> findDirectChildren(ProductCategoryDto category) {
         return sqlSession.selectList(nameSpace + "findDirectChildren", category);
     }
+
+    @Override
+    public List<ProductCategoryDto> findRoot() {
+        return sqlSession.selectList(nameSpace + "findRoot");
+    }
 }

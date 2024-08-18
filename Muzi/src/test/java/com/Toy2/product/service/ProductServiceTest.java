@@ -4,15 +4,18 @@ import com.Toy2.product.db.dto.ProductDto;
 import com.Toy2.product.db.dto.request.ProductPageRequestDto;
 import com.Toy2.product.db.dto.request.ProductUpdateRequestDto;
 import com.Toy2.product.domain.service.ProductService;
+import com.Toy2.product.option.db.dto.ProductOptionDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -124,5 +127,17 @@ public class ProductServiceTest {
     public void productServiceDeleteTest() {
         boolean delete = productService.deleteService(1);
         assertThat(delete).isTrue();
+    }
+
+    @Test
+    public void productOptionSelectTest() {
+        Map<String, List<ProductOptionDto>> stringProductOptionDtoMap = productService.selectProductOption(1);
+        System.out.println("stringProductOptionDtoMap = " + stringProductOptionDtoMap);
+    }
+
+    @Test
+    @Commit
+    public void productOptionInsert() {
+        productService.insertOption(new ProductOptionDto(0, 1, "추가", "1", true));
     }
 }

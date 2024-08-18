@@ -4,8 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/styles.css">
+    <title>주문중</title>
 </head>
 <body>
+<%@ include file="header.jspf" %>
+
+<link rel="stylesheet" href="/css/order.css" />
 <h2>주문 상세 정보</h2>
 <h3>
     <input type="hidden" name="customerEmail" value="${orderDto.customerEmail}">
@@ -30,7 +34,9 @@
             <tr>
                 <td>
                     <input type="hidden" name="orderDetails[${status.index}].productNo" value="${orderDetail.productNo}">
-                        ${orderDetail.productNo}
+                    <input type="hidden" name="orderDetails[${status.index}].orderDetailProductName"
+                           value="${orderDetail.orderDetailProductName}">
+                        ${orderDetail.orderDetailProductName}
                 </td>
                 <td>
                     <input type="hidden" name="orderDetails[${status.index}].orderDetailPrice" value="${orderDetail.orderDetailPrice}">

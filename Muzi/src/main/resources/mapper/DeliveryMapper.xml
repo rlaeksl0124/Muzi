@@ -23,4 +23,8 @@
         from delv
         where or_no = #{orderNo};
     </select>
+
+    <delete id="deliveryDelete">
+        delete from delv
+    </delete>
 </mapper>

@@ -12,7 +12,7 @@
                 #{cartProductCnt},
                 (select pdt_price from toy2.Product where pdt_no = #{cartProductNo}),
                 #{cartProductOption},
-                (select delivery_tip from toy2.Product where pdt_no = #{cartProductNo}),
+                (select delivery_fee from toy2.Product where pdt_no = #{cartProductNo}),
                 #{customerEmail})
     </insert>
 
@@ -34,7 +34,6 @@
             ca_delv as cartDelivery
         from `toy2`.`CART`
         where c_email = #{customerEmail}
-        order by ca_no desc
     </select>
 
     <!-- 이메일로 유저의 장바구니안에 몇개가 들어있는지에 대한 개수-->
@@ -48,8 +47,7 @@
     <update id="cartUpdate" parameterType="map">
         update `toy2`.`CART`
         set
-            ca_cnt = #{cartProductCnt},
-            ca_option = #{cartProductOption}
+            ca_cnt = #{cartProductCnt}
         where ca_no = #{cartNo}
     </update>
 
@@ -70,5 +68,9 @@
     <!-- 전부 삭제-->
     <delete id="cartDeleteAll" >
         delete from `toy2`.`CART`
+    </delete>
+
+    <delete id="cartEmailDelete" parameterType="string">
+        delete from cart where c_email = #{customerEmail};
     </delete>
 </mapper>
