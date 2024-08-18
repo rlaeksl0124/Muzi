@@ -9,69 +9,89 @@
     <title>FAQ 등록</title>
     <style>
         body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f7f7f7;
-            }
-            .container {
-                width: 80%;
-                margin: 0 auto;
-                padding: 20px;
-                background-color: #fff;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            }
-            .header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding-bottom: 20px;
-                border-bottom: 1px solid #ddd;
-                margin-bottom: 20px;
-            }
-            .header h1 {
-                margin: 0;
-                font-size: 24px;
-            }
-            .form-group {
-                margin-bottom: 15px;
-            }
-            .form-group label {
-                display: block;
-                margin-bottom: 5px;
-                font-weight: bold;
-            }
-            .form-group input, .form-group textarea {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid #ddd;
-                border-radius: 5px;
-                font-size: 16px;
-                box-sizing: border-box;
-            }
-            .form-group textarea {
-                resize: vertical;
-            }
-            .button-group {
-                display: flex;
-                justify-content: flex-end;
-            }
-            .button-group button {
-                padding: 10px 20px;
-                /*background-color: #007bff;*/
-                background-color: black;
-                color: #fff;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 16px;
-            }
-            .button-group button:hover {
-                /*background-color: #0056b3;*/
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .form-group textarea {
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .button-group button {
+            padding: 10px 20px;
+            background-color: black;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .button-group button:hover {
+            background-color: #333;
+        }
+        /* Styles for the category dropdown */
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #f7f7f7;
+            color: #333;
+            margin-top: 5px;
+        }
+        .form-group select optgroup {
+            color: #000;
+            font-weight: bold;
+            background-color: #e7e7e7; /* Light gray background for optgroup */
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .form-group select option {
+            padding: 5px;
+            background-color: #fff; /* White background for options */
+            color: #333;
         }
     </style>
-    <%--    <link rel="stylesheet" href="/css/Headers.css" />--%>
-    <%--    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">--%>
 </head>
 <body>
 <%@ include file="header.jspf" %>
@@ -86,7 +106,7 @@
             <input type="text" id="faq_title" name="faq_title" required>
         </div>
 
-        <!-- 드롭다운으로 카테고리 선택 -->
+        <!-- Drop-down for Category Selection -->
         <div class="form-group">
             <label for="cate_no">카테고리 선택</label>
             <select id="cate_no" name="cate_no" required>
@@ -151,11 +171,7 @@
             <label for="faq_content">FAQ 내용</label>
             <textarea id="faq_content" name="faq_content" rows="5" required></textarea>
         </div>
-<%--        <div class="form-group">--%>
-<%--            <label for="faq_closing">FAQ 끝맺음말</label>--%>
-<%--            <p>미입력 시 자동값이 채워집니다.</p>--%>
-<%--            <textarea id="faq_closing" name="faq_closing" rows="3"></textarea>--%>
-<%--        </div>--%>
+
         <div class="form-group">
             <label for="faq_writer">FAQ 작성자</label>
             <input type="text" id="faq_writer" name="faq_writer" required>
@@ -167,8 +183,7 @@
         </div>
 
         <div class="button-group">
-            <button type="submit">등록</button>           <!-- type="submit" : form data를 제출하는 버튼-->
-
+            <button type="submit">등록</button> <!-- Form submit button -->
         </div>
 
     </form>
@@ -179,7 +194,6 @@
         // Get the form elements
         var faqTitle = document.getElementById('faq_title').value;
         var faqWriter = document.getElementById('faq_writer').value;
-        // var faqClosing = document.getElementById('faq_closing').value;
         var faqOrder = document.getElementById('faq_order').value;
 
         // Validate lengths
@@ -194,12 +208,6 @@
             event.preventDefault(); // Prevent form submission
             return;
         }
-
-        // if (faqClosing.length > 100) {
-        //     alert("FAQ 끝맺음말은 100자 이내로 입력해 주세요.");
-        //     event.preventDefault(); // Prevent form submission
-        //     return;
-        // }
 
         if (faqOrder.length > 10) {
             alert("FAQ 순서는 100자 이내로 입력해 주세요.");

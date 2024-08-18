@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -19,33 +20,27 @@ import java.util.List;
 public class FaqController {
 
     @Autowired FaqService faqService;       // FaqService 주입 받기
-    @Autowired FaqCateDao faqCateDao;
+//    @Autowired FaqCateDao faqCateDao;
 
 
-    /* READ - faq_center 관계자가 보는 목록 페이지 보여줌 */
+    /* READ - 관계자가 보는 목록 페이지 faq_list  보여줌 */
     @RequestMapping("")
-    public String faqCenter(Model model) {
+    public String faqList(Model model) {
         try {
-            List<FaqDto> faqList = faqService.selectAll();      // 서비스에서 모든 FAQ 게시글을 List로 가져온다
-
+            List<FaqDto> faqList = faqService.selectAll();      // 서비스에서 모든 FAQ 게시글을 List로 가져옴
             for (FaqDto faq : faqList) {        // 가져온 FaqDto의 리스트를 순회
                 // Join 해서 카테고리 이름  갖고오기
-
+                faq.setCategoryName(faqService.joinCategory(faq.getFaq_no(), faq.getCate_no()));
             }
-
-            for (FaqDto faq : faqList) {        // 가져온 FaqDto의 리스트를 순회
-                String categoryName = FaqCategory.getCategoryName(faq.getCate_no());        // 카테고리 번호를 이용해 카테고리 이름 조회
-                faq.setCategoryName(categoryName);          // 조회한 카테고리 이름을 FAQ 게시글의 카테고리 이름으로 설정
-            }
-
             model.addAttribute("list", faqList);        // model에 FAQ 목록을 추가하여 view에서 사용할 수 있도록 함
+
         } catch (Exception e) {              // 게시글 목록 조회를 요청했는데 예외가 발생하면
             e.printStackTrace();
-            //model.addAttribute("msg", "LIST_ERR");          // 에러 메시지를 model에 추가
 
             // 사용자에게 어떤 행동을 할지 - 게시글 목록이 없다고 뜨기 / 에러 페이지
+            model.addAttribute("msg", "LIST_ERR");      // 에러 메시지를 model에 추가
         }
-        return "faq_center";
+        return "faq_list";
     }
 
 
@@ -158,26 +153,22 @@ public class FaqController {
 
 
     // showFaq - 클라이언트에게 보여주는 펼쳐지는 FAQ 페이지 맵핑
-    //로그인은 FaqController에서 고려하지 않음
+    // 로그인은 FaqController에서 고려하지 않음
     @GetMapping("/showFaq")
     public String showFaq(Model model) {
         try {
-            List<FaqDto> faqList = faqService.selectAll();          // 등록된 모든 FAQ 게시글 가져오기
+            List<FaqDto> faqList = faqService.selectAll();          // 저장된 FaqDto를 전부 조회해서 List에 저장
 
-            List<FaqCateDao> faqCategory = faqCateDao.selectAll();
-
-            if (faqList.isEmpty()){
-                return "redirect:/faq";
+            for (FaqDto faq : faqList) {        // 가져온 FaqDto의 리스트를 순회
+                // Join 해서 카테고리 이름  갖고오기
+                faq.setCategoryName(faqService.joinCategory(faq.getFaq_no(), faq.getCate_no()));
             }
-            if (faqCategory.isEmpty()){
-                return "redirect:/faq";
-            }
-            model.addAttribute("list", faqList);
-            model.addAttribute("category", faqCategory);
-
+            model.addAttribute("faqList", faqList);          // model에 FAQ 목록을 추가하여 view에서 사용할 수 있도록 함
+            return "faq_cust_list";             // 조회 성공하면 faq_cust_list FAQ 보여주는 페이지로 이동
         } catch (Exception e){
             e.printStackTrace();
+            model.addAttribute("msg", "faq_cust_list ERROR");
+            return "redirect:/home";
         }
-        return "faq_list";          // faq_list.jsp 페이지 보여줌
     }
 }
