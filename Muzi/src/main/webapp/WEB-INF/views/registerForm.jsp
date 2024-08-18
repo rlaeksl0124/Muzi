@@ -6,16 +6,16 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <link href="<c:url value='/css/registerForm.css'/>" type="text/css" rel="stylesheet"/>
+    <link href="<c:url value='/css/signup.css'/>" type="text/css" rel="stylesheet"/>
+
+<%--    <link rel="stylesheet" href="/css/signup.css" />--%>
     <title>Signup</title>
 </head>
 <body>
+
 <div class="container">
+
     <h2>회원가입</h2>
     <form action="/signup/add" method="post" class="signup-form">
         <p id="auth-check" class="hiddenmsg"></p>
@@ -111,7 +111,7 @@
             </div>
         </div>
         <!-- 주소 입력 부분 끝 -->
-
+        <p id="finalMsg" class="finalMessage hiddenmsg"></p>
         <button type="submit" class="submit-btn" id="submit-btn">가입하기</button>
     </form>
 </div>
@@ -287,20 +287,27 @@
     }
 
     $('#submit-btn').on('click', function (e){
-        let authCheck = document.getElementById("auth-check");
-        let resultMessage = document.getElementById("resultMessage");
-        /* 인증번호 받기 버튼이 disabled 일경우 */
-        if(!$('#verify').prop('disabled') || !isAuthVerify){
+        let finalMsg = document.getElementById("finalMsg");
+
+        /* 패스워드 유효성검사와, 비밀번호 1, 2가 서로 일치하는지 검사하는 함수를 호출한다 */
+        const isPasswordValid = password();
+        const isPasswordMatch = passwordmatch();
+
+        /* 인증번호 받기 버튼이 disabled 일경우 || 비밀번호 유효성검사가 false일경우 */
+        if(!isAuthVerify || !isPasswordValid || !isPasswordMatch){
             /* 회원가입폼 제출 중단 */
             e.preventDefault();
-            if(!$('#verify').prop('disabled')) {
-                authCheck.style.color = "red";
-                authCheck.innerHTML = "이메일을 확인해주세요";
-            }
+            /* 이메일 인증여부가 false 일경우 */
             if(!isAuthVerify){
-                resultMessage.style.color = "red";
-                resultMessage.innerHTML = "이메일인증을 완료해주세요";
+                finalMsg.innerHTML = "이메일 인증을 완료해주세요";
             }
+            if(!isPasswordValid){
+                finalMsg.innerHTML = "비밀번호를 다시 확인해주세요";
+            }
+            if(!isPasswordMatch){
+                finalMsg.innerHTML = "비밀번호가 일치하지않습니다";
+            }
+
         }
     })
 
@@ -318,9 +325,11 @@
         if (passwordPattern.test(password)) {
             passwordcheck.style.color = "green";
             passwordcheck.innerHTML = "비밀번호가 유효합니다.";
-        }else{
+            return true;
+        } else{
             passwordcheck.style.color = "red";
             passwordcheck.innerHTML = "패스워드는 8~15자 사이이며, 숫자, 문자, 특수문자를 포함해야 합니다.";
+            return false;
         }
     }
 
@@ -337,9 +346,11 @@
         if(password === confirmPassword){
             checkpasswordmatch.style.color = "green";
             checkpasswordmatch.innerHTML = "비밀번호가 일치합니다."
+            return true;
         } else{
             checkpasswordmatch.style.color = "red";
             checkpasswordmatch.innerHTML = "비밀번호가 일치하지 않습니다."
+            return false;
         }
     }
 
@@ -356,14 +367,23 @@
         $.ajax({
             type:"get",
             url: "/signup/mailAuth?email="+email,
-            success: function(data) {
+            success: function(response) {
                 verify.attr('disabled', true);
-                code = data;
-
+                console.log(response);
+                $('#resultMessage').html(response);
+                $('#resultMessage').css('color', 'green');
                 // 이메일 인증번호 요청 후 인증번호 입력 받기
                 $('#authCode').on('input', function() {
                     authNumber(); // 인증번호 입력 시 검증 함수 호출
                 });
+            },
+            error: function (xhr){
+                /* 인증실패시 */
+                let errorMsg = xhr.responseText;
+                $('#resultMessage').html(errorMsg);
+                $('#resultMessage').css('color', 'red');
+                isAuthVerify=false;
+                console.log('인증실패:', xhr.responseText);
             }
         })
     });
@@ -372,6 +392,11 @@
         /* 고객이 입력한 인증번호 */
         let inputCode = $('#authCode').val().trim();
         let email = $('#c_email').val().trim();
+
+        if(inputCode==null){
+            $('#resultMessage').css('color', 'red');
+            $('#resultMessage').html("인증번호를 입력해주세요");
+        }
 
         console.log("전송할 데이터:", JSON.stringify({email: email, authCode: inputCode}));
 
@@ -402,25 +427,24 @@
 
     /* 이름 */
     $('#c_name').on('input', function(){
-        let name = document.getElementById("c_name").value.trim();
-        let nameCheck = document.getElementById("name-check");
+        let name = $('#c_name').val().trim();
         if(name===""){
-            nameCheck.style.color = "red";
-            nameCheck.innerHTML = "이름을 입력해주세요";
+            /* input 메시지 띄우기 */
+            $('#name-check').css('color','red');
+            $('#name-check').html('이름을 입력해주세요');
         } else {
-            nameCheck.innerHTML = "";
+            $('#name-check').html("");
         }
     })
 
     /* 닉네임 체크 */
     $('#c_nick').on('input', function (){
         let nick = document.getElementById("c_nick").value.trim();
-        let nickCheck = document.getElementById("nick-check");
         if(nick===""){
-            nickCheck.style.color = "red";
-            nickCheck.innerHTML = "닉네임을 입력해주세요.";
+            $('#nick-check').css('color','red');
+            $('#nick-check').html('닉네임을 입력해주세요');
         } else {
-            nickCheck.innerHTML = "";
+            $('#nick-check').html("");
         }
     })
 
@@ -429,10 +453,10 @@
         let phn = document.getElementById("c_phn").value.trim();
         let phnCheck = document.getElementById("phn-check");
         if(phn===""){
-            phnCheck.style.color = "red";
-            phnCheck.innerHTML = "핸드폰번호를 입력해주세요.";
+            $('#phn-check').css('color','red');
+            $('#phn-check').html('핸드폰번호를 입력해주세요');
         } else {
-            phnCheck.innerHTML = "";
+            $('#phn-check').html("");
         }
     })
 

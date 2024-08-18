@@ -4,8 +4,8 @@
 		"http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-		<typeAlias type="com.Toy2.Notice.domain.NoticeDto" alias="NoticeDto" />
-		<typeAlias type="com.Toy2.Notice.entity.PageHandler" alias="pageHandler" />
+<!--		<typeAlias type="com.Toy2.Notice.domain.NoticeDto" alias="NoticeDto" />-->
+<!--		<typeAlias type="com.Toy2.Notice.entity.PageHandler" alias="pageHandler" />-->
 
 		<typeAlias type="com.Toy2.order.entity.OrderDetailDto" alias="OrderDetailDto"/>
 		<typeAlias type="com.Toy2.order.entity.OrderDto" alias="OrderDto"/>

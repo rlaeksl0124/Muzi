@@ -79,8 +79,6 @@ public class SignupController {
 
 
     private final Map<String, String> authCodeStorage = new HashMap<>();
-
-
     /* 이메일인증요청 */
     @GetMapping(value = "/mailAuth",produces ="text/plain;charset=UTF-8")
     public ResponseEntity<String> mailAuth(String email) {
@@ -92,8 +90,10 @@ public class SignupController {
             String newAuthCode = custService.mailsend(email);
             System.out.println("AuthCode:"+newAuthCode);
 
+            /* 고객의 email을 키로, value는 생성된 인증번호를 저장 */
             authCodeStorage.put(email, newAuthCode);
 
+            /* HHTP 상태 코드와 함께 텍스트 응답을 보낸다 */
             return ResponseEntity.ok().body("인증번호가 이메일로 발송되었습니다.");
 
         } catch (Exception e) {
@@ -102,26 +102,27 @@ public class SignupController {
         }
     }
 
-    /* 인증번호 검증 */
+    /* 인증번호 검증 : POST 요청으로 전송된 데이터를 받아 서버에 저장된 인증번호와 비교 */
     @PostMapping(value = "/verifyAuthCode", produces = "text/plain;charset=UTF-8")
     public ResponseEntity<String> verifyAuthCode(@RequestBody Map<String, String> requestBody){
         try {
+            /* Map 형태의 email과 고객이 입력한 authCode를 전달 받는다 */
             String email = requestBody.get("email");
             String authCode = requestBody.get("authCode");
 
-
+            /* 맵에 저장되있는 생성된 인증번호를 가져온다 */
             String storedCode = authCodeStorage.get(email);
 
             System.out.println("email: "+ email);
             System.out.println("authCode :" + authCode);
             System.out.println("storedCode :" + storedCode);
 
+            /* 생성된 인증번호가 null 이거나 생성된 인증번호와 고객이 입력한 인증번호가 일치하지 않을경우 400에러 */
             if (storedCode == null || (!storedCode.equals(authCode))) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("인증실패: 잘못된 인증번호입니다");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("인증실패: 잘못된 인증번호입니다 다시 입력해주세요");
             }
 
             return ResponseEntity.ok().body("인증 성공");
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("인증과정에서 오류가 발생하였습니다");
