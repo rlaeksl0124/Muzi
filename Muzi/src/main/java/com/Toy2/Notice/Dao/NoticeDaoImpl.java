@@ -44,4 +44,8 @@ public class NoticeDaoImpl implements NoticeDao{
     public int updateState(NoticeDto noticeDto){
         return sqlSession.update(namespace+"updateState", noticeDto);
     }
+    @Override
+    public int updateN_order(NoticeDto notice){
+        return sqlSession.update(namespace+"updateN_order", notice);
+    }
 }
