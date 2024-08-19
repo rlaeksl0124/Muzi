@@ -71,7 +71,11 @@
     <button type="button" onclick="removeSelectedItems('${pageContext.request.contextPath}/cart/remove')">선택삭제</button>
     <button type="button" onclick="submitForm('${pageContext.request.contextPath}/cart/order')">주문하기</button>
 </form>
-
+<c:if test="${not empty errorMessage}">
+    <script>
+        alert('${errorMessage}');
+    </script>
+</c:if>
 <script>
     // 전체 선택/해제 기능
     $("#selectAll").click(function() {
@@ -102,6 +106,7 @@
         $("#cartForm").submit();
     }
     function modifyCart(cartNo) {
+
         // 기존의 hidden 필드 제거
         $("#cartForm input[name='cartNo']").remove();
         $("#cartForm input[name='productCnt']").remove();
@@ -123,6 +128,7 @@
 
         $("#cartForm").attr("action", "/cart/modify");
         $("#cartForm").submit();
+        alert("수량수정완료")
     }
     function checkValue(input) {
         if (input.value < 1) {

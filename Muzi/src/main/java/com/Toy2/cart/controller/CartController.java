@@ -6,12 +6,11 @@ import com.Toy2.order.entity.OrderDetailDto;
 import com.Toy2.order.entity.OrderDto;
 import com.Toy2.product.domain.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -72,12 +71,13 @@ public class CartController {
      * @throws Exception
      */
     @PostMapping("/order")
-    public String orderPageGo(HttpServletRequest request, Model model, HttpSession session) throws Exception {
+    public String orderPageGo(HttpServletRequest request, Model model, HttpSession session, RedirectAttributes re) throws Exception {
         String customerEmail = (String) session.getAttribute("c_email");
-        if (customerEmail == null) {
-            throw new Exception("로그인이 필요합니다.");
-        }
+
         try {
+            if (customerEmail == null) {
+                throw new Exception("로그인이 필요합니다.");
+            }
             String orderType = request.getParameter("orderType");
             OrderDto orDto = new OrderDto(customerEmail);
             List<OrderDetailDto> orderDetailList = createOrderDetailList(request, orDto);
@@ -85,7 +85,9 @@ public class CartController {
             model.addAttribute("orderDetailList", orderDetailList);
             model.addAttribute("orderType", orderType);
         } catch (Exception e) {
-            return "redirect:/cart/cart";
+            String referer = request.getHeader("Referer");
+            re.addFlashAttribute("errorMessage", "로그인을 해주세요.");
+            return "redirect:" + referer;
         }
         return "order";
     }
@@ -159,6 +161,11 @@ public class CartController {
             throw new NullPointerException("상품 번호가 없습니다.");
         }
         return orderDetailList;
+    }
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public @ResponseBody String handleException(Exception e) {
+        return "잘못된 접근입니다.";
     }
 
 }

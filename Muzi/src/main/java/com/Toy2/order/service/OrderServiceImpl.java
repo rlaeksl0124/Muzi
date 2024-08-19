@@ -39,7 +39,7 @@ public class OrderServiceImpl implements OrderService{
      * @return int
      */
     @Override
-    @Transactional
+    @Transactional //트랜잭션 테스트 어떻게 하지?
     public int addOrder(OrderDto orderDto, List<OrderDetailDto> orderDetailList, DeliveryDto deliveryDto){
         try {
             int orderResult = orderDao.orderInsert(orderDto);
@@ -58,7 +58,6 @@ public class OrderServiceImpl implements OrderService{
             deliveryDto.setOrderNo(orderNo);
             deliveryDao.deliveryInsert(deliveryDto);
             orderDao.orderUpdate(orderNo);
-
             return 1;
         }catch (Exception e){
             throw new UnexpectedRollbackException("RollbackException",e);
