@@ -64,17 +64,10 @@
             <button onclick="location.href='${pageContext.request.contextPath}/faq/write'">FAQ 등록</button>
         </div>
         <div>
-            <span>사용자: <strong>${faq_writer}</strong> 님</span>
+            <span>사용자: <strong>${c_email}</strong> 님</span>
             <button onclick="location.href='/logout'">로그아웃</button>
         </div>
     </div>
-
-<%--    <form action="/faq" class="search-form" method="GET">--%>
-<%--        <select class="search-optoin" name="option">--%>
-<%--            <option value="A">제목+내용</option>--%>
-<%--            <option value="T">제목만</option>--%>
-<%--        </select>--%>
-<%--    </form>--%>
 
     <form action="/faq" class="search-form" method="GET" style="display: flex; gap: 10px; align-items: center;">
         <select class="search-option" name="option">

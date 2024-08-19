@@ -2,17 +2,13 @@ package com.Toy2.Faq.Controller;
 
 import com.Toy2.Faq.Domain.FaqDto;
 import com.Toy2.Faq.Domain.SearchCondition;
-import com.Toy2.Faq.Entity.FaqCategory;
 import com.Toy2.Faq.Service.FaqService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.print.attribute.standard.PresentationDirection;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -38,6 +34,7 @@ public class FaqController {
 
             for (FaqDto faq : faqList) {        // 가져온 FaqDto 리스트를 순회
                 faq.setCategoryName(faqService.joinCategory(faq.getFaq_no(), faq.getCate_no()));        // Join 해서 카테고리 이름  갖고오기
+                System.out.println(faq);
             }
             model.addAttribute("list", faqList);        // model에 FAQ 목록을 추가하여 view에서 사용할 수 있도록 함
             return "faq_list";              // faq_list 조회 페이지로 이동
@@ -166,7 +163,12 @@ public class FaqController {
 
     //  faq_modify.jsp 페이지에 faqDto를 전달하는 메서드
     @GetMapping("/modify")
-    public String modify(@RequestParam("faq_no") int faq_no, Model model, RedirectAttributes rd) throws Exception {
+    public String modify(@RequestParam("faq_no") int faq_no, HttpSession session, Model model, RedirectAttributes rd) throws Exception {
+        String c_email = (String) session.getAttribute("c_email");
+
+        if (c_email == null || !c_email.equals("admin"))
+            return "redirect:/login";
+
         try{
             FaqDto faqDto = faqService.select(faq_no);           // 선택한 FAQ 게시글(일치하는 faq_no) 조회 후 저장
             model.addAttribute("faqDto", faqDto);       // Model에 가져온 faqDto 저장
@@ -177,28 +179,6 @@ public class FaqController {
             return "redirect:/faq";
         }
     }
-
-
-    // showFaq - 클라이언트에게 보여주는 펼쳐지는 FAQ 페이지 맵핑
-    // 로그인은 FaqController에서 고려하지 않음
-    // http://localhost:8080/faq/show/
-//    @GetMapping("/show")
-//    public String show(Model model) {
-//        try {
-//            List<FaqDto> faqList = faqService.selectAll();          // 저장된 FaqDto를 전부 조회해서 List에 저장
-//
-//            for (FaqDto faq : faqList) {        // 가져온 FaqDto의 리스트를 순회
-//                // Join 해서 카테고리 이름  갖고오기
-//                faq.setCategoryName(faqService.joinCategory(faq.getFaq_no(), faq.getCate_no()));
-//            }
-//            model.addAttribute("faqList", faqList);          // model에 FAQ 목록을 추가하여 view에서 사용할 수 있도록 함
-//            return "faq_cust_list";             // 조회 성공하면 faq_cust_list FAQ 보여주는 페이지로 이동
-//        } catch (Exception e){
-//            e.printStackTrace();
-//            model.addAttribute("msg", "faq_cust_list ERROR");
-//            return "redirect:/home";
-//        }
-//    }
 
 
     @GetMapping("/show")
