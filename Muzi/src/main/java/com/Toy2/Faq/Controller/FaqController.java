@@ -5,6 +5,7 @@ import com.Toy2.Faq.Domain.SearchCondition;
 import com.Toy2.Faq.Service.FaqService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -34,7 +35,6 @@ public class FaqController {
 
             for (FaqDto faq : faqList) {        // 가져온 FaqDto 리스트를 순회
                 faq.setCategoryName(faqService.joinCategory(faq.getFaq_no(), faq.getCate_no()));        // Join 해서 카테고리 이름  갖고오기
-                System.out.println(faq);
             }
             model.addAttribute("list", faqList);        // model에 FAQ 목록을 추가하여 view에서 사용할 수 있도록 함
             return "faq_list";              // faq_list 조회 페이지로 이동
@@ -51,7 +51,12 @@ public class FaqController {
 
     /* readOne - 선택한 FAQ 게시글 하나 조회 */
     @GetMapping("/read")
-    public String readOne(@RequestParam("faq_no") Integer faq_no, Model model, RedirectAttributes rd) throws Exception {       // 매개변수로 조회할 faq_no 넘김
+    public String readOne(@RequestParam("faq_no") Integer faq_no, HttpSession session, Model model, RedirectAttributes rd) throws Exception {       // 매개변수로 조회할 faq_no 넘김
+        if (session.getAttribute("c_email") == null || !(session.getAttribute("c_email").equals("admin"))){
+            rd.addFlashAttribute("msg", "No_Grant_ERR");
+            return "redirect:/login";
+        }
+
         try {
             FaqDto faqDto = faqService.select(faq_no);           // 매개변수로 받은 faq_no를 가진 게시글을 faqDto로 저장
 
@@ -75,7 +80,7 @@ public class FaqController {
     }
 
 
-    /* write - FAQ 등록 페이지로 이동 */
+    /* write - faq_list 페이지이에서 등록 버튼 */
     // 글 등록하다 에러 발생하면 - 화면 뿌리고 작성하던 데이터는 저장되어야 됨 -> ?
     @GetMapping("/write")
     public String write(RedirectAttributes rd) {
@@ -148,8 +153,8 @@ public class FaqController {
 
         try {
             if (c_email.equals("admin") || c_email.equals(faqDto.getFaq_writer())){
+                faqDto.setCategoryName(faqService.joinCategory(faqDto.getFaq_no(), faqDto.getCate_no()));
                 faqService.update(faqDto);
-                System.out.println(faqDto);
                 return "redirect:/faq" + sc.getQueryString(faqDto.getFaq_no());
             }
             return "redirect:/login";
@@ -199,7 +204,7 @@ public class FaqController {
             }
 
             model.addAttribute("faqList", faqList);
-            return "faq_cust_list";  // Forward to the FAQ list view page
+            return "faq_cust_list";                 // faq_cust_list.jsp 화면
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("msg", "faq_cust_list ERROR");

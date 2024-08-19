@@ -130,6 +130,7 @@
 <%-- JavaScript로 작성한 코드 --%>
 <script>
     let msg = "${msg}";
+    ;if (msg == "No_Grant_ERR") alert("게시글 조회 권한이 없습니다. 로그인 해주세요.");
     if (msg == "Delete_ERR") alert("게시글을 삭제하는데 실패했습니다. 다시 시도해 주세요.");
 
     function deleteFaq(faq_no) {
