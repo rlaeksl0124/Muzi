@@ -8,7 +8,7 @@
     공민경(FAQ), 김규영(제품), 김다니(회원), 유민우(주문, 장바구니), 황정하(공지사항)
 
 - 화면정의서 + API명세서 + ERD : [toy2화면정의서_API명세서_ERD.pptx](https://github.com/user-attachments/files/16655298/toy2._API._ERD.pptx)
-- 발표자료 : 
+- 발표자료 : https://docs.google.com/presentation/d/1VI_fJPmd7AFWO_MbFEuOwVd8FJosH_NQ6tZS4KKEQAU/edit?usp=sharing
 
  - 회원
 <img width="1240" alt="스크린샷 2024-08-19 오후 12 14 12" src="https://github.com/user-attachments/assets/86039d50-24ec-4782-8eef-6a91c46e4d90">
