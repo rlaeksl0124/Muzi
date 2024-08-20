@@ -109,14 +109,24 @@
         </tbody>
     </table>
 <%--</div>--%>
+        <c:set var="totalProductPrice" value="0" />
+        <c:set var="maxDeliveryCost" value="0" />
+
         <!-- 총 상품 가격 계산 -->
         <c:set var="totalProductPrice" value="0" />
         <c:forEach items="${orderDetailList}" var="orderDetail">
             <c:set var="totalProductPrice" value="${totalProductPrice + (orderDetail.orderDetailPrice * orderDetail.orderDetailCnt)}" />
+
+            <!-- 최대 배송비 계산 -->
+            <c:choose>
+                <c:when test="${orderDetail.orderDetailDeliveryPrice > maxDeliveryCost}">
+                    <c:set var="maxDeliveryCost" value="${orderDetail.orderDetailDeliveryPrice}" />
+                </c:when>
+            </c:choose>
         </c:forEach>
 
         <!-- 총 배송비 계산 -->
-        <c:set var="deliveryCost" value="${totalProductPrice >= 30000 ? 0 : 3000}" />
+        <c:set var="deliveryCost" value="${totalProductPrice >= 30000 ? 0 : maxDeliveryCost}" />
 
         <!-- 총 예상 금액 계산 -->
         <c:set var="totalEstimatedPrice" value="${totalProductPrice + deliveryCost}" />

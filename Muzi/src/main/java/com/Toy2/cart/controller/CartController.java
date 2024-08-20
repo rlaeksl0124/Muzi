@@ -95,6 +95,7 @@ public class CartController {
     /**
      * 장바구니 번호로 장바구니 선택삭제
      * 전체삭제를 위해 리스트로 받아서 하나씩 삭제
+     * 비회원도 만들계획이기 때문에 비회원도 삭제기능을 사용할수 있게
      * @param cartNos
      * @return "redirect:/cart/cart"
      * @throws Exception
