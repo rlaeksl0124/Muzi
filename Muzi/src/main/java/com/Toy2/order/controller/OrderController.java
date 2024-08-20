@@ -41,11 +41,11 @@ public class OrderController {
                            Model model,
                            HttpSession session) throws Exception {
         List<OrderDetailDto> orderDetails = orderDto.getOrderDetails();
-        orderDto.setCustomerEmail((String) session.getAttribute("c_email"));
         String customerEmail = (String) session.getAttribute("c_email");
+        orderDto.setCustomerEmail(customerEmail);
+
 
         try {
-            deliveryDto.setDeliveryStreetAddress("zz");
             orderService.addOrder(orderDto, orderDetails, deliveryDto);
             if(cartOrder.equals("장바구니구매"))
                 cartService.cartEmailDelete(customerEmail);
@@ -57,6 +57,8 @@ public class OrderController {
                     .get(orderService.getOrderList(customerEmail).size()-1).getOrderPrices());
             model.addAttribute("orderProductDate", orderService.getOrderList(customerEmail)
                     .get(orderService.getOrderList(customerEmail).size()-1).getOrderDate());
+            model.addAttribute("orderProductList", orderService.getOrderList(customerEmail)
+                    .get(orderService.getOrderList(customerEmail).size()-1));
             return "orderSuccess";
         } catch (Exception e) {
             return "redirect:/cart/order";

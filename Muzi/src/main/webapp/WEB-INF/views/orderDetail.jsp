@@ -7,6 +7,7 @@
     <title>주문상세목록</title>
 </head>
 <body>
+
 <script type="text/javascript">
     function confirmCancel() {
         return confirm("정말 주문을 취소하시겠습니까?");
@@ -14,6 +15,11 @@
 </script>
 <%@ include file="header.jspf" %>
 <link rel="stylesheet" href="/css/orderDetail.css" />
+<c:if test="${not empty errorMessage}">
+    <script>
+        alert('${errorMessage}');
+    </script>
+</c:if>
 <h2>주문상세 페이지</h2>
 
 <h4>1. 주문상품</h4>

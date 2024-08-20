@@ -3,6 +3,8 @@
 
     <div class="mainHeader">
         <ul>
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+            <link rel="stylesheet" href="/css/Header.css" />
 <%--            <a id="headers" href="/">--%>
             <a href="/">
                 <li class="headText">Muji 無印良品</li>
