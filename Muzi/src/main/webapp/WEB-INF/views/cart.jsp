@@ -32,7 +32,10 @@
                     <input type="checkbox" name="cartNo" value="${item.cartNo}" class="selectItem">
                 </td>
                 <td>
-                        ${item.cartProductName} <!-- 제품 이름 출력 -->
+                    <a href="${pageContext.request.contextPath}/product/detail?productNumber=${item.cartProductNo}">
+                        ${item.cartProductName}
+                    </a>
+                         <!-- 제품 이름 출력 -->
                     <input type="hidden" name="productNo" value="${item.cartProductNo}">
                 </td>
                 <td>

@@ -106,4 +106,8 @@ public class CartServiceImpl implements CartService{
     public int cartEmailDelete(String email) throws Exception {
         return cartDao.cartEmailDelete(email);
     }
+    @Override
+    public CartDto getCart(int cartNo) throws Exception {
+        return cartDao.cartSelect(cartNo);
+    }
 }

@@ -14,10 +14,10 @@
             제품 : ${orderProductName}
         </th>
         <th>
-            총 가격 : ${orderProductPrice}
+            총 가격 : ${orderProductList.getOrderPrices()}
         </th>
         <th>
-            결제 날짜 : ${orderProductDate}
+            결제 날짜 : ${orderProductList.getOrderDate()}
         </th>
     </tr>
     <form action="${pageContext.request.contextPath}/orders/orderList" method="get">

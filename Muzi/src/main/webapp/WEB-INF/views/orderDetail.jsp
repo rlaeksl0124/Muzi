@@ -37,7 +37,11 @@
     <tbody>
     <c:forEach items="${orderDetailList}" var="item">
         <tr>
-            <td>${item.orderDetailProductName}</td>
+            <td>
+                <a href="${pageContext.request.contextPath}/product/detail?productNumber=${item.productNo}">
+                    ${item.orderDetailProductName}
+                </a>
+            </td>
             <td>${item.orderDetailPrice}</td>
             <td>${item.orderDetailCnt}</td>
             <td>${item.orderDetailOption}</td>

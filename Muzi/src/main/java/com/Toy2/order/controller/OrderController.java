@@ -34,16 +34,15 @@ public class OrderController {
      * @return orderSuccess
      * @throws Exception
      */
-    @PostMapping("/complete")
+    @PostMapping("/complete")//결제하기
     public String addOrder(@ModelAttribute OrderDto orderDto,
                            @ModelAttribute DeliveryDto deliveryDto,
                            @RequestParam("orderType") String cartOrder,
                            Model model,
                            HttpSession session) throws Exception {
-        List<OrderDetailDto> orderDetails = orderDto.getOrderDetails();
         String customerEmail = (String) session.getAttribute("c_email");
         orderDto.setCustomerEmail(customerEmail);
-
+        List<OrderDetailDto> orderDetails = orderDto.getOrderDetails();
 
         try {
             orderService.addOrder(orderDto, orderDetails, deliveryDto);
@@ -53,10 +52,6 @@ public class OrderController {
                             orderService.getOrderList(customerEmail)
                                     .get(orderService.getOrderList(customerEmail).size()-1).getOrderNo())
                     .get(0).getOrderDetailProductName());
-            model.addAttribute("orderProductPrice", orderService.getOrderList(customerEmail)
-                    .get(orderService.getOrderList(customerEmail).size()-1).getOrderPrices());
-            model.addAttribute("orderProductDate", orderService.getOrderList(customerEmail)
-                    .get(orderService.getOrderList(customerEmail).size()-1).getOrderDate());
             model.addAttribute("orderProductList", orderService.getOrderList(customerEmail)
                     .get(orderService.getOrderList(customerEmail).size()-1));
             return "orderSuccess";
@@ -106,6 +101,16 @@ public class OrderController {
         }
         return "orderDetail";
     }
+
+    /**
+     * 주문 상품에서
+     * 주문취소를 클릭시 OC1->OC2로 바뀌면서 주문취소로 바뀌고 주문취소버튼 사라짐
+     * @param orderDetailNo
+     * @param status
+     * @param orderNo
+     * @return "redirect:/orders/orderDetailList?orderNo=" + orderNo
+     * @throws Exception
+     */
 
     @GetMapping("/cancel")
     public String orderDetailUpdate(@RequestParam("orderDetailNo") int orderDetailNo,

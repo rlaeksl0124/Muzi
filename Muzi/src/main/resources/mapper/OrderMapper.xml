@@ -89,8 +89,8 @@
             or_no,
             SUM(od_price * od_cnt) AS total_price,  -- 가격과 수량을 곱한 값을 합산
             CASE
-            WHEN SUM(od_price * od_cnt) > 30000 THEN 0  -- 곱한 총합이 30000원을 초과하면 배송비 0원
-            ELSE 3000  -- 아니면 3000원
+            WHEN SUM(od_price * od_cnt) >= 30000 THEN 0  -- 곱한 총합이 30000원을 초과하면 배송비 0원
+            ELSE Max(od_delv)  -- 주문상품중에 가장 비싼 배송비
             END AS total_delv
             FROM
             toy2.order_delt
@@ -100,7 +100,7 @@
             SET
                 o.or_prices = od_summary.total_price,
                 o.or_delvs = od_summary.total_delv
-        WHERE o.or_no =  #{orderNo}
+        WHERE o.or_no = #{orderNo}
     </update>
     <!-- 주문한 리스트들을 출력 총가격, 총배송비, 주문일시  parm : email, result : (map or dto) -->
     <select id="orderList" parameterType="string" resultType="com.Toy2.order.entity.OrderResponseDto">
