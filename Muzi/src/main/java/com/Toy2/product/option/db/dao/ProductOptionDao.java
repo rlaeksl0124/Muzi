@@ -1,6 +1,8 @@
 package com.Toy2.product.option.db.dao;
 
+import com.Toy2.product.db.dto.request.ProductInsertRequestDto;
 import com.Toy2.product.option.db.dto.ProductOptionDto;
+import com.Toy2.product.option.db.dto.request.OptionRequestDto;
 
 import java.util.List;
 
@@ -9,5 +11,5 @@ public interface ProductOptionDao {
     List<ProductOptionDto> selectOptions(int productNumber);
 
     ProductOptionDto selectOption(int optionNumber);
-    int insert(ProductOptionDto productOptionDto);
+    boolean insert(OptionRequestDto optionRequestDto);
 }

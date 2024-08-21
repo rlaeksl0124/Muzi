@@ -24,6 +24,6 @@ public class ProductCategoryDto {
         return "ProductCategoryDto{" +
                 "categoryNumber=" + categoryNumber +
                 ", categoryName='" + categoryName + '\'' +
-                '}';
+                '}' + "\n";
     }
 }

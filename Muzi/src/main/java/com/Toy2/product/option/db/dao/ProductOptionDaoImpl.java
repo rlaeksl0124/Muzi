@@ -1,6 +1,7 @@
 package com.Toy2.product.option.db.dao;
 
 import com.Toy2.product.option.db.dto.ProductOptionDto;
+import com.Toy2.product.option.db.dto.request.OptionRequestDto;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -31,7 +32,7 @@ public class ProductOptionDaoImpl implements ProductOptionDao {
     }
 
     @Override
-    public int insert(ProductOptionDto productOptionDto) {
-        return sqlSession.insert(nameSpace + "insertProductOption", productOptionDto);
+    public boolean insert(OptionRequestDto optionRequestDto) {
+        return sqlSession.insert(nameSpace + "insertOptions", optionRequestDto) != 0;
     }
 }

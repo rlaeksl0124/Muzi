@@ -1,9 +1,16 @@
 package com.Toy2.product.db.dto.request;
 
-import com.Toy2.product.db.dto.ProductDto;
-import com.Toy2.product.option.db.dto.ProductOptionDto;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ProductInsertRequestDto {
+    @JsonProperty
+    private Map<String, List<String>> productOptionData = new HashMap<>();
+    private int productNumber;
     private int productPrice;
     private String productName;
     private boolean newItem;
@@ -14,8 +21,21 @@ public class ProductInsertRequestDto {
     private int deliveryFee;
     private boolean privateProduct;
 
+    // Getters and Setters
+    public Map<String, List<String>> getProductOptionData() {
+        return productOptionData;
+    }
+    @JsonAnySetter
+    public void setMapData(String key, List<String> value) {
+        productOptionData.put(key, value);
+    }
 
-    public ProductInsertRequestDto(int productPrice, String productName, boolean newItem, boolean postingStatus, boolean discountable, String notice, String productCode, int deliveryFee, boolean privateProduct) {
+
+
+    public ProductInsertRequestDto(int productPrice, String productName, boolean newItem,
+                                   boolean postingStatus, boolean discountable, String notice,
+                                   String productCode, int deliveryFee, boolean privateProduct,
+                                   Map<String, List<String>> productData) {
         this.productPrice = productPrice;
         this.productName = productName;
         this.newItem = newItem;
@@ -25,6 +45,32 @@ public class ProductInsertRequestDto {
         this.productCode = productCode;
         this.deliveryFee = deliveryFee;
         this.privateProduct = privateProduct;
+        this.productOptionData = productData;
+    }
+
+    public ProductInsertRequestDto(Map<String, List<String>> productData, int productNumber,
+                                   int productPrice, String productName, boolean newItem,
+                                   boolean postingStatus, boolean discountable, String notice,
+                                   String productCode, int deliveryFee, boolean privateProduct) {
+        this.productOptionData = productData;
+        this.productNumber = productNumber;
+        this.productPrice = productPrice;
+        this.productName = productName;
+        this.newItem = newItem;
+        this.postingStatus = postingStatus;
+        this.discountable = discountable;
+        this.notice = notice;
+        this.productCode = productCode;
+        this.deliveryFee = deliveryFee;
+        this.privateProduct = privateProduct;
+    }
+
+    public int getProductNumber() {
+        return productNumber;
+    }
+
+    public void setProductNumber(int productNumber) {
+        this.productNumber = productNumber;
     }
 
     public ProductInsertRequestDto() {
@@ -66,10 +112,13 @@ public class ProductInsertRequestDto {
         return privateProduct;
     }
 
+
     @Override
     public String toString() {
         return "ProductInsertRequestDto{" +
-                "productPrice=" + productPrice +
+                "productOptionData=" + productOptionData +
+                ", productNumber=" + productNumber +
+                ", productPrice=" + productPrice +
                 ", productName='" + productName + '\'' +
                 ", newItem=" + newItem +
                 ", postingStatus=" + postingStatus +

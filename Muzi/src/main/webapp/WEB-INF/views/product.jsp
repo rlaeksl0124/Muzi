@@ -237,12 +237,10 @@ getProducts(productPage, limit);
     </div>
 
 
-    <h1>Product List</h1>
     <ul id="categoryBar" class="category-bar"></ul>
 
     <ul id="productList"></ul>
 
-    <h1>Product Pages</h1>
     <ul id="pageList" class="page-list"></ul>
 
 </body>

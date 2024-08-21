@@ -2,11 +2,14 @@ package com.Toy2.product.option;
 
 import com.Toy2.product.option.db.dao.ProductOptionDao;
 import com.Toy2.product.option.db.dto.ProductOptionDto;
+import com.Toy2.product.option.db.dto.request.OptionRequestDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,17 +18,24 @@ import java.util.List;
 public class ProductOptionTest {
 
     @Autowired
-    private ProductOptionDao productOption;
+    private ProductOptionDao productOptionDao;
 
     @Test
     public void optionCountTest() {
-        int count = productOption.count();
+        int count = productOptionDao.count();
         System.out.println("count = " + count);
     }
 
     @Test
     public void selectOptionsTest() {
-        List<ProductOptionDto> productOptionDtos = productOption.selectOptions(1);
+        List<ProductOptionDto> productOptionDtos = productOptionDao.selectOptions(1);
         System.out.println(productOptionDtos);
+    }
+
+    @Test
+    @Transactional
+    public void insertOptionTest() {
+        boolean insert = productOptionDao.insert(new OptionRequestDto(1, "옵션1", List.of("옵션 내용1", "옵션 내용2", "옵션 내용3"), true));
+        System.out.println("insert = " + insert);
     }
 }

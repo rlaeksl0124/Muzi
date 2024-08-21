@@ -1,10 +1,12 @@
 package com.Toy2.product.service;
 
 import com.Toy2.product.db.dto.ProductDto;
+import com.Toy2.product.db.dto.request.ProductInsertRequestDto;
 import com.Toy2.product.db.dto.request.ProductPageRequestDto;
 import com.Toy2.product.db.dto.request.ProductUpdateRequestDto;
 import com.Toy2.product.domain.service.ProductService;
 import com.Toy2.product.option.db.dto.ProductOptionDto;
+import com.Toy2.product.option.db.dto.request.OptionRequestDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,14 +58,14 @@ public class ProductServiceTest {
                 .privateProduct(false)
                 .productCode("")
                 .notice("없음").build();
-        boolean b = productService.insertProduct(build);
+        boolean b = productService.insertProductAndOption(build);
         assertThat(b).isTrue();
     }
 
     @Test
     @Transactional
     public void productServiceUpdateTest() {
-        productService.insertProduct(new ProductDto.Builder()
+        productService.insertProductAndOption(new ProductDto.Builder()
                 .productNumber(Integer.MAX_VALUE)
                 .productName("테스트 상품")
                 .productPrice(10000)
@@ -115,7 +118,7 @@ public class ProductServiceTest {
                     .notice("없음").build();
             productDtos.add(build);
         }
-        productService.insertProduct(productDtos);
+        productService.insertProductAndOption(productDtos);
         for (int i = 0; i < 10; i++) {
             ProductDto productDto = productService.selectProduct(10000 + i);
             assertThat(productDto).isNotNull();
@@ -138,6 +141,18 @@ public class ProductServiceTest {
     @Test
     @Commit
     public void productOptionInsert() {
-        productService.insertOption(new ProductOptionDto(0, 1, "추가", "1", true));
+        productService.insertOption(new OptionRequestDto(201 , "옵션 1", List.of("옵션 세부 1", "옵션 세부 2"), true));
+    }
+
+    @Test
+    @Commit
+    public void 페이지_옵션_삽입() {
+        Map<String, List<String>> map = new HashMap<>();
+        map.put("옵션", List.of("1", "2", "3"));
+        ProductInsertRequestDto dto = new ProductInsertRequestDto(
+                10000, "상품 1", true, true,
+                true, "상품 설명", "1234", 12345, false, map);
+        System.out.println("dto = " + dto);
+        productService.insertProductAndOption(dto);
     }
 }

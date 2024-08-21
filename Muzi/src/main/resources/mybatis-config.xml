@@ -29,6 +29,7 @@
 		<typeAlias type="com.Toy2.product.productdetail.db.dto.DetailPictureDto" alias="DetailPictureDto"/>
 		<typeAlias type="com.Toy2.product.productdetail.db.dto.ProductSizeDto" alias="ProductSizeDto"/>
 		<typeAlias type="com.Toy2.productcategory.db.dto.ProductCategoryDto" alias="ProductCategoryDto"/>
+		<typeAlias type="com.Toy2.product.option.db.dto.request.OptionRequestDto" alias="OptionRequestDto"/>
 		<typeAlias type="com.Toy2.productcategory.db.dto.request.ProductCategoryUpdateRequestDto" alias="ProductCategoryUpdateRequestDto"/>
 		<typeAlias type="com.Toy2.productcategory.categoryclosure.db.dto.ProductCategoryClosureDto" alias="ProductCategoryClosureDto"/>
 		<typeAlias type="com.Toy2.productcategory.categoryclosure.db.dto.request.CategoryClosureInsertRequestDto" alias="CategoryClosureInsertRequestDto"/>

@@ -16,8 +16,16 @@
         SELECT * FROM `option` WHERE opt_no = #{optionNumber};
     </select>
 
-    <insert id="insertProductOption" parameterType="ProductOptionDto">
+    <insert id="insertProductOption" parameterType="OptionRequestDto">
         INSERT INTO `option`(pdt_no, opt_name, opt_detail, status) VALUES(#{productNumber}, #{optionName}, #{optionDetail}, #{status})
+    </insert>
+
+    <insert id="insertOptions" parameterType="OptionRequestDto">
+        INSERT INTO `option` (pdt_no, opt_name, opt_detail, status)
+        VALUES
+        <foreach collection="optionDetails" item="detail" separator=",">
+            (#{productNumber}, #{optionName}, #{detail}, #{status})
+        </foreach>
     </insert>
 
 </mapper>
