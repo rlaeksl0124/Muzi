@@ -30,7 +30,7 @@ public class SignupController {
     /* 회원가입폼 보여주기 */
     @GetMapping("/add")
     public String signup(){
-        return "registerForm";
+        return "Cust/registerForm";
     }
 
 
@@ -43,7 +43,7 @@ public class SignupController {
         try {
             if(result.hasErrors()){
                 System.out.println(result);
-                return "registerForm";
+                return "Cust/registerForm";
             }
 
             /* 세션추가 */

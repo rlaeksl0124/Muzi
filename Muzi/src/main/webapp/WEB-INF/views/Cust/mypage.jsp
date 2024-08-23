@@ -14,6 +14,7 @@
     <title>MyPage</title>
 </head>
 <body>
+<%@ include file="../header.jspf"%>
     <div class="mypage-container">
         <header>
             <h1>MY PAGE</h1>

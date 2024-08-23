@@ -28,7 +28,7 @@ public class LoginController {
     /* 로그인폼 보여주기 */
     @GetMapping("/login")
     public String login(){
-        return "login";
+        return "Cust/login";
     }
 
     /* 로그아웃 처리 */

@@ -22,7 +22,7 @@ public class CustDto {
     @NotNull(message = "성별은 필수 항목입니다.")
     private String c_gnd;
     @NotNull(message = "휴대전화를 입력해주세요.")
-    @Pattern(regexp = "^\\d{11}$", message = "11자리의 숫자만 입력가능합니다.")
+    @Pattern(regexp = "^01[0-9]{1}-?[0-9]{3,4}-?[0-9]{4}$", message = "11자리의 숫자만 입력가능합니다.")
     private String c_phn;
     private String c_zip;
     private String c_road_a;

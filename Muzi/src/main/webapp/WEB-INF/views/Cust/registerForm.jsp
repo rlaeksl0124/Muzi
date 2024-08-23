@@ -13,9 +13,8 @@
     <title>Signup</title>
 </head>
 <body>
-
+<%@ include file="../header.jspf"%>
 <div class="container">
-
     <h2>회원가입</h2>
     <form action="/signup/add" method="post" class="signup-form">
         <p id="auth-check" class="hiddenmsg"></p>
@@ -64,6 +63,7 @@
             <input type="text" id="c_nick" name="c_nick" required>
         </div>
 
+        <p id="c_birth-check" class="hiddenmsg"></p>
         <div class="form-group">
             <label for="c_birth">생년월일 <span class="required">*</span></label>
             <input type="hidden" id="c_birth" name="c_birth" />
@@ -98,8 +98,9 @@
         </div>
 
         <!-- 주소 입력 부분 시작 -->
+        <p id="address-check" class="hiddenmsg"></p>
         <div class="form-group">
-            <label for="c_zip">주소</label>
+            <label for="c_zip">주소 <span class="required">*</span></label>
             <div class="address-inputs">
                 <div class="zip-search">
                     <input type="text" id="c_zip" name="c_zip" placeholder="우편번호" required>
@@ -198,6 +199,25 @@
     })
 
 
+    /* 인증번호받기버튼, 폼전송버튼 비활성화 */
+    function disableBtn(){
+        /* 인증번호 받기 버튼 */
+        let verifyBtn = $('#verify');
+        let submitBtn = $('#submit-btn');
+        verifyBtn.prop('disabled', true);
+        submitBtn.prop('disabled', true);
+    }
+
+    /* 인증번호받기버튼, 폼전송버튼 활성화 */
+    function inableBtn(){
+        /* 인증번호 받기 버튼 */
+        let verifyBtn = $('#verify');
+        let submitBtn = $('#submit-btn');
+        verifyBtn.prop('disabled', false);
+        submitBtn.prop('disabled', false);
+    }
+
+    /*-------------------------- 이메일 중복 체크, 유효성검사 시작 --------------------------*/
     /* 이메일 중복체크 */
     $('#email').on('input', function(){
         emailCheck();
@@ -206,28 +226,14 @@
         emailCheck();
     });
 
-
-
     function emailCheck(){
         /* email과 도메인을 변수에 저장 */
-        let email = document.getElementById("email").value.trim();    //trim(): email의 양쪽 공백을 제거
-        let domain = document.getElementById("domain_list").value;
+        let email = $('#email').val().trim();     //trim(): email의 양쪽 공백을 제거
+        let domain = $('#domain_list').val();
         /* 이메일 유효성검사 메시지 출력 */
-        let authCheck = document.getElementById("auth-check");
-        /* 인증번호 받기 버튼 */
-        let verifyBtn = $('#verify');
-        let submitBtn = $('#submit-btn');
+        let authCheck = $('#auth-check');
 
 
-        /* email이 공백일경우 */
-        if(!email){
-            authCheck.style.color = "red";
-            authCheck.innerHTML = "이메일을 입력해주세요";
-            /* 버튼 비활성화 */
-            verifyBtn.prop('disabled', true);
-            submitBtn.prop('disabled', true);
-            return;
-        }
 
         /* 이메일과 도메인을 합쳐 c_email에 저장 */
         let c_email = document.getElementById("c_email").value= email+domain;
@@ -237,11 +243,9 @@
 
         /* 이메일 패턴이 유효하지 않을 경우 */
         if(!emailPattern.test(c_email)){
-            authCheck.style.color = "red";
-            authCheck.innerHTML = "이메일 형식을 다시 확인해주세요";
+            authCheck.css('color', 'red').html("이메일 형식을 다시 확인해주세요");
             /* 버튼 비활성화 */
-            verifyBtn.prop('disabled', true);
-            submitBtn.prop('disabled', true);
+            disableBtn();
             return;
         }
 
@@ -261,31 +265,91 @@
                 console.log("result: ",result);
                 /* DB에 중복 메일이 없는경우 result는 true */
                 if(result===true){
-                    authCheck.style.color = "green";
-                    authCheck.innerHTML = "인증받기를 진행해주세요.";
+                    authCheck.css('color', 'green').html("인증받기를 진행해주세요");
                     /* 인증번호 받기 버튼 활성화 */
-                    verifyBtn.prop('disabled', false);
-                    submitBtn.prop('disabled', false);
+                    inableBtn()
                 } else {
                     /* DB에 중복 메일이 있는 경우 result는 false */
-                    authCheck.style.color = "red";
-                    authCheck.innerHTML = "이미 사용중인 이메일입니다.";
+                    authCheck.css('color', 'red').html("이미 사용중인 이메일입니다");
                     /* 버튼 비활성화 */
-                    verifyBtn.prop('disabled', true);
-                    submitBtn.prop('disabled', true);
+                    disableBtn();
                 }
             },
             error: function (err){
                 console.log("에러발생", err);
-                authCheck.style.color = "red";
-                authCheck.innerHTML = "서버에 문제가 발생하였습니다.";
+                authCheck.css('color', 'red').html("서버에 문제가 발생하였습니다");
                 /* 버튼 비활성화 */
-                verifyBtn.prop('disabled', true);
-                submitBtn.prop('disabled', true);
+                disableBtn();
             }
         });
     }
 
+
+
+    /*----------------------------이메일 인증 유효성 시작-----------------------------------*/
+    /* 이메일 인증 여부를 확인하는 변수 */
+    let isAuthVerify = false;
+
+
+    /* 이메일 인증번호 요청 */
+    $('#verify').on('click', function(){
+        let email = $('#c_email').val(); /* 고객 이메일 */
+        console.log('완성된 이메일 : ' + email); /* 고객이메일 콘솔 출력 */
+        const verify = $('#verify') /* 고객이 인증번호 입력하는태그 */
+
+        $.ajax({
+            type:"get",
+            url: "/signup/mailAuth?email="+email,
+            success: function(response) {
+                verify.attr('disabled', true);
+                console.log(response);
+                $('#resultMessage').css('color', 'green').html(response);
+                // 이메일 인증번호 요청 후 인증번호 입력 받기
+                $('#authCode').on('input', function() {
+                    authNumber(); // 인증번호 입력 시 검증 함수 호출
+                });
+            },
+            error: function (xhr){
+                /* 인증실패시 */
+                let errorMsg = xhr.responseText;
+                $('#resultMessage').css('color', 'red').html(errorMsg);
+                isAuthVerify=false;
+                console.log('인증실패:', xhr.responseText);
+            }
+        })
+    });
+
+    function authNumber(){
+        /* 고객이 입력한 인증번호 */
+        let inputCode = $('#authCode').val().trim();
+        let email = $('#c_email').val().trim();
+
+        console.log("전송할 데이터:", JSON.stringify({email: email, authCode: inputCode}));
+
+        $.ajax({
+            type:"POST",
+            url: "/signup/verifyAuthCode",
+            contentType: 'application/json; charset=UTF-8',
+            /* 서버에 전송 */
+            data: JSON.stringify({email: email, authCode: inputCode}),
+            success: function (response){
+                /* 인증성공시 */
+                $('#resultMessage').css('color', 'green').html(response);
+                isAuthVerify=true;
+            },
+            error: function (xhr){
+                /* 인증실패시 */
+                let errorMsg = xhr.responseText;
+                $('#resultMessage').css('color', 'red').html(errorMsg);
+                isAuthVerify=false;
+                console.log('인증실패:', xhr.responseText);
+            }
+        });
+        /* ajax 요청이 비동기이므로 기본폼 제출 막기 */
+        return false;
+    }
+
+    /*------------------------------ 폼 전송 누를때 검사 ------------------------------*/
     $('#submit-btn').on('click', function (e){
         let finalMsg = document.getElementById("finalMsg");
 
@@ -311,152 +375,83 @@
         }
     })
 
-    /* 비밀번호 유효성검사 */
-    document.getElementById('c_pwd').addEventListener('input', password);
-    document.getElementById('c_pwd_check').addEventListener('input', passwordmatch);
+    /* email이 공백일경우 */
+    $('#email').on('click', function(){
+        let email = $('#email').val().trim();
 
-    function password(){
-        const password = document.getElementById('c_pwd').value;
-        const passwordcheck = document.getElementById('password-check');
-
-        // 비밀번호 유효성 검사 (최소 8자, 대문자, 소문자, 숫자, 특수문자 포함)
-        const passwordPattern = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*]).{8,15}$/;
-
-        if (passwordPattern.test(password)) {
-            passwordcheck.style.color = "green";
-            passwordcheck.innerHTML = "비밀번호가 유효합니다.";
-            return true;
-        } else{
-            passwordcheck.style.color = "red";
-            passwordcheck.innerHTML = "패스워드는 8~15자 사이이며, 숫자, 문자, 특수문자를 포함해야 합니다.";
-            return false;
+        if(!email){
+            $('#auth-check').css('color', 'red').html("이메일을 입력해주세요");
+            /* 버튼 비활성화 */
+            disableBtn();
         }
-    }
-
-    /* 비밀번호가 일치하는지 검사 */
-    function passwordmatch(){
-        /* 비밀번호 입력란 */
-        const password = document.getElementById('c_pwd').value;
-        /* 비밀번호 확인 입력란 */
-        const confirmPassword = document.getElementById('c_pwd_check').value;
-
-        /* 비밀번호 일치여부 메시지 표시 변수 */
-        const checkpasswordmatch = document.getElementById('password-match-check');
-
-        if(password === confirmPassword){
-            checkpasswordmatch.style.color = "green";
-            checkpasswordmatch.innerHTML = "비밀번호가 일치합니다."
-            return true;
-        } else{
-            checkpasswordmatch.style.color = "red";
-            checkpasswordmatch.innerHTML = "비밀번호가 일치하지 않습니다."
-            return false;
-        }
-    }
-
-    /* 이메일 인증 여부를 확인하는 변수 */
-    let isAuthVerify = false;
+    })
 
 
-    /* 이메일 인증번호 요청 */
-    $('#verify').on('click', function(){
-        let email = $('#c_email').val(); /* 고객 이메일 */
-        console.log('완성된 이메일 : ' + email); /* 고객이메일 콘솔 출력 */
-        const verify = $('#verify') /* 고객이 인증번호 입력하는태그 */
-
-        $.ajax({
-            type:"get",
-            url: "/signup/mailAuth?email="+email,
-            success: function(response) {
-                verify.attr('disabled', true);
-                console.log(response);
-                $('#resultMessage').html(response);
-                $('#resultMessage').css('color', 'green');
-                // 이메일 인증번호 요청 후 인증번호 입력 받기
-                $('#authCode').on('input', function() {
-                    authNumber(); // 인증번호 입력 시 검증 함수 호출
-                });
-            },
-            error: function (xhr){
-                /* 인증실패시 */
-                let errorMsg = xhr.responseText;
-                $('#resultMessage').html(errorMsg);
-                $('#resultMessage').css('color', 'red');
-                isAuthVerify=false;
-                console.log('인증실패:', xhr.responseText);
-            }
-        })
-    });
-
-    function authNumber(){
-        /* 고객이 입력한 인증번호 */
+    /* 인증번호 */
+    $('#authCode').on('click', function (){
         let inputCode = $('#authCode').val().trim();
-        let email = $('#c_email').val().trim();
 
-        if(inputCode==null){
-            $('#resultMessage').css('color', 'red');
-            $('#resultMessage').html("인증번호를 입력해주세요");
+        if(!inputCode){
+            $('#resultMessage').css('color', 'red').html("인증번호를 입력해주세요");
+            disableBtn();
         }
+    })
 
-        console.log("전송할 데이터:", JSON.stringify({email: email, authCode: inputCode}));
+    /* 비밀번호 */
+    $('#c_pwd').on('click', function (){
+        let c_pwd = $('#c_pwd').val().trim();
 
-        $.ajax({
-            type:"POST",
-            url: "/signup/verifyAuthCode",
-            contentType: 'application/json; charset=UTF-8',
-            /* 서버에 전송 */
-            data: JSON.stringify({email: email, authCode: inputCode}),
-            success: function (response){
-                /* 인증성공시 */
-                $('#resultMessage').html(response);
-                $('#resultMessage').css('color', 'green');
-                isAuthVerify=true;
-            },
-            error: function (xhr){
-                /* 인증실패시 */
-                let errorMsg = xhr.responseText;
-                $('#resultMessage').html(errorMsg);
-                $('#resultMessage').css('color', 'red');
-                isAuthVerify=false;
-                console.log('인증실패:', xhr.responseText);
-            }
-        });
-        /* ajax 요청이 비동기이므로 기본폼 제출 막기 */
-        return false;
-    }
+        if(c_pwd===''){
+            $('#password-check').css('color', 'red').html("비밀번호를 입력해주세요")
+            disableBtn();
+        }
+    })
+
 
     /* 이름 */
-    $('#c_name').on('input', function(){
+    $('#c_name').on('click', function(){
         let name = $('#c_name').val().trim();
         if(name===""){
             /* input 메시지 띄우기 */
-            $('#name-check').css('color','red');
-            $('#name-check').html('이름을 입력해주세요');
+            $('#name-check').css('color','red').html('이름을 입력해주세요');
+            disableBtn();
         } else {
             $('#name-check').html("");
         }
     })
 
     /* 닉네임 체크 */
-    $('#c_nick').on('input', function (){
-        let nick = document.getElementById("c_nick").value.trim();
+    $('#c_nick').on('click', function (){
+        let nick = $('#c_nick').val().trim();
         if(nick===""){
-            $('#nick-check').css('color','red');
-            $('#nick-check').html('닉네임을 입력해주세요');
+            $('#nick-check').css('color','red').html('닉네임을 입력해주세요');
+            disableBtn();
         } else {
             $('#nick-check').html("");
         }
     })
 
     /* 핸드폰 체크 */
-    $('#c_phn').on('input', function (){
-        let phn = document.getElementById("c_phn").value.trim();
-        let phnCheck = document.getElementById("phn-check");
+    $('#c_phn').on('click', function (){
+        let phn = $('#c_phn').val().trim();
         if(phn===""){
-            $('#phn-check').css('color','red');
-            $('#phn-check').html('핸드폰번호를 입력해주세요');
+            $('#phn-check').css('color','red').html('핸드폰번호를 입력해주세요');
+            disableBtn();
         } else {
             $('#phn-check').html("");
+        }
+    })
+
+    /* 주소 */
+    $('#c_zip').on('click', function (){
+        let c_zip = $('#c_zip').val().trim();
+        let c_road_a = $('#c_road_a').val().trim();
+        let c_det_a = $('#c_det_a').val().trim();
+        if(c_zip==='' || c_road_a==='' || c_det_a===''){
+            $('#address-check').css('color','red').html('주소를 입력해주세요');
+            disableBtn();
+        } else {
+            $('#address-check').html("");
         }
     })
 

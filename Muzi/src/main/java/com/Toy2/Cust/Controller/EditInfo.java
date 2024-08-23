@@ -3,13 +3,19 @@ package com.Toy2.Cust.Controller;
 import com.Toy2.Cust.Dao.CustDao;
 import com.Toy2.Cust.Domain.CustDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Controller
 public class EditInfo {
@@ -19,31 +25,25 @@ public class EditInfo {
 
     /* 고객정보 수정 form */
     @GetMapping("/editInfo")
-    public String userInfo(Model m, HttpServletRequest request){
+    public String userInfo(Model m, @SessionAttribute String c_email){
         try {
-            /* 세션을 가져온다 */
-            HttpSession session = request.getSession();
-            String email = (String) session.getAttribute("c_email");
-
             /* 이메일을이용해서 고객조회 */
-            CustDto custDto = custDao.selectEmail(email);
+            CustDto custDto = custDao.selectEmail(c_email);
 
             m.addAttribute("custDto", custDto);
         } catch (Exception e){
 
         }
-        return "editInfo";
+        return "Cust/editInfo";
     }
 
 
     /* 고객정보 수정 */
     @PostMapping("/editInfo")
-    public String userInfo(CustDto custDto, HttpServletRequest request) {
+    public String userInfo(CustDto custDto, @SessionAttribute String c_email) {
         try {
             /* 세션을 가져온다 */
-            HttpSession session = request.getSession();
-            String email = (String) session.getAttribute("c_email");
-            CustDto cust = custDao.selectEmail(email);
+            CustDto cust = custDao.selectEmail(c_email);
 
             /* 고객정보 수정 */
             cust.setC_name(custDto.getC_name());
@@ -60,4 +60,20 @@ public class EditInfo {
         }
         return "redirect:/";
     }
+
+//    @PostMapping("/phnValid")
+//    public ResponseEntity<String> phoneValid(@Valid @RequestBody CustDto custDto, BindingResult result){
+//        try {
+//            if(result.hasErrors()){
+//                System.out.println(result);
+//                return new ResponseEntity<>("11자리의 숫자만 입력가능합니다."+
+//                        result.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+//
+//            }
+//
+//        } catch(Exception e) {
+//            e.printStackTrace();
+//
+//        }
+//    }
 }
