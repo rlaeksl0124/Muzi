@@ -8,10 +8,7 @@ import com.Toy2.product.domain.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +22,7 @@ import java.util.List;
 public class CartController {
     private CartService cartService;
     private ProductService productService;
+
     @Autowired
     public CartController(CartService cartService, ProductService productService) {
         this.cartService = cartService;
@@ -64,35 +62,7 @@ public class CartController {
         return "redirect:/cart/cart";
     }
 
-    /**
-     * 장바구니 페이지에 제품 정보 그대로를 주문페이지로 이동
-     * 바로구매 페이지에서도 그정보를 그대로 이동
-     * @param request
-     * @param model
-     * @return order
-     * @throws Exception
-     */
-    @PostMapping("/order")//주문하기
-    public String orderPageGo(HttpServletRequest request, Model model, HttpSession session, RedirectAttributes re) throws Exception {
-        String customerEmail = (String) session.getAttribute("c_email");
 
-        try {
-            if (customerEmail == null) {
-                throw new Exception("로그인이 필요합니다.");
-            }
-            String orderType = request.getParameter("orderType");
-            OrderDto orDto = new OrderDto(customerEmail);
-            List<OrderDetailDto> orderDetailList = createOrderDetailList(request, orDto);
-            model.addAttribute("orderDto", orDto);
-            model.addAttribute("orderDetailList", orderDetailList);
-            model.addAttribute("orderType", orderType);
-        } catch (Exception e) {
-            String referer = request.getHeader("Referer");
-            re.addFlashAttribute("errorMessage", "로그인을 해주세요.");
-            return "redirect:" + referer;
-        }
-        return "order";
-    }
 
     /**
      * 장바구니 번호로 장바구니 선택삭제
@@ -130,6 +100,37 @@ public class CartController {
         return "redirect:" + referer;
     }
 
+
+    /**
+     * 장바구니 페이지에 제품 정보 그대로를 주문페이지로 이동
+     * 바로구매 페이지에서도 그정보를 그대로 이동
+     * @param request
+     * @param model
+     * @return order
+     * @throws Exception
+     */
+    @PostMapping("/order")//주문하기
+    public String orderPageGo(HttpServletRequest request, Model model, HttpSession session, RedirectAttributes re) throws Exception {
+        String customerEmail = (String) session.getAttribute("c_email");
+        if (customerEmail == null || customerEmail.isEmpty() || customerEmail.equals("")) {
+            return "redirect:/login";
+        }
+        try {
+            String orderType = request.getParameter("orderType");
+            OrderDto orDto = new OrderDto(customerEmail);
+            List<OrderDetailDto> orderDetailList = createOrderDetailList(request, orDto);
+            model.addAttribute("orderDto", orDto);
+            model.addAttribute("orderDetailList", orderDetailList);
+            model.addAttribute("orderType", orderType);
+
+
+        } catch (Exception e) {
+            re.addFlashAttribute("errorMessage", "잘못된 접근입니다.");
+            String referer = request.getHeader("Referer");
+            return "redirect:" + referer;
+        }
+        return "order";
+    }
     private List<OrderDetailDto> createOrderDetailList(HttpServletRequest request, OrderDto orDto) throws Exception {
         String[] productPrice = request.getParameterValues("productPrice");
         String[] productDeliveryPrice = request.getParameterValues("productDeliveryPrice");
@@ -165,10 +166,19 @@ public class CartController {
         }
         return orderDetailList;
     }
-//    @ExceptionHandler(Exception.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public @ResponseBody String handleException(Exception e) {
-//        return "잘못된 접근입니다.";
-//    }
+    @ExceptionHandler(Exception.class)
+    public String handleException(Exception e,HttpServletRequest request, Model model) {
+        model.addAttribute("ex", e);
+
+        String requestURI = request.getRequestURI();
+        // 현재 요청이 GET 요청인지 POST 요청인지 확인
+        if ("POST".equalsIgnoreCase(request.getMethod())) {
+            // POST 요청이라면 GET 요청으로 리다이렉트
+            return "redirect:" + requestURI;
+        } else {
+            // GET 요청이라면 예외가 발생한 페이지를 다시 렌더링
+            return "forward:" + requestURI;
+        }
+    }
 
 }

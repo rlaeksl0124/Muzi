@@ -14,6 +14,7 @@ import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OrderServiceImpl implements OrderService{
@@ -135,5 +136,15 @@ public class OrderServiceImpl implements OrderService{
             throw new Exception("delivery insert failed");
         }
         return deliveryResult;
+    }
+
+    @Override
+    public List<OrderResponseDto> getOrderListPage(Map map) throws Exception {
+        return orderDao.orderListPage(map);
+    }
+
+    @Override
+    public int orderCnt(String customerEmail) throws Exception {
+        return orderDao.orderCount(customerEmail);
     }
 }

@@ -63,7 +63,6 @@
         where or_no = #{orderNo};
     </select>
 
-
     <delete id="orderDetailDeleteAll">
         delete from order_delt
     </delete>
@@ -120,9 +119,29 @@
             SELECT MIN(od2.od_no)
             FROM order_delt od2
             WHERE od2.or_no = o.or_no
-        );
+        )
     </select>
-
+    <select id="orderListPage" parameterType="map" resultType="com.Toy2.order.entity.OrderResponseDto">
+        SELECT
+            o.or_no,
+            od.od_pdtname,
+            o.or_prices,
+            o.or_delvs,
+            o.or_date
+        FROM
+            orders o,
+            order_delt od
+        WHERE
+            o.or_no = od.or_no and
+            o.c_email = #{customerEmail}
+          AND od.od_no = (
+            SELECT MIN(od2.od_no)
+            FROM order_delt od2
+            WHERE od2.or_no = o.or_no
+        )
+        ORDER BY o.or_no DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
     <delete id="orderDelete">
         delete from orders
     </delete>

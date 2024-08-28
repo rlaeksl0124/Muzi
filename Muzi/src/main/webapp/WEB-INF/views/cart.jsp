@@ -5,11 +5,19 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/cart.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery 사용 -->
     <title>장바구니</title>
+    <script>
+        window.onload = function() {
+            var ex = "${ex}";
+            if (ex) {
+                alert(ex);
+            }
+        }
+    </script>
 </head>
 
 <body>
 <%@ include file="header.jspf" %>
-<link rel="stylesheet" href="/css/cart.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/cart.css" />
 <h2>장바구니 페이지</h2>
 <form id="cartForm" method="post">
     <table>
@@ -74,11 +82,6 @@
     <button type="button" onclick="removeSelectedItems('${pageContext.request.contextPath}/cart/remove')">선택삭제</button>
     <button type="button" onclick="submitForm('${pageContext.request.contextPath}/cart/order')">주문하기</button>
 </form>
-<c:if test="${not empty errorMessage}">
-    <script>
-        alert('${errorMessage}');
-    </script>
-</c:if>
 <script>
     // 전체 선택/해제 기능
     $("#selectAll").click(function() {
@@ -139,6 +142,7 @@
             input.value = 1;  // 만약 값이 1보다 작다면 1로 설정
         }
     }
+
 </script>
 </body>
 </html>

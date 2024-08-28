@@ -5,10 +5,24 @@
     <meta charset="UTF-8">
 <%--    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/styles.css">--%>
     <title>주문중</title>
+
 </head>
 <body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
+    $("#kakao_pay").on("click",function (){
+        e.preventDefault();
+
+        $.ajax({
+            url: '/order/orderPay',
+            type : 'get',
+            success : function (response){
+                alert(response.next_redirect_pc_url);
+                location.href = response.next_redirect_pc_url;
+            }
+        });
+    });
     function execDaumPostcode() {
         var postLayer = document.getElementById("postLayer");
         new daum.Postcode({
@@ -158,9 +172,8 @@
             총 예상 금액: ${totalEstimatedPrice}원
         </p>
 
-        <input type="submit" value="결제하기">
+            <input type="submit" id="kakao_pay" value="결제하기">
     </form>
-
 </div>
 </body>
 </html>
