@@ -24,7 +24,7 @@
                 <ul class="accountActions">
                     <li>
                         <c:if test="${sessionScope.c_email == null}">
-                            <a  href="/login?toURL=${requestScope['javax.servlet.forward.request_uri']}">
+                            <a  href="/login?toURL=${requestScope['javax.servlet.forward.request_uri']}?${requestScope['javax.servlet.forward.query_string']}">
                                 <span class="material-icons">login</span>
                             </a>
                             <span>로그인</span>
