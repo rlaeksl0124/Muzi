@@ -76,12 +76,18 @@
     <p>배송메시지: ${delivery.deliveryMessage}</p>
 <h4>3. 총 결제금액</h4>
     <c:set var="totalProductPrice" value="0" />
+    <c:set var="maxDeliveryCost" value="0" />
     <c:forEach items="${orderDetailList}" var="orderDetail">
         <c:set var="totalProductPrice" value="${totalProductPrice + (orderDetail.orderDetailPrice * orderDetail.orderDetailCnt)}" />
+        <c:choose>
+            <c:when test="${orderDetail.orderDetailDeliveryPrice > maxDeliveryCost}">
+                <c:set var="maxDeliveryCost" value="${orderDetail.orderDetailDeliveryPrice}" />
+            </c:when>
+        </c:choose>
     </c:forEach>
 
     <!-- 총 배송비 계산 -->
-    <c:set var="deliveryCost" value="${totalProductPrice >= 30000 ? 0 : 3000}" />
+    <c:set var="deliveryCost" value="${totalProductPrice >= 30000 ? 0 : maxDeliveryCost}" />
 
     <!-- 총 예상 금액 계산 -->
     <c:set var="totalEstimatedPrice" value="${totalProductPrice + deliveryCost}" />

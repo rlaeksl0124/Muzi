@@ -149,7 +149,7 @@
     <select id="orderCount" parameterType="string" resultType="int">
         select count(*)
         from orders
-        where c_email = #{customerEmail}
+        where c_email = #{customerEmail} and or_prices != 0
     </select>
 
     <select id="orderSelect" parameterType="int" resultType="orderDto">

@@ -4,8 +4,10 @@ import com.Toy2.cart.entity.CartDto;
 import com.Toy2.cart.service.CartService;
 import com.Toy2.order.entity.OrderDetailDto;
 import com.Toy2.order.entity.OrderDto;
+import com.Toy2.order.service.OrderService;
 import com.Toy2.product.domain.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,12 +24,17 @@ import java.util.List;
 public class CartController {
     private CartService cartService;
     private ProductService productService;
+    private OrderService orderService;
 
     @Autowired
-    public CartController(CartService cartService, ProductService productService) {
+    public CartController(CartService cartService, ProductService productService
+    , OrderService orderService) {
         this.cartService = cartService;
         this.productService = productService;
+        this.orderService = orderService;
     }
+    @Value("#{tossProperties['payment.toss.test_client_api_key']}")
+    private String tossClientKey;
 
     /**
      * 회원의 장바구니 페이지 출력
@@ -104,6 +111,7 @@ public class CartController {
     /**
      * 장바구니 페이지에 제품 정보 그대로를 주문페이지로 이동
      * 바로구매 페이지에서도 그정보를 그대로 이동
+     * 여기를 고쳐야 선택 주문이 된다.
      * @param request
      * @param model
      * @return order
@@ -118,12 +126,16 @@ public class CartController {
         try {
             String orderType = request.getParameter("orderType");
             OrderDto orDto = new OrderDto(customerEmail);
+
             List<OrderDetailDto> orderDetailList = createOrderDetailList(request, orDto);
             model.addAttribute("orderDto", orDto);
             model.addAttribute("orderDetailList", orderDetailList);
             model.addAttribute("orderType", orderType);
-
-
+            model.addAttribute("tossClientKey", tossClientKey);
+            model.addAttribute("orderProductFirstName", orderDetailList.get(0).getOrderDetailProductName());
+            model.addAttribute("orderID", orderService.getOrderList(customerEmail).size()+1);//여기를 결제 테이블의 id로 바꾸면될듯
+            //order테이블에 컬럼하나 추가해서 orderId값을 받고 랜덤의 값으로 그거랑 payment를 저장할까
+            model.addAttribute("orderDetailSize", orderDetailList.size()-1);
         } catch (Exception e) {
             re.addFlashAttribute("errorMessage", "잘못된 접근입니다.");
             String referer = request.getHeader("Referer");
