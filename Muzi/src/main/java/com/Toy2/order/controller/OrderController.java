@@ -1,7 +1,6 @@
 package com.Toy2.order.controller;
 
 
-import com.Toy2.cart.entity.CartDto;
 import com.Toy2.cart.service.CartService;
 import com.Toy2.order.domain.PageHandler;
 import com.Toy2.order.entity.DeliveryDto;
@@ -9,16 +8,26 @@ import com.Toy2.order.entity.OrderDetailDto;
 import com.Toy2.order.entity.OrderDto;
 import com.Toy2.order.entity.OrderResponseDto;
 import com.Toy2.order.service.OrderService;
-import com.Toy2.pay.entity.ReadyResponse;
-import com.Toy2.pay.service.KakaoPayService;
-import com.Toy2.pay.service.KakaoPayServiceImpl;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,50 +38,55 @@ import java.util.Map;
 public class OrderController {
     private OrderService orderService;
     private CartService cartService;
-    private KakaoPayService kakaoPayService;
     @Autowired
     public OrderController(OrderService orderService,
-                           CartService cartService,
-                           KakaoPayServiceImpl kakaoPayService) {
+                           CartService cartService) {
         this.orderService = orderService;
         this.cartService = cartService;
-        this.kakaoPayService = kakaoPayService;
     }
 
-    /**
-     * 주문페이지에서 주문하기 버튼을 클릭하면 주문이 들어가고 주문상세에대한 정보와 배송지 정보가 저장
-     * @param orderDto
-     * @param deliveryDto
-     * @param model
-     * @return orderSuccess
-     * @throws Exception
-     */
-    @PostMapping("/complete")//결제하기
-    public String addOrder(@ModelAttribute OrderDto orderDto,
-                           @ModelAttribute DeliveryDto deliveryDto,
-                           @RequestParam("orderType") String cartOrder,
-                           Model model,
-                           HttpSession session) throws Exception {
+    @Value("#{tossProperties['payment.toss.test_secrete_api_key']}")
+    private String tossSecreteApiKey;
+
+    @PostMapping("/complete")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> addOrder(
+            @ModelAttribute OrderDto orderDto,
+            @ModelAttribute DeliveryDto deliveryDto,
+            @RequestParam("orderType") String cartOrder,
+            HttpSession session) {
+
+        Map<String, Object> response = new HashMap<>();
+
         String customerEmail = (String) session.getAttribute("c_email");
         orderDto.setCustomerEmail(customerEmail);
         List<OrderDetailDto> orderDetails = orderDto.getOrderDetails();
 
         try {
             orderService.addOrder(orderDto, orderDetails, deliveryDto);
-            if(cartOrder.equals("장바구니구매"))
+            if (cartOrder.equals("장바구니구매"))
                 cartService.cartEmailDelete(customerEmail);
-            model.addAttribute("orderProductName", orderService.getOrderDetailList(
-                            orderService.getOrderList(customerEmail)
-                                    .get(orderService.getOrderList(customerEmail).size()-1).getOrderNo())
-                    .get(0).getOrderDetailProductName());
-            model.addAttribute("orderProductList", orderService.getOrderList(customerEmail)
-                    .get(orderService.getOrderList(customerEmail).size()-1));
-            return "orderSuccess";
-        } catch (Exception e) {
-            return "redirect:/cart/order";
-        }
-    }
 
+            // Assuming getOrderList and getOrderDetailList return the required data
+            String orderProductName = orderService.getOrderDetailList(
+                            orderService.getOrderList(customerEmail)
+                                    .get(orderService.getOrderList(customerEmail).size() - 1).getOrderNo())
+                    .get(0).getOrderDetailProductName();
+
+            response.put("success", true);
+            response.put("orderProductName", orderProductName);
+            response.put("orderPrice", orderService.getOrderList(customerEmail).get(
+                    orderService.getOrderList(customerEmail).size() - 1
+            ).getOrderPrices());
+            response.put("orderDate", orderService.getOrderList(customerEmail).get(
+                    orderService.getOrderList(customerEmail).size() - 1
+            ).getOrderDate());
+        } catch (Exception e) {
+            response.put("success", false);
+        }
+
+        return ResponseEntity.ok(response);
+    }
     /**
      * 회원의 주문내역들 출력
      * @param model
@@ -106,14 +120,6 @@ public class OrderController {
         } catch (Exception e) {
             return "redirect:/";
         }
-
-//        try {
-//            List<OrderResponseDto> orderDto = orderService.getOrderList((String) session.getAttribute("c_email"));
-//            model.addAttribute("orderList", orderDto);
-//        } catch (Exception e) {
-//            model.addAttribute("errorMessage", "주문 내역을 가져오는 중 문제가 발생했습니다.");
-//            return "orderList";
-//        }
         return "orderList";
     }
 
@@ -154,22 +160,78 @@ public class OrderController {
         orderService.updateOrderDetail(orderDetailNo, status);
         return "redirect:/orders/orderDetailList?orderNo=" + orderNo;
     }
+    @RequestMapping(value = "/confirm")//결제 승인 paySuccess에서 값을 뛰워주고 있음.(payment, orderId, amount)
+    public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
+        JSONParser parser = new JSONParser();
+        String orderId;
+        String amount;
+        String paymentKey;
+        try {
+            // 클라이언트에서 받은 JSON 요청 바디입니다.
+            JSONObject requestData = (JSONObject) parser.parse(jsonBody);
+            paymentKey = (String) requestData.get("paymentKey");
+            orderId = (String) requestData.get("orderId");
+            amount = (String) requestData.get("amount");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        };
+        JSONObject obj = new JSONObject();
+        obj.put("orderId", orderId);
+        obj.put("amount", amount);
+        obj.put("paymentKey", paymentKey);
 
-    @GetMapping("/orderPay")
-    public @ResponseBody ReadyResponse payReady(OrderDto orderDto, int totalAmount, HttpSession session, Model model) throws Exception{
-        String mem_id = (String) session.getAttribute("c_email");
-        List<CartDto> cartList = cartService.getCarts(mem_id);
+        // 토스페이먼츠 API는 시크릿 키를 사용자 ID로 사용하고, 비밀번호는 사용하지 않습니다.
+        // 비밀번호가 없다는 것을 알리기 위해 시크릿 키 뒤에 콜론을 추가합니다.
+        String widgetSecretKey = tossSecreteApiKey;
+        Base64.Encoder encoder = Base64.getEncoder();
+        byte[] encodedBytes = encoder.encode((widgetSecretKey + ":").getBytes(StandardCharsets.UTF_8));
+        String authorizations = "Basic " + new String(encodedBytes);
 
-        String itemName = cartList.get(0).getCartProductName()+"외 " + String.valueOf(cartList.size()-1)+ " 개";
-        int quantity = cartList.size()-1;
+        // 결제를 승인하면 결제수단에서 금액이 차감돼요.
+        URL url = new URL("https://api.tosspayments.com/v1/payments/confirm");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestProperty("Authorization", authorizations);
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
 
-        ReadyResponse readyResponse =kakaoPayService.payRead(itemName, quantity, mem_id, totalAmount);
-        System.out.println("결제 고유번호 : " +readyResponse.getTid());
-        System.out.println(("결제 요청 URL : " + readyResponse.getNext_redirect_pc_url()));
+        OutputStream outputStream = connection.getOutputStream();
+        outputStream.write(obj.toString().getBytes("UTF-8"));
 
-        return readyResponse;
+        int code = connection.getResponseCode();
+        boolean isSuccess = code == 200;
+
+        InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
+
+        // 결제 성공 및 실패 비즈니스 로직을 구현하세요.
+        Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
+        JSONObject jsonObject = (JSONObject) parser.parse(reader);
+        responseStream.close();
+        System.out.println(jsonObject);
+        return ResponseEntity.status(code).body(jsonObject);
     }
 
+    @GetMapping("/orderSuccess")//결제 완료 화면
+    public String orderSuccess(@RequestParam String paymentKey,
+            @RequestParam String orderId,
+            @RequestParam Long amount,
+            Model model, HttpSession session) throws Exception {
+        String customerEmail = (String) session.getAttribute("c_email");
+        model.addAttribute("orderId", orderService.getOrderList(customerEmail)
+                .get(orderService.getOrderList(customerEmail).size()-1).getOrderNo());
+        model.addAttribute("amount", orderService.getOrderList(customerEmail)
+                .get(orderService.getOrderList(customerEmail).size()-1).getOrderPrices()+
+                orderService.getOrderList(customerEmail)
+                        .get(orderService.getOrderList(customerEmail).size()-1).getOrderDeliveryPrices());
+        model.addAttribute("orderDate", orderService.getOrderList(customerEmail)
+                .get(orderService.getOrderList(customerEmail).size()-1).getOrderDate());
+        model.addAttribute("orderProductName", orderService.getOrderDetailList(
+                        orderService.getOrderList(customerEmail)
+                                .get(orderService.getOrderList(customerEmail).size()-1).getOrderNo())
+                .get(0).getOrderDetailProductName());
+
+        return "orderSuccess"; // orderSuccess.jsp로 이동
+    }
     @ExceptionHandler(Exception.class)
     public String handleException(Exception e, HttpServletRequest request, Model model) {
         model.addAttribute("ex", e);

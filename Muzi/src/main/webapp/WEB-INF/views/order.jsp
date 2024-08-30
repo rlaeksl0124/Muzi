@@ -5,24 +5,14 @@
     <meta charset="UTF-8">
 <%--    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/styles.css">--%>
     <title>주문중</title>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 
 </head>
 <body>
+<script src="https://js.tosspayments.com/v1/payment"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
-    $("#kakao_pay").on("click",function (){
-        e.preventDefault();
-
-        $.ajax({
-            url: '/order/orderPay',
-            type : 'get',
-            success : function (response){
-                alert(response.next_redirect_pc_url);
-                location.href = response.next_redirect_pc_url;
-            }
-        });
-    });
     function execDaumPostcode() {
         var postLayer = document.getElementById("postLayer");
         new daum.Postcode({
@@ -76,7 +66,7 @@
 </h3>
 <div class="order-section">
     <h3>1. 주문상품</h3>
-    <form action="${pageContext.request.contextPath}/orders/complete" method="post">
+    <form id="orderForm" action="${pageContext.request.contextPath}/orders/complete" method="post">
         <input type="hidden" id="orderType" name="orderType" value="${orderType}">
     <table>
         <thead>
@@ -114,7 +104,7 @@
                     <input type="hidden" name="orderDetails[${status.index}].orderDetailDeliveryPrice" value="${orderDetail.orderDetailDeliveryPrice}">
                         ${orderDetail.orderDetailDeliveryPrice}
                 </td>
-                <c:set var="totalPrice" value="${orderDetail.orderDetailPrice * orderDetail.orderDetailCnt}" />
+                <c:set var="totalPrice" value="${orderDetail.orderDetailPrice * orderDetail.orderDetailCnt+orderDetail.orderDetailDeliveryPrice}" />
                 <td>
                         ${totalPrice}
                 </td>
@@ -171,9 +161,59 @@
         <p>
             총 예상 금액: ${totalEstimatedPrice}원
         </p>
-
-            <input type="submit" id="kakao_pay" value="결제하기">
+        <input type="submit" id="payment-button" value="결제하기">
     </form>
 </div>
+<script>
+    const clientKey = '${tossClientKey}';
+    const tossPayments = TossPayments(clientKey);
+    const allAmount = '${totalProductPrice + deliveryCost}';
+    const orderEmail = '${customerEmail}';
+    const orderFirstName = '${orderProductFirstName}외 ${orderDetailSize}'
+    const orderNO = 'order_Test_${orderID}';
+
+    document.getElementById('payment-button').addEventListener('click', function (event) {
+        event.preventDefault(); // 기본 폼 제출 동작을 방지합니다.
+
+        // TossPayments 결제 요청
+        tossPayments.requestPayment('CARD', {
+            amount: allAmount,
+            orderId: orderNO,
+            orderName: orderFirstName,
+            customerName: orderEmail,
+            customerEmail: orderEmail,
+        }).then(function (response) {
+            // 결제 성공 후 response에서 paymentKey를 가져옵니다.
+            const paymentKey = response.paymentKey;
+
+            // 필요한 경우 추가적인 서버 작업을 위해 AJAX 호출
+            var formData = $('#orderForm').serialize();
+
+            $.ajax({
+                type: "POST",
+                url: "${pageContext.request.contextPath}/orders/complete",
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        // AJAX 요청이 성공하면 수동으로 successUrl로 리다이렉트
+                        window.location.href = 'http://localhost:8080/orders/orderSuccess?paymentKey=' + paymentKey +
+                            '&orderId=' + orderNO + '&amount=' + allAmount;
+                    } else {
+                        alert('Order failed. Please try again.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        }).catch(function (error) {
+            // 결제 실패 시 처리
+            console.error(error); // 결제 창 표시 중 오류가 발생하면 콘솔에 표시합니다.
+            alert('Payment failed. Please try again.');
+            window.location.href = 'http://localhost:8080/cart/cart'; // 실패 시 failUrl로 이동
+        });
+    });
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
 </html>
