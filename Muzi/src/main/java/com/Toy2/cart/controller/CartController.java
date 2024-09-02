@@ -123,13 +123,12 @@ public class CartController {
         if (customerEmail == null || customerEmail.isEmpty() || customerEmail.equals("")) {
             return "redirect:/login";
         }
-
         try {
             String orderType = request.getParameter("orderType");
-            OrderDto orDto = new OrderDto(customerEmail);
+            OrderDto orderDto = new OrderDto(customerEmail);
 
-            List<OrderDetailDto> orderDetailList = createOrderDetailList(request, orDto);
-            model.addAttribute("orderDto", orDto);
+            List<OrderDetailDto> orderDetailList = createOrderDetailList(request, orderDto);
+            model.addAttribute("orderDto", orderDto);
             model.addAttribute("orderDetailList", orderDetailList);
             model.addAttribute("orderType", orderType);
             model.addAttribute("tossClientKey", tossClientKey);
@@ -144,41 +143,8 @@ public class CartController {
         }
         return "order";
     }
-    private List<OrderDetailDto> createOrderDetailList(HttpServletRequest request, OrderDto orDto) throws Exception {
-        String[] productPrice = request.getParameterValues("productPrice");
-        String[] productDeliveryPrice = request.getParameterValues("productDeliveryPrice");
-        String[] productNos = request.getParameterValues("productNo");
-        String[] productCnts = request.getParameterValues("productCnt");
-        String[] productOptions = request.getParameterValues("productOption");
 
 
-        List<OrderDetailDto> orderDetailList = new ArrayList<>();
-        if (productNos != null) {
-            for (int i = 0; i < productNos.length; i++) {
-                Long pp  = Long.parseLong(productPrice[i]);
-                Integer dp = Integer.valueOf(productDeliveryPrice[i]);
-                String productName = productService.selectProduct(Integer.parseInt(productNos[i])).getProductName();
-
-                if(Integer.parseInt(productCnts[i]) <= 0)
-                    throw new Exception("0이하의 값 입력 불가");
-                OrderDetailDto odDto = new OrderDetailDto(
-                        orDto.getOrderNo(),
-                        Integer.parseInt(productNos[i]),
-                        Integer.parseInt(productCnts[i]),
-                        "주문완료",
-                        productOptions[i],
-                        "일반배송",
-                        pp,
-                        dp
-                );
-                odDto.setOrderDetailProductName(productName);
-                orderDetailList.add(odDto);
-            }
-        }else{
-            throw new NullPointerException("상품 번호가 없습니다.");
-        }
-        return orderDetailList;
-    }
     @ExceptionHandler(Exception.class)
     public String handleException(Exception e,HttpServletRequest request, Model model) {
         model.addAttribute("ex", e);
@@ -194,4 +160,47 @@ public class CartController {
         }
     }
 
+    //제품정보획득로직
+    private List<OrderDetailDto> createOrderDetailList(HttpServletRequest request, OrderDto orderDto) throws Exception {
+        String[] productPrice = request.getParameterValues("productPrice");
+        String[] productDeliveryPrice = request.getParameterValues("productDeliveryPrice");
+        String[] productNos = request.getParameterValues("productNo");
+        String[] productCnts = request.getParameterValues("productCnt");
+        String[] productOptions = request.getParameterValues("productOption");
+
+
+        List<OrderDetailDto> orderDetailList = new ArrayList<>();
+        if (productNos != null) {
+            orderDetailCreateList(productPrice, productDeliveryPrice,
+                    productNos, productCnts, productOptions, orderDto, orderDetailList);
+        }else{
+            throw new NullPointerException("상품 번호가 없습니다.");
+        }
+        return orderDetailList;
+    }
+    //DTO 생성 로직
+    private void orderDetailCreateList(String[] productPrice,String[] productDeliveryPrice,String[] productNos,
+                                       String[] productCnts,String[] productOptions, OrderDto orderDto,
+                                       List<OrderDetailDto> orderDetailList) throws Exception {
+        for (int i = 0; i < productNos.length; i++) {
+            Long pp  = Long.parseLong(productPrice[i]);
+            Integer dp = Integer.valueOf(productDeliveryPrice[i]);
+            String productName = productService.selectProduct(Integer.parseInt(productNos[i])).getProductName();
+
+            if(Integer.parseInt(productCnts[i]) <= 0)
+                throw new Exception("0이하의 값 입력 불가");
+            OrderDetailDto odDto = new OrderDetailDto(
+                    orderDto.getOrderNo(),
+                    Integer.parseInt(productNos[i]),
+                    Integer.parseInt(productCnts[i]),
+                    "주문완료",
+                    productOptions[i],
+                    "일반배송",
+                    pp,
+                    dp
+            );
+            odDto.setOrderDetailProductName(productName);
+            orderDetailList.add(odDto);
+        }
+    }
 }

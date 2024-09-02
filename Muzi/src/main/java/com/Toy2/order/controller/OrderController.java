@@ -65,27 +65,16 @@ public class OrderController {
         try {
             orderService.addOrder(orderDto, orderDetails, deliveryDto);
             if (cartOrder.equals("장바구니구매"))
-                cartService.cartEmailDelete(customerEmail); //변경 예정
-
+                cartService.cartEmailDelete(customerEmail); //q
             // Assuming getOrderList and getOrderDetailList return the required data
-            String orderProductName = orderService.getOrderDetailList(
-                            orderService.getOrderList(customerEmail)
-                                    .get(orderService.getOrderList(customerEmail).size() - 1).getOrderNo())
-                    .get(0).getOrderDetailProductName();
-
-            response.put("success", true);
-            response.put("orderProductName", orderProductName);
-            response.put("orderPrice", orderService.getOrderList(customerEmail).get(
-                    orderService.getOrderList(customerEmail).size() - 1
-            ).getOrderPrices());
-            response.put("orderDate", orderService.getOrderList(customerEmail).get(
-                    orderService.getOrderList(customerEmail).size() - 1
-            ).getOrderDate());
+            orderSuccess(response, customerEmail);
         } catch (Exception e) {
             response.put("success", false);
         }
         return ResponseEntity.ok(response);
     }
+
+
     /**
      * 회원의 주문내역들 출력
      * @param model
@@ -106,12 +95,12 @@ public class OrderController {
             int totalCnt = orderService.orderCnt(customerEmail);
             PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
 
-            Map map = new HashMap();
-            map.put("offset", (page) * pageSize);// + 되어있었음 * 로 바꿈
-            map.put("pageSize", pageSize);
-            map.put("customerEmail", customerEmail);
+            Map pagingMap = new HashMap();
+            pagingMap.put("offset", (page) * pageSize);// + 되어있었음 * 로 바꿈
+            pagingMap.put("pageSize", pageSize);
+            pagingMap.put("customerEmail", customerEmail);
 
-            List<OrderResponseDto> list = orderService.getOrderListPage(map);
+            List<OrderResponseDto> list = orderService.getOrderListPage(pagingMap);
             model.addAttribute("orderList", list);
             model.addAttribute("ph", pageHandler);
             model.addAttribute("page", page);
@@ -244,5 +233,22 @@ public class OrderController {
             // GET 요청이라면 예외가 발생한 페이지를 다시 렌더링
             return "forward:" + requestURI;
         }
+    }
+
+    //주문성공 후 모델속성 설정하는 로직
+    private void orderSuccess(Map<String, Object> response, String customerEmail) throws Exception {
+        String orderProductName = orderService.getOrderDetailList(
+                        orderService.getOrderList(customerEmail)
+                                .get(orderService.getOrderList(customerEmail).size() - 1).getOrderNo())
+                .get(0).getOrderDetailProductName();
+
+        response.put("success", true);
+        response.put("orderProductName", orderProductName);
+        response.put("orderPrice", orderService.getOrderList(customerEmail).get(
+                orderService.getOrderList(customerEmail).size() - 1
+        ).getOrderPrices());
+        response.put("orderDate", orderService.getOrderList(customerEmail).get(
+                orderService.getOrderList(customerEmail).size() - 1
+        ).getOrderDate());
     }
 }
