@@ -12,8 +12,11 @@ import java.util.Map;
 @Repository("CartDao")
 public class CartDaoImpl implements CartDao{
 
-    @Autowired
     private SqlSession session;
+    @Autowired
+    public CartDaoImpl(SqlSession session){
+        this.session = session;
+    }
     private static String namespace = "cart.dao.CartDao.";
 
     @Override

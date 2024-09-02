@@ -12,8 +12,11 @@ import java.util.Map;
 @Repository("OrderDetailDto")
 public class OrderDetailDaoImpl implements OrderDetailDao{
 
-    @Autowired
     private SqlSession session;
+    @Autowired
+    public OrderDetailDaoImpl(SqlSession session){
+        this.session = session;
+    }
 
     private static String namespace = "cart.dao.OrderDao.";
 
