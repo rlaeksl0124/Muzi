@@ -106,11 +106,25 @@
         $("#cartForm").attr("action", actionUrl);
         $("#cartForm").submit();
     }
+
     function submitForm(actionUrl) {
+        // 선택되지 않은 항목을 모두 제거
+        $(".selectItem:not(:checked)").each(function() {
+            // 체크되지 않은 항목의 행(row)을 찾아서 그 안의 input 요소를 모두 제거합니다.
+            $(this).closest("tr").find("input").remove();
+        });
+
+        // 체크된 항목이 없을 경우 경고 메시지를 표시하고 폼 제출 중단
+        if ($(".selectItem:checked").length === 0) {
+            alert("주문할 항목을 선택해주세요.");
+            return;
+        }
+
         // 폼의 액션 설정 후 제출
         $("#cartForm").attr("action", actionUrl);
         $("#cartForm").submit();
     }
+
     function modifyCart(cartNo) {
 
         // 기존의 hidden 필드 제거

@@ -123,6 +123,7 @@ public class CartController {
         if (customerEmail == null || customerEmail.isEmpty() || customerEmail.equals("")) {
             return "redirect:/login";
         }
+
         try {
             String orderType = request.getParameter("orderType");
             OrderDto orDto = new OrderDto(customerEmail);

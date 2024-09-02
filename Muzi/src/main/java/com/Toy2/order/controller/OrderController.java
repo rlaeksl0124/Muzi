@@ -65,7 +65,7 @@ public class OrderController {
         try {
             orderService.addOrder(orderDto, orderDetails, deliveryDto);
             if (cartOrder.equals("장바구니구매"))
-                cartService.cartEmailDelete(customerEmail);
+                cartService.cartEmailDelete(customerEmail); //변경 예정
 
             // Assuming getOrderList and getOrderDetailList return the required data
             String orderProductName = orderService.getOrderDetailList(
@@ -84,7 +84,6 @@ public class OrderController {
         } catch (Exception e) {
             response.put("success", false);
         }
-
         return ResponseEntity.ok(response);
     }
     /**
