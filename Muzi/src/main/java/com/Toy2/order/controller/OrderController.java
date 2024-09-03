@@ -48,6 +48,12 @@ public class OrderController {
     @Value("#{tossProperties['payment.toss.test_secrete_api_key']}")
     private String tossSecreteApiKey;
 
+
+    @GetMapping("/index")
+    public String index() {
+        return "index";
+    }
+
     @PostMapping("/complete")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> addOrder(
