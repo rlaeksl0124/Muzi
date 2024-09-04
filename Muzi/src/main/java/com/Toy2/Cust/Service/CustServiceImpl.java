@@ -3,11 +3,11 @@ package com.Toy2.Cust.Service;
 import com.Toy2.Cust.Dao.CustDao;
 import com.Toy2.Cust.Domain.CustDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 
 import javax.mail.internet.MimeMessage;
 import java.util.Random;
@@ -16,10 +16,9 @@ import java.util.Random;
 public class CustServiceImpl implements CustService, PasswordService {
     @Autowired
     private CustDao custDao;
-
+    StringRedisTemplate redisTemplate;
     @Autowired
     private JavaMailSenderImpl mailSender;
-
 
     /* 회원가입폼 이메일 중복검사 */
     @Override
