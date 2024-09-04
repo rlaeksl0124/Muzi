@@ -46,12 +46,14 @@
     <update id="deleteCustChangeStatusCode" parameterType="String">
         update cust
         set c_stat_cd = 'D'
+        and last_mod_dt = now()
+        and last_mod_id = #{c_email}
         where c_email = #{c_email}
     </update>
 
 
     <!-- SERVICE DAO 구현해야함 -->
-    <!-- 휴먼: admin이 N 이면서 로그인일자가 1년 이상인 고객 상태코드 N으로 변경 -->
+    <!-- 휴먼: admin이 N 이면서, 로그인일자가 1년 이상인 고객 상태코드 H으로 변경 -->
     <update id="notLoginUserStatusCodeUpdate" parameterType="String">
         update cust
         set c_stat_cd = 'H'

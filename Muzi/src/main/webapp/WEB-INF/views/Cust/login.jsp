@@ -13,6 +13,15 @@
     <title>login</title>
 </head>
 <body>
+<%-- attr 컨트롤러에서 msg로 전달받은 값이 비어있지 않을때만 코드를 실행 --%>
+<c:if test="${not empty msg}">
+    <script type="text/javascript">
+        var message = "${msg}";
+        alert(message);
+    </script>
+</c:if>
+
+
 <div id="snap-sync-body" class="snap-sync-pc">
     <%@ include file="../header.jspf"%>
     <div id="snap-sync-wrapper">

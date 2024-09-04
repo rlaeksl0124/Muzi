@@ -3,6 +3,7 @@ package com.Toy2.Cust.Controller;
 import com.Toy2.Cust.Dao.CustDao;
 import com.Toy2.Cust.Domain.CustDto;
 import com.Toy2.Cust.Service.CustService;
+import com.Toy2.Cust.Service.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,8 @@ public class SignupController {
     CustDao custDao;
     @Autowired
     CustService custService;
+    @Autowired
+    PasswordService passwordService;
 
     /* 회원가입폼 보여주기 */
     @GetMapping("/add")
@@ -46,6 +49,13 @@ public class SignupController {
                 return "Cust/registerForm";
             }
 
+            /* 고객의 비밀번호를 가져와서 */
+            String rawPwd = custDto.getC_pwd();
+            /* 패스워드 암호화 */
+            String encryptedPwd = passwordService.encodePassword(rawPwd);
+            /* 고객객체에 저장 */
+            custDto.setC_pwd(encryptedPwd);
+
             /* 세션추가 */
             session.setAttribute("c_email", custDto.getC_email());
 
@@ -63,7 +73,7 @@ public class SignupController {
 
     /* 회원가입 이메일 중복검사 */
     @GetMapping("/emailDumpCheck")
-    public ResponseEntity<Boolean> emailCheck(String c_email, RedirectAttributes rattr) {
+    public ResponseEntity<Boolean> emailCheck(String c_email) {
         try {
             /* email 중복 체크 */
             boolean result = custService.emailDumpCheck(c_email);
@@ -72,7 +82,6 @@ public class SignupController {
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             e.printStackTrace();
-            rattr.addFlashAttribute("msg", "이미 사용중인 이메일입니다");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
         }
     }

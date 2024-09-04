@@ -15,6 +15,8 @@ public enum ResCode {
     /* 404 */
     ALREADY_USE_EMAIL(409, "U001", "이미 사용중인 이메일입니다."),
     DIFF_AUTH_EMAIL(409, "U002","잘못된 인증번호입니다 다시 입력해주세요"),
+    EMAIL_NOTFOUNT(409, "U003", "해당 이메일로 사용자를 찾을수 없습니다."),
+    EMAIL_ALREADY(409, "U004", "이미 존재하는 이메일입니다.."),
 
     /* 500 */
     SERVER_AUTH_EMAIL(500, "S001", "인증과정에서 오류가 발생하였습니다");

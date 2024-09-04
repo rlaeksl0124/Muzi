@@ -6,10 +6,12 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 <script>
     /*------------------------------비밀번호 유효성 시작-------------------------------------*/
+$(document).ready(function(){
     $('#c_pwd').on('input', password);
     $('#c_pwd_check').on('input', passwordmatch);
 
@@ -46,6 +48,7 @@
             return false;
         }
     }
+})
 
 </script>
 </body>

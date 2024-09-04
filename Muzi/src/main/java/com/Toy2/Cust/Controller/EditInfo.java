@@ -45,6 +45,10 @@ public class EditInfo {
             /* 세션을 가져온다 */
             CustDto cust = custDao.selectEmail(c_email);
 
+            if(cust==null){
+                return "";
+            }
+
             /* 고객정보 수정 */
             cust.setC_name(custDto.getC_name());
             cust.setC_phn(custDto.getC_phn());
@@ -60,6 +64,8 @@ public class EditInfo {
         }
         return "redirect:/";
     }
+
+//    @PostMapping("/editInfo/")
 
 //    @PostMapping("/phnValid")
 //    public ResponseEntity<String> phoneValid(@Valid @RequestBody CustDto custDto, BindingResult result){

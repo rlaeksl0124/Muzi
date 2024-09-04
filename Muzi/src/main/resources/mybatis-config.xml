@@ -10,7 +10,6 @@
 		<typeAlias type="com.Toy2.order.entity.OrderDetailDto" alias="OrderDetailDto"/>
 		<typeAlias type="com.Toy2.order.entity.OrderDto" alias="OrderDto"/>
 		<typeAlias type="com.Toy2.order.entity.DeliveryDto" alias="DeliveryDto"/>
-		<typeAlias type="com.Toy2.Cust.Domain.CustDto" alias="CustDto" />
 
 		<typeAlias type="com.Toy2.cart.entity.CartDto" alias="CartDto"/>
 

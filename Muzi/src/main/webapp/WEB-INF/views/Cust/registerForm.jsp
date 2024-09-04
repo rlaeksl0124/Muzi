@@ -39,6 +39,7 @@
             <input type="button" id="verify"  value="인증번호 받기" class="verify-btn" required>
         </div>
         <!-- 비밀번호 유효성 검사 결과를 표시 -->
+        <%@ include file="validPwd.jsp" %>
         <p id="password-check" class="feedback hiddenmsg"></p>
         <div class="form-group">
             <label for="c_pwd">비밀번호 <span class="required">*</span></label>
@@ -345,8 +346,6 @@
                 console.log('인증실패:', xhr.responseText);
             }
         });
-        /* ajax 요청이 비동기이므로 기본폼 제출 막기 */
-        return false;
     }
 
     /*------------------------------ 폼 전송 누를때 검사 ------------------------------*/
@@ -356,7 +355,7 @@
         /* 패스워드 유효성검사와, 비밀번호 1, 2가 서로 일치하는지 검사하는 함수를 호출한다 */
         const isPasswordValid = password();
         const isPasswordMatch = passwordmatch();
-
+        console.log(isAuthVerify)
         /* 인증번호 받기 버튼이 disabled 일경우 || 비밀번호 유효성검사가 false일경우 */
         if(!isAuthVerify || !isPasswordValid || !isPasswordMatch){
             /* 회원가입폼 제출 중단 */
@@ -376,40 +375,21 @@
     })
 
     /* email이 공백일경우 */
-    $('#email').on('click', function(){
+    $('#email').on('input', function(){
         let email = $('#email').val().trim();
 
         if(!email){
             $('#auth-check').css('color', 'red').html("이메일을 입력해주세요");
             /* 버튼 비활성화 */
             disableBtn();
-        }
-    })
-
-
-    /* 인증번호 */
-    $('#authCode').on('click', function (){
-        let inputCode = $('#authCode').val().trim();
-
-        if(!inputCode){
-            $('#resultMessage').css('color', 'red').html("인증번호를 입력해주세요");
-            disableBtn();
-        }
-    })
-
-    /* 비밀번호 */
-    $('#c_pwd').on('click', function (){
-        let c_pwd = $('#c_pwd').val().trim();
-
-        if(c_pwd===''){
-            $('#password-check').css('color', 'red').html("비밀번호를 입력해주세요")
-            disableBtn();
+        } else {
+            inableBtn();
         }
     })
 
 
     /* 이름 */
-    $('#c_name').on('click', function(){
+    $('#c_name').on('input', function(){
         let name = $('#c_name').val().trim();
         if(name===""){
             /* input 메시지 띄우기 */
@@ -417,33 +397,36 @@
             disableBtn();
         } else {
             $('#name-check').html("");
+            inableBtn()
         }
     })
 
     /* 닉네임 체크 */
-    $('#c_nick').on('click', function (){
+    $('#c_nick').on('input', function (){
         let nick = $('#c_nick').val().trim();
         if(nick===""){
             $('#nick-check').css('color','red').html('닉네임을 입력해주세요');
             disableBtn();
         } else {
             $('#nick-check').html("");
+            inableBtn()
         }
     })
 
     /* 핸드폰 체크 */
-    $('#c_phn').on('click', function (){
+    $('#c_phn').on('input', function (){
         let phn = $('#c_phn').val().trim();
         if(phn===""){
             $('#phn-check').css('color','red').html('핸드폰번호를 입력해주세요');
             disableBtn();
         } else {
             $('#phn-check').html("");
+            inableBtn()
         }
     })
 
     /* 주소 */
-    $('#c_zip').on('click', function (){
+    $('#c_zip').on('input', function (){
         let c_zip = $('#c_zip').val().trim();
         let c_road_a = $('#c_road_a').val().trim();
         let c_det_a = $('#c_det_a').val().trim();
@@ -452,6 +435,7 @@
             disableBtn();
         } else {
             $('#address-check').html("");
+            inableBtn()
         }
     })
 
