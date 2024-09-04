@@ -6,15 +6,14 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <link href="<c:url value='/css/registerForm.css'/>" type="text/css" rel="stylesheet"/>
+    <link href="<c:url value='/css/signup.css'/>" type="text/css" rel="stylesheet"/>
+
+<%--    <link rel="stylesheet" href="/css/signup.css" />--%>
     <title>Signup</title>
 </head>
 <body>
+<%@ include file="../header.jspf"%>
 <div class="container">
     <h2>회원가입</h2>
     <form action="/signup/add" method="post" class="signup-form">
@@ -40,6 +39,7 @@
             <input type="button" id="verify"  value="인증번호 받기" class="verify-btn" required>
         </div>
         <!-- 비밀번호 유효성 검사 결과를 표시 -->
+        <%@ include file="validPwd.jsp" %>
         <p id="password-check" class="feedback hiddenmsg"></p>
         <div class="form-group">
             <label for="c_pwd">비밀번호 <span class="required">*</span></label>
@@ -64,6 +64,7 @@
             <input type="text" id="c_nick" name="c_nick" required>
         </div>
 
+        <p id="c_birth-check" class="hiddenmsg"></p>
         <div class="form-group">
             <label for="c_birth">생년월일 <span class="required">*</span></label>
             <input type="hidden" id="c_birth" name="c_birth" />
@@ -98,8 +99,9 @@
         </div>
 
         <!-- 주소 입력 부분 시작 -->
+        <p id="address-check" class="hiddenmsg"></p>
         <div class="form-group">
-            <label for="c_zip">주소</label>
+            <label for="c_zip">주소 <span class="required">*</span></label>
             <div class="address-inputs">
                 <div class="zip-search">
                     <input type="text" id="c_zip" name="c_zip" placeholder="우편번호" required>
@@ -111,7 +113,7 @@
             </div>
         </div>
         <!-- 주소 입력 부분 끝 -->
-
+        <p id="finalMsg" class="finalMessage hiddenmsg"></p>
         <button type="submit" class="submit-btn" id="submit-btn">가입하기</button>
     </form>
 </div>
@@ -198,6 +200,25 @@
     })
 
 
+    /* 인증번호받기버튼, 폼전송버튼 비활성화 */
+    function disableBtn(){
+        /* 인증번호 받기 버튼 */
+        let verifyBtn = $('#verify');
+        let submitBtn = $('#submit-btn');
+        verifyBtn.prop('disabled', true);
+        submitBtn.prop('disabled', true);
+    }
+
+    /* 인증번호받기버튼, 폼전송버튼 활성화 */
+    function inableBtn(){
+        /* 인증번호 받기 버튼 */
+        let verifyBtn = $('#verify');
+        let submitBtn = $('#submit-btn');
+        verifyBtn.prop('disabled', false);
+        submitBtn.prop('disabled', false);
+    }
+
+    /*-------------------------- 이메일 중복 체크, 유효성검사 시작 --------------------------*/
     /* 이메일 중복체크 */
     $('#email').on('input', function(){
         emailCheck();
@@ -206,28 +227,14 @@
         emailCheck();
     });
 
-
-
     function emailCheck(){
         /* email과 도메인을 변수에 저장 */
-        let email = document.getElementById("email").value.trim();    //trim(): email의 양쪽 공백을 제거
-        let domain = document.getElementById("domain_list").value;
+        let email = $('#email').val().trim();     //trim(): email의 양쪽 공백을 제거
+        let domain = $('#domain_list').val();
         /* 이메일 유효성검사 메시지 출력 */
-        let authCheck = document.getElementById("auth-check");
-        /* 인증번호 받기 버튼 */
-        let verifyBtn = $('#verify');
-        let submitBtn = $('#submit-btn');
+        let authCheck = $('#auth-check');
 
 
-        /* email이 공백일경우 */
-        if(!email){
-            authCheck.style.color = "red";
-            authCheck.innerHTML = "이메일을 입력해주세요";
-            /* 버튼 비활성화 */
-            verifyBtn.prop('disabled', true);
-            submitBtn.prop('disabled', true);
-            return;
-        }
 
         /* 이메일과 도메인을 합쳐 c_email에 저장 */
         let c_email = document.getElementById("c_email").value= email+domain;
@@ -237,11 +244,9 @@
 
         /* 이메일 패턴이 유효하지 않을 경우 */
         if(!emailPattern.test(c_email)){
-            authCheck.style.color = "red";
-            authCheck.innerHTML = "이메일 형식을 다시 확인해주세요";
+            authCheck.css('color', 'red').html("이메일 형식을 다시 확인해주세요");
             /* 버튼 비활성화 */
-            verifyBtn.prop('disabled', true);
-            submitBtn.prop('disabled', true);
+            disableBtn();
             return;
         }
 
@@ -261,88 +266,28 @@
                 console.log("result: ",result);
                 /* DB에 중복 메일이 없는경우 result는 true */
                 if(result===true){
-                    authCheck.style.color = "green";
-                    authCheck.innerHTML = "인증받기를 진행해주세요.";
+                    authCheck.css('color', 'green').html("인증받기를 진행해주세요");
                     /* 인증번호 받기 버튼 활성화 */
-                    verifyBtn.prop('disabled', false);
-                    submitBtn.prop('disabled', false);
+                    inableBtn()
                 } else {
                     /* DB에 중복 메일이 있는 경우 result는 false */
-                    authCheck.style.color = "red";
-                    authCheck.innerHTML = "이미 사용중인 이메일입니다.";
+                    authCheck.css('color', 'red').html("이미 사용중인 이메일입니다");
                     /* 버튼 비활성화 */
-                    verifyBtn.prop('disabled', true);
-                    submitBtn.prop('disabled', true);
+                    disableBtn();
                 }
             },
             error: function (err){
                 console.log("에러발생", err);
-                authCheck.style.color = "red";
-                authCheck.innerHTML = "서버에 문제가 발생하였습니다.";
+                authCheck.css('color', 'red').html("서버에 문제가 발생하였습니다");
                 /* 버튼 비활성화 */
-                verifyBtn.prop('disabled', true);
-                submitBtn.prop('disabled', true);
+                disableBtn();
             }
         });
     }
 
-    $('#submit-btn').on('click', function (e){
-        let authCheck = document.getElementById("auth-check");
-        let resultMessage = document.getElementById("resultMessage");
-        /* 인증번호 받기 버튼이 disabled 일경우 */
-        if(!$('#verify').prop('disabled') || !isAuthVerify){
-            /* 회원가입폼 제출 중단 */
-            e.preventDefault();
-            if(!$('#verify').prop('disabled')) {
-                authCheck.style.color = "red";
-                authCheck.innerHTML = "이메일을 확인해주세요";
-            }
-            if(!isAuthVerify){
-                resultMessage.style.color = "red";
-                resultMessage.innerHTML = "이메일인증을 완료해주세요";
-            }
-        }
-    })
 
-    /* 비밀번호 유효성검사 */
-    document.getElementById('c_pwd').addEventListener('input', password);
-    document.getElementById('c_pwd_check').addEventListener('input', passwordmatch);
 
-    function password(){
-        const password = document.getElementById('c_pwd').value;
-        const passwordcheck = document.getElementById('password-check');
-
-        // 비밀번호 유효성 검사 (최소 8자, 대문자, 소문자, 숫자, 특수문자 포함)
-        const passwordPattern = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*]).{8,15}$/;
-
-        if (passwordPattern.test(password)) {
-            passwordcheck.style.color = "green";
-            passwordcheck.innerHTML = "비밀번호가 유효합니다.";
-        }else{
-            passwordcheck.style.color = "red";
-            passwordcheck.innerHTML = "패스워드는 8~15자 사이이며, 숫자, 문자, 특수문자를 포함해야 합니다.";
-        }
-    }
-
-    /* 비밀번호가 일치하는지 검사 */
-    function passwordmatch(){
-        /* 비밀번호 입력란 */
-        const password = document.getElementById('c_pwd').value;
-        /* 비밀번호 확인 입력란 */
-        const confirmPassword = document.getElementById('c_pwd_check').value;
-
-        /* 비밀번호 일치여부 메시지 표시 변수 */
-        const checkpasswordmatch = document.getElementById('password-match-check');
-
-        if(password === confirmPassword){
-            checkpasswordmatch.style.color = "green";
-            checkpasswordmatch.innerHTML = "비밀번호가 일치합니다."
-        } else{
-            checkpasswordmatch.style.color = "red";
-            checkpasswordmatch.innerHTML = "비밀번호가 일치하지 않습니다."
-        }
-    }
-
+    /*----------------------------이메일 인증 유효성 시작-----------------------------------*/
     /* 이메일 인증 여부를 확인하는 변수 */
     let isAuthVerify = false;
 
@@ -356,14 +301,21 @@
         $.ajax({
             type:"get",
             url: "/signup/mailAuth?email="+email,
-            success: function(data) {
+            success: function(response) {
                 verify.attr('disabled', true);
-                code = data;
-
+                console.log(response);
+                $('#resultMessage').css('color', 'green').html(response);
                 // 이메일 인증번호 요청 후 인증번호 입력 받기
                 $('#authCode').on('input', function() {
                     authNumber(); // 인증번호 입력 시 검증 함수 호출
                 });
+            },
+            error: function (xhr){
+                /* 인증실패시 */
+                let errorMsg = xhr.responseText;
+                $('#resultMessage').css('color', 'red').html(errorMsg);
+                isAuthVerify=false;
+                console.log('인증실패:', xhr.responseText);
             }
         })
     });
@@ -383,56 +335,107 @@
             data: JSON.stringify({email: email, authCode: inputCode}),
             success: function (response){
                 /* 인증성공시 */
-                $('#resultMessage').html(response);
-                $('#resultMessage').css('color', 'green');
+                $('#resultMessage').css('color', 'green').html(response);
                 isAuthVerify=true;
             },
             error: function (xhr){
                 /* 인증실패시 */
                 let errorMsg = xhr.responseText;
-                $('#resultMessage').html(errorMsg);
-                $('#resultMessage').css('color', 'red');
+                $('#resultMessage').css('color', 'red').html(errorMsg);
                 isAuthVerify=false;
                 console.log('인증실패:', xhr.responseText);
             }
         });
-        /* ajax 요청이 비동기이므로 기본폼 제출 막기 */
-        return false;
     }
+
+    /*------------------------------ 폼 전송 누를때 검사 ------------------------------*/
+    $('#submit-btn').on('click', function (e){
+        let finalMsg = document.getElementById("finalMsg");
+
+        /* 패스워드 유효성검사와, 비밀번호 1, 2가 서로 일치하는지 검사하는 함수를 호출한다 */
+        const isPasswordValid = password();
+        const isPasswordMatch = passwordmatch();
+        console.log(isAuthVerify)
+        /* 인증번호 받기 버튼이 disabled 일경우 || 비밀번호 유효성검사가 false일경우 */
+        if(!isAuthVerify || !isPasswordValid || !isPasswordMatch){
+            /* 회원가입폼 제출 중단 */
+            e.preventDefault();
+            /* 이메일 인증여부가 false 일경우 */
+            if(!isAuthVerify){
+                finalMsg.innerHTML = "이메일 인증을 완료해주세요";
+            }
+            if(!isPasswordValid){
+                finalMsg.innerHTML = "비밀번호를 다시 확인해주세요";
+            }
+            if(!isPasswordMatch){
+                finalMsg.innerHTML = "비밀번호가 일치하지않습니다";
+            }
+
+        }
+    })
+
+    /* email이 공백일경우 */
+    $('#email').on('input', function(){
+        let email = $('#email').val().trim();
+
+        if(!email){
+            $('#auth-check').css('color', 'red').html("이메일을 입력해주세요");
+            /* 버튼 비활성화 */
+            disableBtn();
+        } else {
+            inableBtn();
+        }
+    })
+
 
     /* 이름 */
     $('#c_name').on('input', function(){
-        let name = document.getElementById("c_name").value.trim();
-        let nameCheck = document.getElementById("name-check");
+        let name = $('#c_name').val().trim();
         if(name===""){
-            nameCheck.style.color = "red";
-            nameCheck.innerHTML = "이름을 입력해주세요";
+            /* input 메시지 띄우기 */
+            $('#name-check').css('color','red').html('이름을 입력해주세요');
+            disableBtn();
         } else {
-            nameCheck.innerHTML = "";
+            $('#name-check').html("");
+            inableBtn()
         }
     })
 
     /* 닉네임 체크 */
     $('#c_nick').on('input', function (){
-        let nick = document.getElementById("c_nick").value.trim();
-        let nickCheck = document.getElementById("nick-check");
+        let nick = $('#c_nick').val().trim();
         if(nick===""){
-            nickCheck.style.color = "red";
-            nickCheck.innerHTML = "닉네임을 입력해주세요.";
+            $('#nick-check').css('color','red').html('닉네임을 입력해주세요');
+            disableBtn();
         } else {
-            nickCheck.innerHTML = "";
+            $('#nick-check').html("");
+            inableBtn()
         }
     })
 
     /* 핸드폰 체크 */
     $('#c_phn').on('input', function (){
-        let phn = document.getElementById("c_phn").value.trim();
-        let phnCheck = document.getElementById("phn-check");
+        let phn = $('#c_phn').val().trim();
         if(phn===""){
-            phnCheck.style.color = "red";
-            phnCheck.innerHTML = "핸드폰번호를 입력해주세요.";
+            $('#phn-check').css('color','red').html('핸드폰번호를 입력해주세요');
+            disableBtn();
         } else {
-            phnCheck.innerHTML = "";
+            $('#phn-check').html("");
+            inableBtn()
+        }
+    })
+
+    /* 주소 */
+    $('#c_zip').on('input', function (){
+        let c_zip = $('#c_zip').val().trim();
+        let c_road_a = $('#c_road_a').val().trim();
+        let c_det_a = $('#c_det_a').val().trim();
+        if(c_zip==='' || c_road_a==='' || c_det_a===''){
+            $('#address-check').css('color','red').html('주소를 입력해주세요');
+            disableBtn();
+        } else {
+            $('#address-check').html("");
+            inableBtn()
         }
     })
 

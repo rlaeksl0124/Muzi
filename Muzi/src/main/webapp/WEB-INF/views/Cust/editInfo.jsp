@@ -15,6 +15,7 @@
     <title>회원정보수정</title>
 </head>
 <body>
+<%@ include file="../header.jspf"%>
     <div class="container">
         <h2>회원정보 수정</h2>
         <form action="#" method="post">
@@ -41,16 +42,16 @@
 
             <!-- 비밀번호 유효성 검사 결과를 표시 -->
             <p id="password-check" class="feedback hiddenmsg"></p>
+            <%@ include file="validPwd.jsp" %>
             <div class="form-group">
                 <label for="c_pwd">비밀번호 <span class="required">*</span></label>
-                <input type="password" id="c_pwd" name="c_pwd" required>
-
+                <input type="password" id="c_pwd" name="c_pwd" oninput="password()" required>
             </div>
             <!-- 비밀번호 일치 여부 유효성 검사 메시지를 표시 -->
             <p id="password-match-check" class="feedback hiddenmsg"></p>
             <div class="form-group">
                 <label for="c_pwd_check">비밀번호 확인 <span class="required">*</span></label>
-                <input type="password" id="c_pwd_check" name="c_pwd_check" required>
+                <input type="password" id="c_pwd_check" name="c_pwd_check" oninput="passwordmatch()" required>
 
             </div>
 
@@ -90,6 +91,8 @@
             <button type="submit" class="submit-btn" id="submit-btn">저장하기</button>
         </form>
     </div>
-</body>
+<script>
 
+</script>
+</body>
 </html>

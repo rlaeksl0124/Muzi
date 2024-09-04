@@ -34,7 +34,7 @@ public class MyPage {
             /* email 의 고객정보를 불러오지 못할때 처리 */
         }
 
-        return "mypage";
+        return "Cust/mypage";
     }
 
 

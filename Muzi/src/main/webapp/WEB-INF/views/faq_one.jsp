@@ -150,7 +150,7 @@
                     window.location.href = `/faq`;  // FAQ 목록 페이지로 리다이렉트
                 })
                 .catch(error => {
-                    console.error('Error:', error);  // 콘솔에 오류 출력
+                    console.error('Response:', error);  // 콘솔에 오류 출력
                     alert("오류가 발생했습니다. 다시 시도해 주세요.");  // 사용자에게 오류 메시지 표시
                 });
         }

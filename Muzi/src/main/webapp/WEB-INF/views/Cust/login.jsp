@@ -13,7 +13,17 @@
     <title>login</title>
 </head>
 <body>
+<%-- attr 컨트롤러에서 msg로 전달받은 값이 비어있지 않을때만 코드를 실행 --%>
+<c:if test="${not empty msg}">
+    <script type="text/javascript">
+        var message = "${msg}";
+        alert(message);
+    </script>
+</c:if>
+
+
 <div id="snap-sync-body" class="snap-sync-pc">
+    <%@ include file="../header.jspf"%>
     <div id="snap-sync-wrapper">
         <div class="snap-sync-container">
             <div class="snap-sync-content snap-sync-login-type">
@@ -80,13 +90,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="snap-sync-line2 vertical"></div>
                 <div class="sync-sns-login">
                     <div class="sync-sns-tit">
                         <span>SNS 로그인</span>
                     </div>
                     <div class="sync-sns-buttons btn-type">
-                        <div><button type="button" class="sns-btn sync-sns-naver naver">네이버 계정으로 로그인</button></div>
-                        <div><button type="button" class="sns-btn sync-sns-apple">애플 계정으로 로그인</button></div>
+                        <div class="sns-btn-div"><button type="button" class="sns-btn sync-sns-naver naver">네이버 계정으로 로그인</button></div>
+                        <div class="sns-btn-div"><button type="button" class="sns-btn sync-sns-apple">애플 계정으로 로그인</button></div>
                     </div>
                 </div>
                 <div class="sync-join-button-area">

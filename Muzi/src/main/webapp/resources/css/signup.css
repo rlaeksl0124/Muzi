@@ -230,3 +230,12 @@ select.c_gnd {
     font-size: 12px;
     margin-left: auto;
 }
+
+.finalMessage {
+    color: red;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 10px;
+}

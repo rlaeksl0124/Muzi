@@ -136,7 +136,7 @@ fetch(baseUrl + 'list?page=' + encodeURIComponent(productPage) + '&limit=' + enc
 
         productList.appendChild(table);
     })
-    .catch(error => console.error('Error fetching product list:', error));
+    .catch(error => console.error('Response fetching product list:', error));
 }
 fetchPages(limit)
 getProducts(productPage, limit);
@@ -191,7 +191,7 @@ getProducts(productPage, limit);
                     });
 
                 })
-                .catch(error => console.error('Error fetching pages:', error));
+                .catch(error => console.error('Response fetching pages:', error));
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -201,7 +201,7 @@ getProducts(productPage, limit);
                     const categories = data.dto; // Assuming the JSON structure has `data` field
                     renderCategories(categories, 0, document.getElementById('categoryBar'));
                 })
-                .catch(error => console.error('Error fetching categories:', error));
+                .catch(error => console.error('Response fetching categories:', error));
         });
 
         function renderCategories(categories, parentId, parentElement) {

@@ -28,9 +28,10 @@ public class CustServiceImpl implements CustService, PasswordService {
         return custDto == null;
     }
 
+    /*--------------------------- 회원가입 이메일 인증 시작 ---------------------------*/
     /* 난수 인증번호 생성 */
     @Override
-    public int emailRandom() throws Exception {
+    public int emailRandom() {
         Random random = new Random();
         /* 100,000 ~ 999,999 까지 랜덤난수 생성 */
         return random.nextInt(900000)+100000;
@@ -59,13 +60,15 @@ public class CustServiceImpl implements CustService, PasswordService {
         setMailSend(setFrom, c_email, title, content);
         return String.valueOf(num);
     }
+/*---------------------------- 회원가입 이메일 인증 끝 ----------------------------*/
 
+/*----------------------------- 비밀번호 암호화 시작 -----------------------------*/
 
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     /* 원시 비밀번호를 암호화 한다 */
     @Override
-    public String encodePassword(String rawPassword, String c_email) throws Exception{
+    public String encodePassword(String rawPassword) throws Exception{
         return passwordEncoder.encode(rawPassword);
     };
 
@@ -80,5 +83,8 @@ public class CustServiceImpl implements CustService, PasswordService {
     public boolean needsUpgrade(String encodedPassword) throws Exception {
         return passwordEncoder.upgradeEncoding(encodedPassword);
     };
+
+    /*----------------------------- 비밀번호 암호화 끝 -----------------------------*/
+
 
 }
