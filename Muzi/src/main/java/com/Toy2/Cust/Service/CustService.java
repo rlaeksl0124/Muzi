@@ -12,7 +12,6 @@ public interface CustService {
 
     /* 이메일 양식 */
     String mailsend(String c_email) throws Exception;
-
 }
 
 

@@ -6,6 +6,8 @@ import com.Toy2.Cust.Service.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,12 +22,16 @@ import javax.validation.Valid;
 public class LoginController {
     @Autowired
     CustDao custDao;
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @Autowired
     PasswordService passwordService;
 
     /* 회원가입 */
 
+    /* 미구현목록 리스트 */
+    /* 패스워드는 암호화처리 */
     /* 장기 미로그인 유저 휴먼처리 → 상태코드 변경 */
     /* 고객이 탈퇴할경우 실제로 DB삭제 X → 상태코드만 변경 */
     /* 찜내역 */
@@ -39,8 +45,9 @@ public class LoginController {
 
     /* 로그아웃 처리 */
     @GetMapping("/logout")
-    public String logOut(HttpSession session){
+    public String logOut(HttpSession session) throws Exception {
         session.invalidate();
+        redisTemplate.delete("c_email");
         return "redirect:/";
     }
 
@@ -65,8 +72,18 @@ public class LoginController {
 
             /* 로그인성공시 */
             /* 세션생성 */
+            if (redisTemplate == null) {
+                System.out.println("redisTemplate is null");
+            } else {
+                System.out.println("redisTemplate is initialized");
+            }
+            ValueOperations<String, String> ops = redisTemplate.opsForValue();
+            ops.set("c_email", c_email);
             HttpSession session = request.getSession();
             session.setAttribute("c_email", c_email);
+
+            session.setMaxInactiveInterval(30 * 60);
+            System.out.println("Session ID: " + session.getId());
 
             /* 마지막 로그인일자를 업데이트하는 Dao 호출 */
             custDao.updateLogin(c_email);
