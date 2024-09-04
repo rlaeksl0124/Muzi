@@ -7,10 +7,12 @@ import com.Toy2.product.db.dto.request.ProductPageRequestDto;
 import com.Toy2.product.db.dto.request.ProductUpdateRequestDto;
 import com.Toy2.product.option.db.dao.ProductOptionDao;
 import com.Toy2.product.option.db.dto.ProductOptionDto;
+import com.Toy2.product.option.db.dto.request.OptionRequestDto;
 import com.Toy2.product.productdetail.db.dao.ProductDetailDao;
 import com.Toy2.product.productdetail.db.dto.ProductPictureDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,11 +55,25 @@ public class ProductService {
      * @return int
      * @throws IllegalArgumentException
      */
-    public boolean insertProduct(ProductDto productDto) {
+    public boolean insertProductAndOption(ProductDto productDto) {
         return productDao.insert(productDto);
     }
-    public boolean insertProduct(ProductInsertRequestDto productInsertRequestDto) {
-        return productDao.insert(productInsertRequestDto);
+
+    @Transactional
+    public boolean insertProductAndOption(ProductInsertRequestDto productInsertRequestDto) {
+        System.out.println("ProductService.insertProductAndOption");
+        return productDao.insert(productInsertRequestDto) && insertProductOption(productInsertRequestDto);
+    }
+
+    @Transactional
+    private boolean insertProductOption(ProductInsertRequestDto productInsertRequestDto) {
+        System.out.println("ProductService.insertProductOption");
+        Map<String, List<String>> productOptionData = productInsertRequestDto.getProductOptionData();
+        System.out.println("productInsertRequestDto = " + productInsertRequestDto);
+         return productOptionData.keySet().stream().map(optionName -> productOptionDao
+                .insert(new OptionRequestDto(productInsertRequestDto.getProductNumber(),
+                        optionName, productOptionData.get(optionName), true)))
+                 .allMatch(d -> true);
     }
 
     /**
@@ -65,7 +81,7 @@ public class ProductService {
      * @apiNote 복수개 삽입
      * @TODO: 성공 하다가 중간에 실패하는 경우에 대해 생각해보기
      */
-    public boolean insertProduct(List<ProductDto> productDtos) {
+    public boolean insertProductAndOption(List<ProductDto> productDtos) {
         int inserted = 0;
         for (int i = 0; i < productDtos.size(); i++) {
             productDao.insert(productDtos.get(i));
@@ -146,7 +162,7 @@ public class ProductService {
         return productOptionDao.selectOption(optionNumber);
     }
 
-    public void insertOption(ProductOptionDto productOptionDto) {
-        productOptionDao.insert(productOptionDto);
+    public void insertOption(OptionRequestDto optionRequestDto) {
+        productOptionDao.insert(optionRequestDto);
     }
 }

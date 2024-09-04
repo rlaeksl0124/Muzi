@@ -1,9 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="<c:url value='/css/Headers.css'/>" type="text/css" rel="stylesheet"/>
     <title>FAQ 등록</title>
     <style>
         body {
@@ -56,7 +58,7 @@
         }
         .button-group button {
             padding: 10px 20px;
-            background-color: #007bff;
+            background-color: black;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -64,23 +66,47 @@
             font-size: 16px;
         }
         .button-group button:hover {
-            background-color: #0056b3;
+            background-color: #333;
+        }
+        /* Styles for the category dropdown */
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #f7f7f7;
+            color: #333;
+            margin-top: 5px;
+        }
+        .form-group select optgroup {
+            color: #000;
+            font-weight: bold;
+            background-color: #e7e7e7; /* Light gray background for optgroup */
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .form-group select option {
+            padding: 5px;
+            background-color: #fff; /* White background for options */
+            color: #333;
         }
     </style>
 </head>
 <body>
+<%@ include file="header.jspf" %>
 <div class="container">
     <div class="header">
         <h1>FAQ 등록</h1>
     </div>
 
-    <form id="faqForm" action="${pageContext.request.contextPath}/faq/register" method="POST">
+    <form id="faqForm" action="${pageContext.request.contextPath}/faq/write" method="POST">
         <div class="form-group">
             <label for="faq_title">FAQ 제목</label>
             <input type="text" id="faq_title" name="faq_title" required>
         </div>
 
-        <!-- 드롭다운으로 카테고리 선택 -->
+        <!-- Drop-down for Category Selection -->
         <div class="form-group">
             <label for="cate_no">카테고리 선택</label>
             <select id="cate_no" name="cate_no" required>
@@ -145,11 +171,7 @@
             <label for="faq_content">FAQ 내용</label>
             <textarea id="faq_content" name="faq_content" rows="5" required></textarea>
         </div>
-<%--        <div class="form-group">--%>
-<%--            <label for="faq_closing">FAQ 끝맺음말</label>--%>
-<%--            <p>미입력 시 자동값이 채워집니다.</p>--%>
-<%--            <textarea id="faq_closing" name="faq_closing" rows="3"></textarea>--%>
-<%--        </div>--%>
+
         <div class="form-group">
             <label for="faq_writer">FAQ 작성자</label>
             <input type="text" id="faq_writer" name="faq_writer" required>
@@ -161,19 +183,20 @@
         </div>
 
         <div class="button-group">
-            <button type="submit">등록</button>           <!-- type="submit" : form data를 제출하는 버튼-->
-
+            <button type="submit">등록</button> <!-- Form submit button -->
         </div>
 
     </form>
 </div>
 
 <script>
+    let msg = "${msg}";
+    if (msg == "Submit_Write_ERR") alert("게시글을 등록하는데 실패했습니다. 다시 시도해 주세요.");
+
     document.getElementById('faqForm').addEventListener('submit', function(event) {
         // Get the form elements
         var faqTitle = document.getElementById('faq_title').value;
         var faqWriter = document.getElementById('faq_writer').value;
-        // var faqClosing = document.getElementById('faq_closing').value;
         var faqOrder = document.getElementById('faq_order').value;
 
         // Validate lengths
@@ -188,12 +211,6 @@
             event.preventDefault(); // Prevent form submission
             return;
         }
-
-        // if (faqClosing.length > 100) {
-        //     alert("FAQ 끝맺음말은 100자 이내로 입력해 주세요.");
-        //     event.preventDefault(); // Prevent form submission
-        //     return;
-        // }
 
         if (faqOrder.length > 10) {
             alert("FAQ 순서는 100자 이내로 입력해 주세요.");

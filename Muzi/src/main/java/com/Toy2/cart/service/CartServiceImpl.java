@@ -33,15 +33,8 @@ public class CartServiceImpl implements CartService{
     @Transactional
     public int addCart(CartDto cartDto) throws Exception {
         List<CartDto> check = cartDao.cartSelectAll(cartDto.getCustomerEmail());
-        for (int i = 0; i < check.size(); i++) {
-            if(check.get(i).getCartProductNo() == cartDto.getCartProductNo()) {
-                System.out.println(cartDto.getCartProductCnt());
-                cartDto.setCartProductCnt(cartDto.getCartProductCnt() + 1);
-                cartDto.setCartNo(check.get(i).getCartProductNo());
-                return cartDao.cartUpdate(cartDto.getCartNo(), cartDto);
-            }
-        }
-        return cartDao.cartInsert(cartDto);
+        cartCheck(check, "addCart is Failed");
+        return cartCheck(check, cartDto);
     }
 
     /**
@@ -53,6 +46,7 @@ public class CartServiceImpl implements CartService{
      * 회원의 장바구니 리스트 출력
      */
     @Override
+    @Transactional
     public List<CartDto> getCarts(String customerEmail) throws Exception {
         List<CartDto> emptyCheck = cartDao.cartSelectAll(customerEmail);
         for (CartDto cart : emptyCheck) {
@@ -78,9 +72,7 @@ public class CartServiceImpl implements CartService{
             throw new Exception("cartNo is not empty");
         for (Integer cartNo : cartNos) {
             int removeCheck = cartDao.cartDelete(cartNo);
-            if (removeCheck != 1) {
-                throw new Exception("Failed remove: " + cartNo);
-            }
+            validateResult(removeCheck, "removeCart is Failed" + cartNo);
         }
         return 1;
     }
@@ -97,13 +89,51 @@ public class CartServiceImpl implements CartService{
     @Override
     public int modifyCart(int cartNo, CartDto cartDto) throws Exception {
         int modifyCheck = cartDao.cartUpdate(cartNo, cartDto);
-        if(modifyCheck != 1)
-            throw new Exception("cartModify is not success");
+        validateResult(modifyCheck, "modifyCart is Failed");
         return modifyCheck;
     }
 
     @Override
     public int cartEmailDelete(String email) throws Exception {
-        return cartDao.cartEmailDelete(email);
+        int deleteCheck = cartDao.cartEmailDelete(email);
+        validateResult(deleteCheck, "cartEmailDelete is Failed");
+        return deleteCheck;
     }
+
+    @Override
+    public CartDto getCart(int cartNo) throws Exception {
+        CartDto cartDto = cartDao.cartSelect(cartNo);
+        cartGetValid(cartDto,"getCart is Failed");
+        return cartDao.cartSelect(cartNo);
+    }
+
+    private void cartGetValid(CartDto cartDto, String errorMessage){
+        if((cartDto.equals("")||cartDto==null))
+            throw new NullPointerException(errorMessage);
+    }
+
+
+
+
+
+    private void validateResult(int result, String errorMessage) throws Exception{
+        if(result != 1){
+            throw new Exception(errorMessage);
+        }
+    }
+    private int cartCheck(List<CartDto> check, CartDto cartDto) throws Exception {
+        for (int i = 0; i < check.size(); i++) {
+            if(check.get(i).getCartProductNo() == cartDto.getCartProductNo()) {
+                cartDto.setCartProductCnt(cartDto.getCartProductCnt() + 1);
+                cartDto.setCartNo(check.get(i).getCartProductNo());
+                return cartDao.cartUpdate(cartDto.getCartNo(), cartDto);
+            }
+        }
+        return cartDao.cartInsert(cartDto);
+    }
+    private void cartCheck(List<CartDto> check, String errorMessage){
+        if(check.isEmpty()||check.size()==0)
+            throw new NullPointerException(errorMessage);
+    }
+
 }

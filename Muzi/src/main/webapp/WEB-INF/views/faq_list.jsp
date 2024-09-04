@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Center</title>
+    <title>FAQ 목록 관리</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,14 +29,14 @@
         }
         .header button {
             padding: 10px 20px;
-            background-color: #007bff;
+            background-color: black;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
         .header button:hover {
-            background-color: #0056b3;
+            background-color: black;
         }
         .faq-table {
             width: 100%;
@@ -51,31 +51,37 @@
         .faq-table th {
             background-color: #f2f2f2;
         }
-        .checkbox {
-            text-align: center;
-        }
-
     </style>
-    <link rel="stylesheet" href="/css/Header.css">
+    <link rel="stylesheet" href="/css/Headers.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-<%@ include file="header.jspf"%>
+
+<%@include file="header.jspf"%>
 <div class="container">
     <div class="header">
         <div>
-            <button onclick="location.href='${pageContext.request.contextPath}/faq/register'">FAQ 등록</button>
-<%--            <button type="button" onclick="deleteFaq()">FAQ 삭제</button>--%>
+            <button onclick="location.href='${pageContext.request.contextPath}/faq/write'">FAQ 등록</button>
         </div>
         <div>
-            <span>사용자: <strong>${faq_writer}</strong> 님</span>
-            <button onclick="location.href='logout.jsp'">로그아웃</button>
+            <span>사용자: <strong>${c_email}</strong> 님</span>
+            <button onclick="location.href='/logout'">로그아웃</button>
         </div>
     </div>
+
+    <form action="/faq" class="search-form" method="GET" style="display: flex; gap: 10px; align-items: center;">
+        <select class="search-option" name="option">
+            <option value="A">제목+내용</option>
+            <option value="T">제목만</option>
+        </select>
+        <input type="text" name="keyword" placeholder="검색어를 입력하세요" value="${param.keyword}" style="padding: 5px;">
+        <button type="submit" style="padding: 5px 10px; background-color: black; color: white; border: none; cursor: pointer;">검색</button>
+    </form>
+
 
     <table class="faq-table">
         <thead>
         <tr>
-            <th class="checkbox"><input type="checkbox" onclick="selectAll(this)"></th>
             <th>분류유형</th>
             <th>FAQ 제목</th>
             <th>작성자</th>
@@ -84,10 +90,9 @@
         <tbody>
         <c:forEach var="faqDto" items="${list}">
             <tr>
-                <td class="checkbox"><input type="checkbox" name="faq" value="${faqDto.faq_no}"></td>
                 <td>${faqDto.categoryName}</td>
                 <td class="faq_title">
-                    <a href="${pageContext.request.contextPath}/faq/view?faq_no=${faqDto.faq_no}">
+                    <a href="${pageContext.request.contextPath}/faq/read?faq_no=${faqDto.faq_no}">
                             ${faqDto.faq_title}
                     </a>
                 </td>
@@ -97,14 +102,12 @@
         </tbody>
     </table>
 </div>
-
-<script>
-    function selectAll(source) {
-        const checkboxes = document.getElementsByName('faq');
-        for (let i = 0; i < checkboxes.length; i++) {
-            checkboxes[i].checked = source.checked;
-        }
-    }
-</script>
 </body>
+<script>
+    let msg = "${msg}";
+    if (msg == "No_Grand_ERR") alert("게시글 조회 권한이 없습니다. 로그인 해주세요.");
+    if (msg == "ReadList_ERR") alert("게시글 목록을 가져오는데 실패했습니다. 다시 시도해 주세요.");
+    if (msg == "ReadOne_ERR") alert("게시글을 가져오는데 실패했습니다. 다시 시도해 주세요.");
+    if (msg == "Write_ERR") alert("게시글을 등록 페이지를 로드하는데 실패했습니다. 다시 시도해 주세요.");
+</script>
 </html>

@@ -16,4 +16,6 @@ public interface CartService {
     int modifyCart(int cartNo, CartDto cartDto) throws Exception;
 
     int cartEmailDelete(String email) throws Exception;
+    //장바구니 값
+    CartDto getCart(int cartNo) throws Exception;
 }

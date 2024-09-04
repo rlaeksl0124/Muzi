@@ -1,11 +1,14 @@
 package com.Toy2.Faq.Dao;
 
 import com.Toy2.Faq.Domain.FaqDto;
+import com.Toy2.Faq.Domain.SearchCondition;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /* Bean 등록해야 함 */
 @Repository
@@ -13,7 +16,8 @@ public class FaqDaoImpl implements FaqDao{
 
     @Autowired
     SqlSession session;     /* SqlSession 주입 받기 */
-    String namespace = "com.Toy2.Notice.Dao.FaqMapper.";        /* namespace 저장 */
+//    String namespace = "com.Toy2.Notice.Dao.FaqMapper.";        /* namespace 저장 */
+    String namespace= "com.Toy2.Faq.Dao.FaqDao.";
 
     /* count - 행 개수 셈 */
     @Override
@@ -56,12 +60,34 @@ public class FaqDaoImpl implements FaqDao{
     /* update - FAQ에 등록된 게시글을 수정; 게시글의 번호와 담당자가 같은지 확인 */
     @Override
     public int update(FaqDto faqDto) {
-        System.out.println("Updating FAQ with data: " + faqDto);
+//        System.out.println("Updating FAQ with data: " + faqDto);
         return session.update(namespace + "update", faqDto);
     }
+
 
     @Override
     public int increaseViewCnt(Integer faq_no) {
         return session.update(namespace + "increaseViewCnt", faq_no);
+    }
+
+
+    @Override
+    public String joinCategory(Integer faq_no, Integer cate_no) {
+        Map map = new HashMap();
+        map.put("faq_no", faq_no);
+        map.put("cate_no", cate_no);
+        return session.selectOne(namespace + "joinCategory", faq_no);
+    }
+
+    @Override
+    public int searchResultCnt(SearchCondition sc) {
+        System.out.println("sc in searchResultCnt = " + sc);
+        System.out.println("session = " + session);
+        return session.selectOne(namespace + "searchResultCnt", sc);
+    }
+
+    @Override
+    public List<FaqDto> searchSelected(SearchCondition sc) {
+        return session.selectList(namespace + "searchSelected", sc);
     }
 }

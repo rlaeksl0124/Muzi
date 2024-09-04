@@ -7,6 +7,7 @@
     <title>주문상세목록</title>
 </head>
 <body>
+
 <script type="text/javascript">
     function confirmCancel() {
         return confirm("정말 주문을 취소하시겠습니까?");
@@ -14,6 +15,11 @@
 </script>
 <%@ include file="header.jspf" %>
 <link rel="stylesheet" href="/css/orderDetail.css" />
+<c:if test="${not empty errorMessage}">
+    <script>
+        alert('${errorMessage}');
+    </script>
+</c:if>
 <h2>주문상세 페이지</h2>
 
 <h4>1. 주문상품</h4>
@@ -31,7 +37,11 @@
     <tbody>
     <c:forEach items="${orderDetailList}" var="item">
         <tr>
-            <td>${item.orderDetailProductName}</td>
+            <td>
+                <a href="${pageContext.request.contextPath}/product/detail?productNumber=${item.productNo}">
+                    ${item.orderDetailProductName}
+                </a>
+            </td>
             <td>${item.orderDetailPrice}</td>
             <td>${item.orderDetailCnt}</td>
             <td>${item.orderDetailOption}</td>
@@ -66,12 +76,18 @@
     <p>배송메시지: ${delivery.deliveryMessage}</p>
 <h4>3. 총 결제금액</h4>
     <c:set var="totalProductPrice" value="0" />
+    <c:set var="maxDeliveryCost" value="0" />
     <c:forEach items="${orderDetailList}" var="orderDetail">
         <c:set var="totalProductPrice" value="${totalProductPrice + (orderDetail.orderDetailPrice * orderDetail.orderDetailCnt)}" />
+        <c:choose>
+            <c:when test="${orderDetail.orderDetailDeliveryPrice > maxDeliveryCost}">
+                <c:set var="maxDeliveryCost" value="${orderDetail.orderDetailDeliveryPrice}" />
+            </c:when>
+        </c:choose>
     </c:forEach>
 
     <!-- 총 배송비 계산 -->
-    <c:set var="deliveryCost" value="${totalProductPrice >= 30000 ? 0 : 3000}" />
+    <c:set var="deliveryCost" value="${totalProductPrice >= 30000 ? 0 : maxDeliveryCost}" />
 
     <!-- 총 예상 금액 계산 -->
     <c:set var="totalEstimatedPrice" value="${totalProductPrice + deliveryCost}" />

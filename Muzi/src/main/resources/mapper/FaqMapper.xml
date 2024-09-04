@@ -3,7 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- mapper 태그에 namespace 등록하기 -->
-<mapper namespace="com.Toy2.Notice.Dao.FaqMapper">
+<!--<mapper namespace="com.Toy2.Notice.Dao.FaqMapper">-->
+<mapper namespace="com.Toy2.Faq.Dao.FaqDao">
 
 <!--    보이는 거 관리 하기-->
 
@@ -42,7 +43,8 @@
     <select id="selectAll" resultType="FaqDto">
         SELECT *
         FROM FAQ
-        ORDER BY faq_no ASC;
+        ORDER BY first_reg_date DESC;
+#         ORDER BY faq_no ASC;
     </select>
 
 
@@ -59,28 +61,8 @@
     </select>
 
 
-    <!--    update - FAQ에 등록된 게시글을 수정; 게시글의 번호와 담당자가 맞는지 확인 -->
-    <!--    담당자만 게시글 삭제 가능-->
+    <!--    update - FAQ에 등록된 게시글을 수정; 게시글의 번호 -->
     <!--    parameter : FaqDto, result : 없음-->
-
-    <!-- 로그인 되면 faq_writer, last_mod_id 추가하기
-    <update id="update" parameterType="FaqDto">
-        UPDATE FAQ
-        #  faq_writer, faq_admin은 바꾸지 못함
-        SET cate_no = #{cate_no},
-            faq_order = #{faq_order},
-            is_top = #{is_top},
-            faq_title = #{faq_title},
-            faq_content = #{faq_content},
-            faq_closing = #{faq_closing},
-            faq_att_file = #{faq_att_file},
-            faq_view_cnt = #{faq_view_cnt},
-            last_mod_date = CURRENT_TIMESTAMP,
-            last_mod_id = #{last_mod_id}
-        WHERE faq_no = #{faq_no}
-    </update>
-    -->
-
     <update id="update" parameterType="FaqDto">
         UPDATE FAQ
         #  faq_writer, faq_admin은 바꾸지 못함
@@ -105,6 +87,46 @@
         SET faq_view_cnt = faq_view_cnt + 1
         WHERE faq_no = #{faq_no}
     </update>
+
+
+    <!-- category 이름 보이게 join 해서 가져오기 -->
+    <select id="joinCategory" parameterType="int" resultType="String">
+        SELECT c.cate_name
+        FROM FAQ f
+                 JOIN FAQ_CATE c
+                      ON c.cate_no = f.cate_no
+        WHERE faq_no = #{faq_no};
+    </select>
+
+
+    <!--  searchCondition - 검색 -->
+    <sql id="searchCondition">
+        <choose>
+            <when test='option=="T"'>
+                AND faq_title LIKE concat('%', #{keyword}, '%')
+            </when>
+
+            <when test='option="A"'>
+                AND (faq_title LIKE concat('%', #{keyword},'%')
+                OR faq_content LIKE concat('%', #{keyword}, '%'))
+            </when>
+        </choose>
+    </sql>
+
+    <select id="searchSelected" parameterType="SearchCondition" resultType="FaqDto">
+        SELECT faq_no, faq_title, faq_content, faq_closing
+        FROM FAQ
+        WHERE true
+        <include refid="searchCondition"/>
+        ORDER BY faq_reg_date DESC, faq_no DESC
+    </select>
+
+    <select id="searchResultCnt" parameterType="SearchCondition" resultType="int">
+        SELECT count(*)
+        FROM FAQ
+        WHERE true
+        <include refid="searchCondition"/>
+    </select>
 
 </mapper>
 

@@ -6,16 +6,16 @@
     <!-- ORDER_DETAIL -->
     <!-- 주문에 대한 주문상세 출력 제품번호로 가격과 배송비 입력-->
     <insert id="orderDetailInsert" parameterType="orderDetailDto" useGeneratedKeys="true" keyProperty="orderDetailNo">
-        insert into `toy2`.`ORDER_DELT`
+        insert into `toy2`.`order_delt`
         (or_no, pdt_no, od_cnt, od_pdtname, od_price, od_delv, od_stat_cd, od_option, od_delvinfo, od_date)
         values
         (
             #{orderNo},
             #{productNo},
             #{orderDetailCnt},
-            (select pdt_name from toy2.Product where pdt_no = #{productNo}),
-            (select pdt_price from toy2.Product where pdt_no = #{productNo}),
-            (select delivery_fee from toy2.Product where pdt_no = #{productNo}),
+            (select pdt_name from toy2.product where pdt_no = #{productNo}),
+            (select pdt_price from toy2.product where pdt_no = #{productNo}),
+            (select delivery_fee from toy2.product where pdt_no = #{productNo}),
             "OC1",
             #{orderDetailOption},
             "일반상품",
@@ -24,7 +24,7 @@
     </insert>
     <!-- 주문상세에 대한 주문상태코드 변경 -->
     <update id="orderDetailUpdate" parameterType="map">
-        update ORDER_DELT
+        update order_delt
         set od_stat_cd = #{orderDetailStatus}
         where od_no = #{orderDetailNo}
     </update>
@@ -59,13 +59,12 @@
                od_option,
                od_delvinfo,
                od_date
-        from ORDER_DELT
+        from order_delt
         where or_no = #{orderNo};
     </select>
 
-
     <delete id="orderDetailDeleteAll">
-        delete from ORDER_DELT
+        delete from order_delt
     </delete>
 
     <!-- ORDER -->
@@ -74,7 +73,7 @@
     order insert -> order_detail insert -> order update ->
     order order_detail pdt_no count(*) -> 판매량 -> top10 -->
     <insert id="orderInsert" parameterType="orderDto" useGeneratedKeys="true" keyProperty="orderNo">
-        insert into ORDERS
+        insert into orders
             (c_email)
         values
             (#{customerEmail})
@@ -83,24 +82,24 @@
     <!-- order 이후 order_detail값이 들어오고 update문 실행을 하여 총가격과 총 배송비를 수정
         배송비가 30000원 이상이면 배송비는 0원으로 출력-->
     <update id="orderUpdate" parameterType="int">
-        UPDATE ORDERS o
+        UPDATE orders o
             JOIN (
             SELECT
             or_no,
             SUM(od_price * od_cnt) AS total_price,  -- 가격과 수량을 곱한 값을 합산
             CASE
-            WHEN SUM(od_price * od_cnt) > 30000 THEN 0  -- 곱한 총합이 30000원을 초과하면 배송비 0원
-            ELSE 3000  -- 아니면 3000원
+            WHEN SUM(od_price * od_cnt) >= 30000 THEN 0  -- 곱한 총합이 30000원을 초과하면 배송비 0원
+            ELSE Max(od_delv)  -- 주문상품중에 가장 비싼 배송비
             END AS total_delv
             FROM
-            toy2.ORDER_DELT
+            toy2.order_delt
             GROUP BY
             or_no
             ) od_summary ON o.or_no = od_summary.or_no
             SET
                 o.or_prices = od_summary.total_price,
                 o.or_delvs = od_summary.total_delv
-        WHERE o.or_no =  #{orderNo}
+        WHERE o.or_no = #{orderNo}
     </update>
     <!-- 주문한 리스트들을 출력 총가격, 총배송비, 주문일시  parm : email, result : (map or dto) -->
     <select id="orderList" parameterType="string" resultType="com.Toy2.order.entity.OrderResponseDto">
@@ -120,17 +119,37 @@
             SELECT MIN(od2.od_no)
             FROM order_delt od2
             WHERE od2.or_no = o.or_no
-        );
+        )
     </select>
-
+    <select id="orderListPage" parameterType="map" resultType="com.Toy2.order.entity.OrderResponseDto">
+        SELECT
+            o.or_no,
+            od.od_pdtname,
+            o.or_prices,
+            o.or_delvs,
+            o.or_date
+        FROM
+            orders o,
+            order_delt od
+        WHERE
+            o.or_no = od.or_no and
+            o.c_email = #{customerEmail}
+          AND od.od_no = (
+            SELECT MIN(od2.od_no)
+            FROM order_delt od2
+            WHERE od2.or_no = o.or_no
+        )
+        ORDER BY o.or_no DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
     <delete id="orderDelete">
-        delete from ORDERS
+        delete from orders
     </delete>
 
     <select id="orderCount" parameterType="string" resultType="int">
         select count(*)
         from orders
-        where c_email = #{customerEmail}
+        where c_email = #{customerEmail} and or_prices != 0
     </select>
 
     <select id="orderSelect" parameterType="int" resultType="orderDto">

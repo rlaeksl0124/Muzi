@@ -7,7 +7,7 @@ public class FaqCategory {
     private static final Map<Integer, String> categoryMap = new HashMap<>();
 
     static {
-        // Product Information
+        // 제품정보안내
         categoryMap.put(101, "소파류");
         categoryMap.put(102, "침대류");
         categoryMap.put(103, "테이블류");
@@ -17,7 +17,7 @@ public class FaqCategory {
         categoryMap.put(107, "배송관련");
         categoryMap.put(108, "기타");
 
-        // Membership Benefits/Services
+        // 회원혜택/서비스
         categoryMap.put(201, "L.POINT 회원");
         categoryMap.put(202, "메일매거진");
         categoryMap.put(203, "회원헤택");
@@ -27,12 +27,12 @@ public class FaqCategory {
         categoryMap.put(207, "L.POINT");
         categoryMap.put(208, "카탈로그");
 
-        // Member Information
+        // 회원정보
         categoryMap.put(301, "정보변경");
         categoryMap.put(302, "아이디/비밀번호");
         categoryMap.put(303, "탈퇴");
 
-        // Order/Payment Methods
+        // 주문/결제 방법
         categoryMap.put(401, "주문 방법 및 확인");
         categoryMap.put(402, "대량구매");
         categoryMap.put(403, "주문 내용 변경");
@@ -41,21 +41,21 @@ public class FaqCategory {
         categoryMap.put(406, "결제수단");
         categoryMap.put(407, "소량재고");
 
-        // Cancellation/Exchange/Return
+        // 취소/교환/반품
         categoryMap.put(501, "반품");
         categoryMap.put(502, "주문취소");
         categoryMap.put(503, "교환/AS방법");
 
-        // Delivery Related
+        // 배송관련
         categoryMap.put(601, "배송확인/기간");
         categoryMap.put(602, "배송지변경");
         categoryMap.put(603, "배송기간");
 
-        // Receipt
+        // 영수증
         categoryMap.put(701, "현금영수증");
         categoryMap.put(702, "신용카드 매출전표");
 
-        // Site Usage Inquiries
+        // 사이트 이용문의
         categoryMap.put(801, "PC문제해결/오류");
         categoryMap.put(802, "MUJI 고객센터 이용 안내");
     }

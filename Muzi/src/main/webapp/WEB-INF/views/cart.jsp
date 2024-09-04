@@ -5,11 +5,19 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/cart.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery 사용 -->
     <title>장바구니</title>
+    <script>
+        window.onload = function() {
+            var ex = "${ex}";
+            if (ex) {
+                alert(ex);
+            }
+        }
+    </script>
 </head>
 
 <body>
 <%@ include file="header.jspf" %>
-<link rel="stylesheet" href="/css/cart.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/cart.css" />
 <h2>장바구니 페이지</h2>
 <form id="cartForm" method="post">
     <table>
@@ -32,7 +40,10 @@
                     <input type="checkbox" name="cartNo" value="${item.cartNo}" class="selectItem">
                 </td>
                 <td>
-                        ${item.cartProductName} <!-- 제품 이름 출력 -->
+                    <a href="${pageContext.request.contextPath}/product/detail?productNumber=${item.cartProductNo}">
+                        ${item.cartProductName}
+                    </a>
+                         <!-- 제품 이름 출력 -->
                     <input type="hidden" name="productNo" value="${item.cartProductNo}">
                 </td>
                 <td>
@@ -40,7 +51,8 @@
                         ${item.cartProductPrice}
                 </td>
                 <td>
-                    <input type="number" name="productCnt_${item.cartNo}" value="${item.cartProductCnt}" id="productCnt_${item.cartNo}" min="1">
+                    <input type="number" name="productCnt_${item.cartNo}" value="${item.cartProductCnt}"
+                           id="productCnt_${item.cartNo}" min="1" oninput="checkValue(this)">
                     <input type="hidden" name="productCnt" value="${item.cartProductCnt}" id="productCnt_${item.cartNo}" min="1">
                 </td>
                 <td>
@@ -66,11 +78,10 @@
         </c:forEach>
         </tbody>
     </table>
-
+    <input type="hidden" id="orderType" name="orderType" value="장바구니구매">
     <button type="button" onclick="removeSelectedItems('${pageContext.request.contextPath}/cart/remove')">선택삭제</button>
     <button type="button" onclick="submitForm('${pageContext.request.contextPath}/cart/order')">주문하기</button>
 </form>
-
 <script>
     // 전체 선택/해제 기능
     $("#selectAll").click(function() {
@@ -95,12 +106,27 @@
         $("#cartForm").attr("action", actionUrl);
         $("#cartForm").submit();
     }
+
     function submitForm(actionUrl) {
+        // 선택되지 않은 항목을 모두 제거
+        $(".selectItem:not(:checked)").each(function() {
+            // 체크되지 않은 항목의 행(row)을 찾아서 그 안의 input 요소를 모두 제거합니다.
+            $(this).closest("tr").find("input").remove();
+        });
+
+        // 체크된 항목이 없을 경우 경고 메시지를 표시하고 폼 제출 중단
+        if ($(".selectItem:checked").length === 0) {
+            alert("주문할 항목을 선택해주세요.");
+            return;
+        }
+
         // 폼의 액션 설정 후 제출
         $("#cartForm").attr("action", actionUrl);
         $("#cartForm").submit();
     }
+
     function modifyCart(cartNo) {
+
         // 기존의 hidden 필드 제거
         $("#cartForm input[name='cartNo']").remove();
         $("#cartForm input[name='productCnt']").remove();
@@ -122,7 +148,15 @@
 
         $("#cartForm").attr("action", "/cart/modify");
         $("#cartForm").submit();
+        alert("수량수정완료")
     }
+    function checkValue(input) {
+        if (input.value < 1) {
+            alert("0이하는 불가능합니다.")
+            input.value = 1;  // 만약 값이 1보다 작다면 1로 설정
+        }
+    }
+
 </script>
 </body>
 </html>

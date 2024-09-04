@@ -84,8 +84,6 @@ public class ProductController {
     @PostMapping("/product/add-product")
     @ResponseBody
     public boolean submitProduct(@RequestBody ProductInsertRequestDto productInsertRequestDto) {
-        System.out.println("productDto = " + productInsertRequestDto);
-        return productService.insertProduct(productInsertRequestDto);
+        return productService.insertProductAndOption(productInsertRequestDto);
     }
-
 }

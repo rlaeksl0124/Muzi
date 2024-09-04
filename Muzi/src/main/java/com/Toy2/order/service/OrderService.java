@@ -6,6 +6,7 @@ import com.Toy2.order.entity.OrderDto;
 import com.Toy2.order.entity.OrderResponseDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderService {
     int addOrder(OrderDto orderDto, List<OrderDetailDto> orderDetailList, DeliveryDto deliveryDto) throws Exception;
@@ -14,4 +15,6 @@ public interface OrderService {
     int updateOrderDetail(int orderDetailNo, String orderDetailStatus) throws Exception;
     DeliveryDto getDeliveryList(int orderNo) throws Exception;
     int addDelivery(DeliveryDto deliveryDto) throws Exception;
+    List<OrderResponseDto> getOrderListPage(Map map) throws Exception;
+    int orderCnt(String customerEmail) throws Exception;
 }

@@ -67,6 +67,8 @@
             background-color: #0056b3;
         }
     </style>
+    <link rel="stylesheet" href="/css/Headers.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -169,6 +171,11 @@
 </div>
 
 <script>
+    let msg = "${msg}";
+    if (msg == "Modify_ERR") alert("게시글을 수정하는데 실패했습니다. 다시 시도해 주세요.");
+    if (msg == "Not_Admin_ERR") alert("게시글 수정 권한이 없습니다.");
+    if (msg == "Not_Writer_ERR") alert("게시글 수정 권한이 없습니다.");
+
     document.getElementById('faqForm').addEventListener('submit', function(event) {
         // Get the form elements
         var faqTitle = document.getElementById('faq_title').value;

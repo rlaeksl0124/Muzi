@@ -20,16 +20,17 @@
     </select>
 
     <!--상품 삽입-->
-    <insert id="insertProduct" parameterType="ProductDto">
+    <insert id="insertProduct" parameterType="ProductDto" useGeneratedKeys="true" keyProperty="productNumber">
         INSERT INTO product
-        (pdt_price, pdt_name, new_item, pst_status
-        , discountable, pdt_amount, notice, delivery_fee, pdt_private)
+        (pdt_price, pdt_name, new_item
+        , discountable, notice, delivery_fee, pdt_private)
         VALUES(#{productPrice},
         #{productName}, #{newItem},
-        #{postingStatus}, #{discountable},
-        #{productAmount}, #{notice}, #{deliveryFee}, #{privateProduct})
+        #{discountable},
+        #{notice}, #{deliveryFee}, #{privateProduct})
     </insert>
-    <insert id="insertProduct2" parameterType="ProductInsertRequestDto">
+
+    <insert id="insertProduct2" parameterType="ProductInsertRequestDto" useGeneratedKeys="true" keyProperty="productNumber">
         INSERT INTO product
         (pdt_price, pdt_name, new_item, pst_status
         , discountable, notice, delivery_fee, pdt_private)

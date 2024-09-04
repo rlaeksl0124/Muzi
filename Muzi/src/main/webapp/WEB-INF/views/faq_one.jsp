@@ -66,25 +66,27 @@
         }
         .back-button, .edit-button, .delete-button {
             padding: 10px 20px;
-            background-color: #007bff;
+            background-color: black;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
         .back-button:hover, .edit-button:hover, .delete-button:hover {
-            background-color: #0056b3;
+            background-color: black;
         }
         .edit-button {
             margin-right: 10px; /* Space between edit and delete buttons */
         }
         .delete-button {
-            background-color: #dc3545;
+            background-color: black;
         }
         .delete-button:hover {
-            background-color: #c82333;
+            background-color: black;
         }
     </style>
+    <link rel="stylesheet" href="webapp/resources/css/Headers.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 
@@ -127,6 +129,10 @@
 
 <%-- JavaScript로 작성한 코드 --%>
 <script>
+    let msg = "${msg}";
+    ;if (msg == "No_Grant_ERR") alert("게시글 조회 권한이 없습니다. 로그인 해주세요.");
+    if (msg == "Delete_ERR") alert("게시글을 삭제하는데 실패했습니다. 다시 시도해 주세요.");
+
     function deleteFaq(faq_no) {
         if (confirm("FAQ를 삭제하시겠습니까?")) {
             fetch(`/faq/remove?faq_no=${faqDto.faq_no}`, {
@@ -150,11 +156,6 @@
         }
     }
 </script>
-​
-
-
-
-
 
 </body>
 </html>

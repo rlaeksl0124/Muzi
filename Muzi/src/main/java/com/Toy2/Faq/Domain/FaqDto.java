@@ -44,6 +44,7 @@ public class FaqDto {
         this.faq_content = faq_content;
 
         /* DEFAULT 값 추가 */
+        this.categoryName = "";
         this.faq_writer = "test";
         this.faq_closing = "*답변이 충분하지 않으셨다면 1:1 상담을 이용해주세요.";
         this.faq_att_file = null;           // NULL로 설정
@@ -163,7 +164,7 @@ public class FaqDto {
         return faq_view_cnt;
     }
 
-    public void setView_cnt(int faq_view_cnt) {
+    public void setFaq_View_cnt(int faq_view_cnt) {
         this.faq_view_cnt = faq_view_cnt;
     }
 

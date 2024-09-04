@@ -7,8 +7,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository("DeliveryDto")
 public class DeliveryDaoImpl implements DeliveryDao{
-    @Autowired
     private SqlSession session;
+    @Autowired
+    public DeliveryDaoImpl(SqlSession session){
+        this.session = session;
+    }
+
     private static String namespace = "order.dao.DeliveryDao.";
 
     @Override

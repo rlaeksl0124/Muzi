@@ -7,11 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository("OrderDto")
 public class OrderDaoImpl implements OrderDao{
-    @Autowired
     private SqlSession session;
+    @Autowired
+    public OrderDaoImpl(SqlSession session){
+        this.session = session;
+    }
 
     private static String namespace = "cart.dao.OrderDao.";
 
@@ -43,5 +47,10 @@ public class OrderDaoImpl implements OrderDao{
     @Override
     public OrderDto orderSelect(int orderNo) throws Exception {
         return session.selectOne(namespace + "orderSelect", orderNo);
+    }
+
+    @Override
+    public List<OrderResponseDto> orderListPage(Map map) throws Exception {
+        return session.selectList(namespace + "orderListPage", map);
     }
 }

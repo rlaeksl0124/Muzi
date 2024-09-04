@@ -1,6 +1,5 @@
-package com.Toy2.Notice.Dao;
+package com.Toy2.Faq.Dao;
 
-import com.Toy2.Faq.Dao.FaqDao;
 import com.Toy2.Faq.Domain.FaqDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -154,49 +153,6 @@ public class FaqDaoImplTest {
         assertTrue(faqDao.delete(faq_no) == 1);
         assertTrue(faqDao.count() == 0);        /* 삭제했으니 행 0개*/
     }
-
-    @Test
-    public void deleteTest3() {
-        // Step 1: Clear the table
-        faqDao.deleteAll();
-        assertTrue(faqDao.count() == 0); // Ensure table is empty
-
-        // Step 2: Add a new FAQ
-        FaqDto faqDto = new FaqDto(111, 1, 'Y',
-                "The shelf does not fit properly when assembling the SUS SET product.",
-                "If the shelf is difficult to insert, gently tap the top of the shelf to insert the shelf. " +
-                        "If it still doesn’t fit, loosen the hook little by little to make it easier to insert. " +
-                        "More details can be found in the video link.\n" +
-                        "[Related video] https://www.muji.com/kr/mp4_file/sus_assmbly.mp4"
-        );
-        assertTrue(faqDao.insert(faqDto) == 1);     /* 추가되는 행은 1개*/
-
-        // Step 3: Verify the insertion
-        List<FaqDto> allFaqs = faqDao.selectAll();
-        assertFalse(allFaqs.isEmpty()); // Ensure we have some FAQs
-        Integer faq_no = allFaqs.get(0).getFaq_no(); // Get the generated faq_no
-        assertNotNull(faq_no); // Verify the faq_no is not null
-
-        // Step 4: Delete the FAQ
-        assertTrue(faqDao.delete(faq_no) == 1); // Delete the FAQ by its faq_no
-        assertTrue(faqDao.count() == 0); // Ensure the table is empty after deletion
-
-        // Step 5: Re-insert the FAQ
-        faqDto.setFaq_no(null);             // Ensure a new faq_no will be generated
-        assertTrue(faqDao.insert(faqDto) == 1); // Re-insert the FAQ
-
-        // Step 6: Verify re-insertion
-        allFaqs = faqDao.selectAll();
-        assertFalse(allFaqs.isEmpty()); // Ensure the FAQ is inserted again
-        Integer faq_no2 = allFaqs.get(0).getFaq_no(); // Get the new generated faq_no
-        assertNotNull(faq_no2); // Verify the new faq_no is not null
-
-        // Step 7: Attempt to delete the re-inserted FAQ
-        assertTrue(faqDao.delete(faq_no2) == 1); // Delete the FAQ
-        assertTrue(faqDao.count() == 0); // Ensure the table is empty after deletion
-    }
-
-
 
 
     // insertTest1 - FAQ 게시글 추가
@@ -414,22 +370,40 @@ public class FaqDaoImplTest {
         }
     }
 
-//    @Test
-//    public void increaseViewCnt(){
-//        faqDao.deleteAll();     /* 테이블 비우기 */
-//        assertTrue(faqDao.count() == 0);
-//
-//        FaqDto faqDto = new FaqDto(104, 1, 'Y', "title" ,"content");
-//        assertTrue(faqDao.insert(faqDto) == 1);
-//        Integer faq_no = faqDao.selectAll().get(0).getFaq_no();
-//        assertTrue(faqDao.count() == 1);
-//
-//        // 조회수가 올라가는 건 읽을 때 == select할 때 (selectAll은 관리자를 위한 거)
-//        faqDto = faqDao.select(faq_no);
-//        assertTrue(faqDao.increaseViewCnt(faq_no) == 1);
-//        System.out.println(faqDto.getFaq_view_cnt());
-//        assertTrue(faqDto.getFaq_view_cnt() == 1);
-//    }
 
-    // 테이블에 없는 값으로 변경 faqDto.setCate_no(0);
+    // increaseViewCnt - 조회수 올라가는지 테스트
+    @Test
+    public void increaseViewCnt(){
+        faqDao.deleteAll();     /* 테이블 비우기 */
+        assertTrue(faqDao.count() == 0);           // 테이블 행 0개 확인
+
+        FaqDto faqDto = new FaqDto(104, 1, 'Y', "Title1" ,"Content1");      // FaqDto 객체 선언 및 정의
+        assertTrue(faqDao.insert(faqDto) == 1);         // faqDto DB에 추가
+        assertTrue(faqDao.count() == 1);                // 추가되는 행은 1개
+
+        // 조회수가 올라가는 건 읽을 때 == select, selectAll으로 호출할 때
+        Integer faq_no = faqDao.selectAll().get(0).getFaq_no();             // faqDao 조회해서 faq_no 가져와서 저장
+        assertTrue(faqDao.increaseViewCnt(faq_no) == 1);           // faqDao의 조회수를 올리기 - 조회수 올라가는 행은 1개
+
+        faqDto = faqDao.select(faq_no);                                     // DB에서 faq_no에 해당하는 값을 가져와서 faqDto에 저장
+        assertTrue(faqDto != null);                                // DB에서 가져와서 저장한 객체는 null이 아님
+        assertTrue(faqDao.increaseViewCnt(faq_no) == 1);           // faqDao의 조회수를 올리기 - 조회수 올라가는 행은 1개
+        assertTrue(faqDao.select(faq_no).getFaq_view_cnt() == 2);           // faqDao를
+    }
+
+    // joinCategoryTest - faqDto의 카테고리 이름을 FaqDao의 joinCategory 메서드로 설정하는지 확인
+    @Test
+    public void joinCategoryTest(){
+        faqDao.deleteAll();     // 테이블 비우기
+        assertTrue(faqDao.count() == 0);        // 행 0개
+
+        FaqDto faqDto = new FaqDto(102, 3, 'Y', "Title1","Content1");
+        assertTrue(faqDao.insert(faqDto) == 1);         // 데이터 추가하는 행 1개
+        Integer faq_no = faqDao.selectAll().get(0).getFaq_no();     // 등록한 FaqDto의 faq_no 저장
+        Integer cate_no = faqDao.selectAll().get(0).getCate_no();
+
+        System.out.println(faqDao.joinCategory(faq_no, cate_no));       // cate_no에 대응하는 카테고리 이름 "침대류" 출력되어야 함
+        assertTrue(faqDao.joinCategory(faq_no, cate_no).equals("침대류"));
+    }
+
 }

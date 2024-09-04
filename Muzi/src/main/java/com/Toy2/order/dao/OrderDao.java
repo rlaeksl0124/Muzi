@@ -4,6 +4,7 @@ import com.Toy2.order.entity.OrderDto;
 import com.Toy2.order.entity.OrderResponseDto;
 
 import java.util.List;
+import java.util.Map;
 
 /*
     orderInsert : 주문상세가 들어오기전에 insert 하여서 공간을 만들고
@@ -16,4 +17,5 @@ public interface OrderDao {
     int orderDelete() throws Exception;
     int orderCount(String customerEmail) throws Exception;
     OrderDto orderSelect (int orderNo) throws Exception;
+    List<OrderResponseDto> orderListPage(Map map) throws Exception;
 }

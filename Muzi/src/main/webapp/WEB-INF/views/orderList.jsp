@@ -42,7 +42,23 @@
         </tr>
     </c:forEach>
     </tbody>
+
+
 </table>
+<br>
+<div class="pagination">
+    <c:if test="${ph.showPre}">
+        <a href="/orders/orderList?page=1&cd=${cd}"><<</a>
+        <a href="/orders/orderList?page=${ph.beginPage-1}"><</a>
+    </c:if>
+    <c:forEach var="page" begin="${ph.beginPage-1}" end="${ph.endPage}">
+        <a href="/orders/orderList?page=${page}">${page+1}</a>
+    </c:forEach>
+    <c:if test="${ph.showNext}">
+        <a href="/orders/orderList?page=${ph.endPage+1}">></a>
+        <a href="/orders/orderList?page=${ph.totalPage}">>></a>
+    </c:if>
+</div>
 
 <script>
     function submitOrderForm(orderNo) {

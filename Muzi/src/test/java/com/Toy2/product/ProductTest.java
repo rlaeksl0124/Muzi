@@ -74,7 +74,6 @@ public class ProductTest {
     public void productInsertTest() {
         ProductDto build = new ProductDto.Builder()
 //                .productNumber((int) (Math.random()*100000000))
-                .productNumber(999999997)
                 .productName("테스트 상품")
                 .productPrice(10000)
                 .postingStatus(true)
@@ -188,4 +187,7 @@ public class ProductTest {
         assertThat(productDtos).isNotNull();
         System.out.println("productDtos = " + productDtos);
     }
+
+
+
 }
