@@ -114,7 +114,7 @@ public class LoginController {
 
 
     /* admin 계정 로그인 */
-    @Value("#{properties['admin.password']}")
+    @Value("#{confidential['admin.password']}")
     private String adminPwd;
     private boolean adminLogin(String c_pwd){
 

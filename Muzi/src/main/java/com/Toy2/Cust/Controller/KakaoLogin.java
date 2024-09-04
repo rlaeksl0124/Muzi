@@ -32,11 +32,11 @@ import java.util.Map;
 public class KakaoLogin {
     
     /* propertise파일에 api key 가져오기 */
-    @Value("#{properties['kakao.api_key']}") //confidential.properties에 저장된 키 가져오기
+    @Value("#{confidential['kakao.api_key']}") //confidential.properties에 저장된 키 가져오기
     private String kakaoApiKey;
     
     /* properties파일에 callback주소 url 가져오기 */
-    @Value("#{properties['kakao.redirect_uri']}")
+    @Value("#{confidential['kakao.redirect_uri']}")
     private String kakaoRedirectUri;
 
     @Autowired
