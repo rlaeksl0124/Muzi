@@ -204,6 +204,7 @@ public class FaqController {
             }
 
             model.addAttribute("faqList", faqList);
+            System.out.println(faqList);
             return "faq_cust_list";                 // faq_cust_list.jsp 화면
         } catch (Exception e) {
             e.printStackTrace();
