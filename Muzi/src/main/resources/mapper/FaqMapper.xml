@@ -49,7 +49,7 @@
 
 
     <sql id="selectFromFaq">
-        SELECT faq_no, cate_no, faq_order, faq_title, faq_content, faq_closing, FAQ.faq_writer, faq_att_file, faq_reg_date, faq_view_cnt
+        SELECT faq_no, cate_no, faq_order, faq_title, faq_content, faq_closing, faq_writer, faq_att_file, faq_reg_date, faq_view_cnt
         FROM faq
     </sql>
 
