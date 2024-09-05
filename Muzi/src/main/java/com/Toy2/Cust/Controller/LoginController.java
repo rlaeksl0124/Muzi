@@ -8,13 +8,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 @Controller
 public class LoginController {
@@ -129,7 +127,6 @@ public class LoginController {
                 admin.setC_pwd(hashPwd);
                 custDao.updateCust(admin);
             }
-
 
             /* 암호화된 pwd가 DB와 일치한지 확인 */
             boolean isAdminMatch = passwordService.checkPassword(c_pwd, admin.getC_pwd());
