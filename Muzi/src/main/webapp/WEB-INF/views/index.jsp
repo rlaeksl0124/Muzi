@@ -108,7 +108,7 @@
         <div id="container"></div>
 
     </div>
-    <form class="input-form" action="http://127.0.0.1:5000/" method="POST">
+    <form class="input-form" action="http://127.0.0.1:5000/notice" method="POST">
         <input type="hidden" name="user_email" value="${sessionScope.c_email}"/>
         <input type="text" name="user_input" placeholder="채팅을 입력하세요:" required />
         <button type="submit">전송</button>

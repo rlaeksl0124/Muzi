@@ -3,74 +3,74 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="dao.Notice.NoticeDao">
-    <!--    insert 테스트를 위한 전체 테이블 삭제-->
-<!--    <delete id="deleteAll">-->
-<!--        delete from Notice;-->
-<!--    </delete>-->
+<!--        insert 테스트를 위한 전체 테이블 삭제-->
+    <delete id="deleteAll">
+        delete from Notice;
+    </delete>
 
-<!--    &lt;!&ndash; 테스트를 위한 시퀀스 초기화를&ndash;&gt;-->
-<!--    <update id="autoIncreasereset">-->
-<!--        ALTER TABLE Notice auto_increment=1;-->
-<!--    </update>-->
+    <!-- 테스트를 위한 시퀀스 초기화를-->
+    <update id="autoIncreasereset">
+        ALTER TABLE Notice auto_increment=1;
+    </update>
 
-<!--    &lt;!&ndash;    전체 게시글 조회 및 페이지 핸들링 을 위한 카운트&ndash;&gt;-->
-<!--    <select id="count" resultType="int">-->
-<!--        SELECT count(*) FROM Notice-->
-<!--        where n_state = 'Y'-->
-<!--    </select>-->
+    <!--    전체 게시글 조회 및 페이지 핸들링 을 위한 카운트-->
+    <select id="count" resultType="int">
+        SELECT count(*) FROM Notice
+        where n_state = 'Y'
+    </select>
 
-<!--    &lt;!&ndash;게시글 등록&ndash;&gt;-->
-<!--    <insert id="insertNotice" parameterType="NoticeDto">-->
-<!--        insert into Notice(n_title,n_contents,n_createDate,c_email, frst_reg_id, last_mod_id)-->
-<!--        values (#{n_title},#{n_contents}, #{n_createDate} ,#{c_email}, #{frst_reg_id}, #{last_mod_id});-->
-<!--    </insert>-->
+    <!--게시글 등록-->
+    <insert id="insertNotice" parameterType="NoticeDto">
+        insert into Notice(n_title,n_contents,n_createDate,c_email, frst_reg_id, last_mod_id)
+        values (#{n_title},#{n_contents}, #{n_createDate} ,#{c_email}, #{frst_reg_id}, #{last_mod_id});
+    </insert>
 
-<!--    &lt;!&ndash; 패이지 핸들러로 목록 조회   &ndash;&gt;-->
-<!--    <select id="selectPage" parameterType="pageHandler" resultType="NoticeDto">-->
-<!--        select * from Notice-->
-<!--        where n_state = 'Y'-->
-<!--        order by n_order desc, notice_no desc-->
-<!--        limit #{pageSize} offset #{offset};-->
-<!--    </select>-->
+    <!-- 패이지 핸들러로 목록 조회   -->
+    <select id="selectPage" parameterType="pageHandler" resultType="NoticeDto">
+        select * from Notice
+        where n_state = 'Y'
+        order by n_order desc, notice_no desc
+        limit #{pageSize} offset #{offset};
+    </select>
 
-<!--    &lt;!&ndash;아이디로 게시글 하나 조회&ndash;&gt;-->
-<!--    <select id="selectNoticeById" parameterType="int" resultType="NoticeDto">-->
-<!--        select * from Notice-->
-<!--        where notice_no = #{notice_no};-->
-<!--    </select>-->
-<!--    &lt;!&ndash;테스트를 위해 아이디로 삭제 &ndash;&gt;-->
-<!--    <delete id="deleteById" parameterType="int">-->
-<!--        delete from Notice-->
-<!--        where notice_no = #{notice_no};-->
-<!--    </delete>-->
+    <!--아이디로 게시글 하나 조회-->
+    <select id="selectNoticeById" parameterType="int" resultType="NoticeDto">
+        select * from Notice
+        where notice_no = #{notice_no};
+    </select>
+    <!--테스트를 위해 아이디로 삭제 -->
+    <delete id="deleteById" parameterType="int">
+        delete from Notice
+        where notice_no = #{notice_no};
+    </delete>
 
-<!--    &lt;!&ndash;게시글 정보 업데이트 &ndash;&gt;-->
-<!--    <update id="updateContents" parameterType="NoticeDto">-->
-<!--        update Notice-->
-<!--        set n_title = #{n_title},-->
-<!--            n_contents = #{n_contents},-->
-<!--            n_createDate = #{n_createDate} ,-->
-<!--            c_email = #{c_email},-->
-<!--            last_mod_id = #{last_mod_id},-->
-<!--            last_mod_dt = #{last_mod_dt}-->
-<!--        where notice_no = #{notice_no};-->
-<!--    </update>-->
+    <!--게시글 정보 업데이트 -->
+    <update id="updateContents" parameterType="NoticeDto">
+        update Notice
+        set n_title = #{n_title},
+            n_contents = #{n_contents},
+            n_createDate = #{n_createDate} ,
+            c_email = #{c_email},
+            last_mod_id = #{last_mod_id},
+            last_mod_dt = #{last_mod_dt}
+        where notice_no = #{notice_no};
+    </update>
 
-<!--    &lt;!&ndash;실제 사용되는 상태로 삭제 관리 &ndash;&gt;-->
-<!--    <update id="updateState" parameterType="NoticeDto">-->
-<!--        update Notice-->
-<!--        set n_state = #{n_state},-->
-<!--        last_mod_id = #{last_mod_id},-->
-<!--        last_mod_dt = #{last_mod_dt}-->
-<!--        where notice_no = #{notice_no};-->
-<!--    </update>-->
-<!--    &lt;!&ndash; 게시글 순서 임의 조정 상태 관리하기 위한 업데이트  0-3번으로 관리 되고 0은 일반값 1-3은 3번이 가장 상단으로 정렬된다-->
-<!--        1-3 번은 중복이 들어가지 않도록 트리거로 관리 &ndash;&gt;-->
-<!--    <update id="updateN_order" parameterType="NoticeDto">-->
-<!--        UPDATE Notice-->
-<!--        SET n_order = #{n_order},-->
-<!--        last_mod_id = #{last_mod_id},-->
-<!--        last_mod_dt = #{last_mod_dt}-->
-<!--        WHERE notice_no = #{notice_no};-->
-<!--    </update>-->
+    <!--실제 사용되는 상태로 삭제 관리 -->
+    <update id="updateState" parameterType="NoticeDto">
+        update Notice
+        set n_state = #{n_state},
+        last_mod_id = #{last_mod_id},
+        last_mod_dt = #{last_mod_dt}
+        where notice_no = #{notice_no};
+    </update>
+    <!-- 게시글 순서 임의 조정 상태 관리하기 위한 업데이트  0-3번으로 관리 되고 0은 일반값 1-3은 3번이 가장 상단으로 정렬된다
+        1-3 번은 중복이 들어가지 않도록 트리거로 관리 -->
+    <update id="updateN_order" parameterType="NoticeDto">
+        UPDATE Notice
+        SET n_order = #{n_order},
+        last_mod_id = #{last_mod_id},
+        last_mod_dt = #{last_mod_dt}
+        WHERE notice_no = #{notice_no};
+    </update>
 </mapper>
