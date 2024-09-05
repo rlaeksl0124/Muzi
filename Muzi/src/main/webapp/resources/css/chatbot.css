@@ -1,0 +1,104 @@
+/* 기본 모달창 스타일 */
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    height: 500px;
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* 채팅창 헤더 */
+.chatbot-header {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 카테고리 제목 표시 */
+.chatbot-category {
+    font-size: 14px;
+    padding-left: 10px;
+}
+
+/* 닫기 버튼 */
+.close-btn {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    color: white;
+}
+
+/* 채팅 메시지를 표시하는 영역 */
+.chatbot-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    font-size: 14px;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 사용자와 챗봇 메시지 스타일 */
+.user-message {
+    text-align: right;
+    margin: 5px 0;
+    background-color: #e9e9e9;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.bot-message {
+    text-align: left;
+    margin: 5px 0;
+    background-color: #007bff;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+/* 사용자 입력창과 버튼 영역 */
+.chatbot-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.chatbot-input input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.chatbot-input button {
+    margin-left: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+/* 챗봇 열기 버튼 */
+.open-chatbot-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}

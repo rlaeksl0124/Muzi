@@ -13,44 +13,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<title>Home</title>
-	<style>
-		/* 챗봇 버튼 스타일 */
-		#chatbotButton {
-			position: fixed;
-			bottom: 30px; /* 아래에서 30px 띄움 */
-			right: 30px; /* 오른쪽에서 30px 띄움 */
-			background-color: #007BFF; /* 버튼 배경색 (파란색) */
-			color: white; /* 텍스트 색상 (흰색) */
-			border: none;
-			border-radius: 50px; /* 둥근 버튼 모양 */
-			padding: 15px 20px; /* 버튼 내부 여백 */
-			font-size: 16px; /* 폰트 크기 */
-			cursor: pointer;
-			box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
-			transition: background-color 0.3s ease; /* 배경색 변경 시 애니메이션 효과 */
-		}
-
-		#chatbotButton:hover {
-			background-color: #0056b3; /* 버튼에 마우스 오버 시 배경색 */
-		}
-
-		/* iframe을 중앙에 배치 */
-		#iframeContainer {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			position: fixed;
-			bottom: 80px;
-			right: 30px;
-			width: 600px;
-			height: 400px;
-			box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-			background-color: white;
-			border-radius: 10px;
-			overflow: hidden;
-			display: none; /* 기본적으로 숨김 */
-		}
-	</style>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<link rel="stylesheet" href="/css/chatbot.css">
 </head>
 <body>
 <%@ include file="header.jspf" %>
@@ -61,22 +25,43 @@
 <P>  The time on the server is ${serverTime}. </P>
 <a class="cart_link" id="logoutLink" href="<c:url value='${loginOutLink}'/>">${loginOut}</a>
 <a class="cart_link" id="mypage" href="<c:url value='${mypageLink}'/>">${mypage}</a>
+<!-- 챗봇 열기 버튼 -->
+<button class="open-chatbot-btn" onclick="toggleChatbot()">💬</button>
+<!-- 챗봇 모달창 -->
+<div class="chatbot-container" id="chatbot">
+	<div class="chatbot-header">
+		<span>Chatbot</span>
+		<button class="close-btn" onclick="toggleChatbot()">X</button>
+	</div>
 
-<button id="chatbotButton" onclick="loadContent()">챗봇</button>
+	<!-- 카테고리 표시 -->
+	<div class="chatbot-category" id="chatbot-category">
+		선택한 카테고리: 없음
+	</div>
 
-<div id="iframeContainer">
-	<iframe src="/orders/index" width="100%" height="100%"></iframe>
+	<!-- 채팅 메시지 표시 영역 -->
+	<div class="chatbot-messages" id="chatbot-messages">
+		<div class="bot-message">안녕하세요! 무엇을 도와드릴까요?</div>
+	</div>
+
+	<!-- 사용자 입력 필드 및 전송 버튼 -->
+	<div class="chatbot-input">
+		<input type="text" id="userInput" placeholder="메시지를 입력하세요..." onkeypress="checkEnter(event)">
+		<button onclick="sendMessage()">보내기</button>
+	</div>
+
+	<!-- 버튼들 (공지사항, FAQ, 주문, 상품) -->
+	<div class="chatbot-buttons" style="padding: 10px; display: flex; justify-content: space-around;">
+		<button onclick="sendCategory('일상대화', '/')">일상대화</button>
+		<button onclick="sendCategory('공지사항', '/notice')">공지사항</button>
+		<button onclick="sendCategory('FAQ', '/faq')">FAQ</button>
+		<button onclick="sendCategory('주문', '/order')">주문</button>
+		<button onclick="sendCategory('상품', '/product')">상품</button>
+	</div>
 </div>
 
-<script>
-	function loadContent() {
-		var container = document.getElementById("iframeContainer");
-		if (container.style.display === "none" || container.style.display === "") {
-			container.style.display = "flex"; // iframe 보여주기
-		} else {
-			container.style.display = "none"; // iframe 숨기기
-		}
-	}
-</script>
+
+
+<script src="/js/chatbot.js"></script>
 </body>
 </html>
