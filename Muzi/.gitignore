@@ -1,4 +1,6 @@
 src/main/resources/database.properties
+src/main/resources/confidential.properties
+src/main/resources/tossPay.properties
 .smarttomcat
 .idea
 target/

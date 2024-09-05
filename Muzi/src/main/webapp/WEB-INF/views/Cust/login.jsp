@@ -112,7 +112,7 @@
         </div>
     </div>
 </div>
-
+<%@ include file="custChatBot.jsp"%>
 <script>
     let loginFail = "${loginFail}"
     if(loginFail == "msg") alert("아이디 또는 비밀번호를 잘못 입력하셨습니다.");

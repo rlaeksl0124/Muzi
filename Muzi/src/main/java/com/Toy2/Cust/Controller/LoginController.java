@@ -130,6 +130,7 @@ public class LoginController {
                 custDao.updateCust(admin);
             }
 
+
             /* 암호화된 pwd가 DB와 일치한지 확인 */
             boolean isAdminMatch = passwordService.checkPassword(c_pwd, admin.getC_pwd());
             return isAdminMatch;
