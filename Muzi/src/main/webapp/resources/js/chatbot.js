@@ -38,6 +38,7 @@ function sendCategory(category, url) {
     endpoint = url;
     // 사용자 선택을 채팅창에 추가
     var chatbox = $("#chatbot-messages");
+
     var userMessage = $("<div></div>").addClass("user-message").text("사용자: " + category + "을(를) 선택했습니다.");
     chatbox.append(userMessage);
 
@@ -49,7 +50,7 @@ function sendCategory(category, url) {
 // jQuery로 AJAX 요청 함수
 function sendAjaxRequest(endpoint, data) {
     $.ajax({
-        url: "http://localhost:5000" + endpoint,
+        url: "http://localhost:5001" + endpoint,
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({contents:data}),

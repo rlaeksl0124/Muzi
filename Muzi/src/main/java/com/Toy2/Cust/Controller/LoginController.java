@@ -5,8 +5,6 @@ import com.Toy2.Cust.Domain.CustDto;
 import com.Toy2.Cust.Service.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +17,7 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
     @Autowired
     CustDao custDao;
-    @Autowired
-    private StringRedisTemplate redisTemplate;
+
 
     @Autowired
     PasswordService passwordService;
@@ -44,7 +41,6 @@ public class LoginController {
     @GetMapping("/logout")
     public String logOut(HttpSession session) throws Exception {
         session.invalidate();
-        redisTemplate.delete("c_email");
         return "redirect:/";
     }
 
@@ -67,18 +63,9 @@ public class LoginController {
                 }
             }
 
-            /* 로그인성공시 */
-            /* 세션생성 */
-            if (redisTemplate == null) {
-                System.out.println("redisTemplate is null");
-            } else {
-                System.out.println("redisTemplate is initialized");
-            }
-            ValueOperations<String, String> ops = redisTemplate.opsForValue();
-            ops.set("c_email", c_email);
+
             HttpSession session = request.getSession();
             session.setAttribute("c_email", c_email);
-
             session.setMaxInactiveInterval(30 * 60);
             System.out.println("Session ID: " + session.getId());
 

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <context:annotation-config/>
+    <context:property-placeholder location="classpath:database.properties" />
+    <!-- redis http session configuration -->
+    <task:annotation-driven />
+    <bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration">
+        <property name="maxInactiveIntervalInSeconds" value="1800" />
+        <property name="cleanupCron" value="0 * * * * *" /> <!-- 1분마다 만료된 세션 정리 -->
+    </bean>
+
+    <bean id="redisStandaloneConfiguration" class="org.springframework.data.redis.connection.RedisStandaloneConfiguration">
+        <property name="hostName" value="${redis.host}" /> <!-- Redis 서버 IP -->
+        <property name="port" value="${redis.port}" /> <!-- Redis 서버 포트 -->
+        <property name="password">
+            <bean class="org.springframework.data.redis.connection.RedisPassword">
+                <constructor-arg value="${redis.password}" /> <!-- Redis 비밀번호 -->
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="lettuceConnectionFactory" class="org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory">
+        <constructor-arg ref="redisStandaloneConfiguration" />
+    </bean>
+
+    <!-- RedisTemplate 설정: JSON 직렬화 적용 -->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate" depends-on="lettuceConnectionFactory">
+        <property name="connectionFactory" ref="lettuceConnectionFactory"/>
+        <property name="defaultSerializer">
+            <bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"/>
+        </property>
+    </bean>
+
+    <!-- Spring Session Redis 직렬화 설정 -->
+    <bean id="springSessionDefaultRedisSerializer" class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"/>
+
+</beans>

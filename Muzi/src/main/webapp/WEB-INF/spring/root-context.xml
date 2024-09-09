@@ -52,17 +52,4 @@
 			</props>
 		</property>
 	</bean>
-
-	<bean id="redisConnectionFactory"
-		  class="org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory"
-		  p:host-name="${redis.host}"
-		  p:port="${redis.port}"
-		  p:password="${redis.password}" />
-
-	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
-		<property name="connectionFactory" ref="redisConnectionFactory" />
-	</bean>
-
-	<context:component-scan base-package="com.Toy2"/>
-
 </beans>
