@@ -95,16 +95,26 @@
         .input-form button:hover {
             background-color: #0056b3;
         }
+        .user-message {
+            background-color: #e0f7fa;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 5px 0;
+            text-align: right;
+        }
+
+        .robot-message {
+            background-color: #e0e0e0;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 5px 0;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
 <div class="chat-container">
     <div class="messages" id="messages">
-<%--        <% for message in messages %>--%>
-<%--        <div class="message {{message.role}}">--%>
-<%--            <strong>{{ message.role | capitalize }}:</strong> {{ message.content }}--%>
-<%--        </div>--%>
-<%--        <% endfor %>--%>
         <div id="container"></div>
 
     </div>
@@ -116,12 +126,33 @@
 </div>
 
 <script>
-    fetch('http://127.0.0.1:5000').then(r => r.json()).then(
-        data => {
+    let data = null
+    fetch('http://127.0.0.1:5000')
+        .then(r => r.json())
+        .then(data => {
             const container = document.getElementById("container");
-            container.innerHTML=data[0]
-        }
-    );
+            container.innerHTML = '';  // 기존 내용 초기화
+
+            // 받은 데이터를 반복하여 화면에 추가
+            data.forEach(item => {
+                const messageDiv = document.createElement("div");
+
+                // 역할에 따라 클래스 추가
+                if (item.role === 'robot') {
+                    messageDiv.classList.add('robot-message');
+                } else if (item.role === 'user') {
+                    messageDiv.classList.add('user-message');
+                }
+
+                // 메시지 내용 추가
+                messageDiv.textContent = item.content;
+
+
+                // 컨테이너에 메시지 추가
+                container.appendChild(messageDiv);
+            });
+        })
+        .catch(error => console.error('Error:', error));
 
     function scrollToBottom() {
         var messagesContainer = document.getElementById("messages");
