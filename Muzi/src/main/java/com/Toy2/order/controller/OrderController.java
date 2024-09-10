@@ -18,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -61,7 +60,7 @@ public class OrderController {
             @ModelAttribute DeliveryDto deliveryDto,
             @RequestParam("orderType") String cartOrder,
             HttpSession session) {
-
+        System.out.println(session.getId());
         Map<String, Object> response = new HashMap<>();
 
         String customerEmail = (String) session.getAttribute("c_email");
@@ -226,20 +225,20 @@ public class OrderController {
 
         return "orderSuccess"; // orderSuccess.jsp로 이동
     }
-    @ExceptionHandler(Exception.class)
-    public String handleException(Exception e, HttpServletRequest request, Model model) {
-        model.addAttribute("ex", e);
-
-        String requestURI = request.getRequestURI();
-        // 현재 요청이 GET 요청인지 POST 요청인지 확인
-        if ("POST".equalsIgnoreCase(request.getMethod())) {
-            // POST 요청이라면 GET 요청으로 리다이렉트
-            return "redirect:" + requestURI;
-        } else {
-            // GET 요청이라면 예외가 발생한 페이지를 다시 렌더링
-            return "forward:" + requestURI;
-        }
-    }
+//    @ExceptionHandler(Exception.class)
+//    public String handleException(Exception e, HttpServletRequest request, Model model) {
+//        model.addAttribute("ex", e);
+//
+//        String requestURI = request.getRequestURI();
+//        // 현재 요청이 GET 요청인지 POST 요청인지 확인
+//        if ("POST".equalsIgnoreCase(request.getMethod())) {
+//            // POST 요청이라면 GET 요청으로 리다이렉트
+//            return "redirect:" + requestURI;
+//        } else {
+//            // GET 요청이라면 예외가 발생한 페이지를 다시 렌더링
+//            return "forward:" + requestURI;
+//        }
+//    }
 
     //주문성공 후 모델속성 설정하는 로직
     private void orderSuccess(Map<String, Object> response, String customerEmail) throws Exception {

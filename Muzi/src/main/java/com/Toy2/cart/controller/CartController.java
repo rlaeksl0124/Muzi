@@ -87,13 +87,13 @@ public class CartController {
 
     @PostMapping("/add")
     public String addCar(HttpServletRequest request, Model model) throws Exception{
-
         int productNumber = Integer.parseInt(request.getParameter("productNo"));
         int productCnt = Integer.parseInt(request.getParameter("productCnt"));
         String productOption = request.getParameter("productOption");
 
         // 세션에서 사용자 이메일을 가져옴 (예: 로그인된 사용자)
         String customerEmail = (String) request.getSession().getAttribute("c_email");
+        System.out.println(customerEmail);
         if (customerEmail == null || customerEmail.isEmpty()) {
             model.addAttribute("errorMessage", "로그인이 필요합니다.");
             return "redirect:/login";
@@ -103,8 +103,7 @@ public class CartController {
         CartDto cartDto = new CartDto(productNumber, productCnt, productOption, customerEmail);
         cartService.addCart(cartDto);
         // 장바구니를 담았던 그 화면으로 다시 들어가게
-        String referer = request.getHeader("Referer");
-        return "redirect:" + referer;
+        return "redirect:" + request.getHeader("Referer");
     }
 
 
@@ -145,20 +144,20 @@ public class CartController {
     }
 
 
-    @ExceptionHandler(Exception.class)
-    public String handleException(Exception e,HttpServletRequest request, Model model) {
-        model.addAttribute("ex", e);
-
-        String requestURI = request.getRequestURI();
-        // 현재 요청이 GET 요청인지 POST 요청인지 확인
-        if ("POST".equalsIgnoreCase(request.getMethod())) {
-            // POST 요청이라면 GET 요청으로 리다이렉트
-            return "redirect:" + requestURI;
-        } else {
-            // GET 요청이라면 예외가 발생한 페이지를 다시 렌더링
-            return "forward:" + requestURI;
-        }
-    }
+//    @ExceptionHandler(Exception.class)
+//    public String handleException(Exception e,HttpServletRequest request, Model model) {
+//        model.addAttribute("ex", e);
+//
+//        String requestURI = request.getRequestURI();
+//        // 현재 요청이 GET 요청인지 POST 요청인지 확인
+//        if ("POST".equalsIgnoreCase(request.getMethod())) {
+//            // POST 요청이라면 GET 요청으로 리다이렉트
+//            return "redirect:" + requestURI;
+//        } else {
+//            // GET 요청이라면 예외가 발생한 페이지를 다시 렌더링
+//            return "forward:" + requestURI;
+//        }
+//    }
 
     //제품정보획득로직
     private List<OrderDetailDto> createOrderDetailList(HttpServletRequest request, OrderDto orderDto) throws Exception {
