@@ -54,6 +54,9 @@ function sendAjaxRequest(endpoint, data) {
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({contents:data}),
+        xhrFields: {
+            withCredentials: true  // 쿠키 전송 활성화
+        },
         success: function (response) {
             // 서버 응답을 채팅창에 추가
             var chatbox = $("#chatbot-messages");

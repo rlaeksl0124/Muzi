@@ -6,6 +6,7 @@ import com.Toy2.Cust.Service.PasswordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -14,11 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
+@CrossOrigin("http://localhost:5001")
 public class LoginController {
     @Autowired
     CustDao custDao;
-
-
     @Autowired
     PasswordService passwordService;
 
@@ -64,10 +64,9 @@ public class LoginController {
             }
 
 
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(true);
             session.setAttribute("c_email", c_email);
             session.setMaxInactiveInterval(30 * 60);
-            System.out.println("Session ID: " + session.getId());
 
             /* 마지막 로그인일자를 업데이트하는 Dao 호출 */
             custDao.updateLogin(c_email);
