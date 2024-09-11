@@ -60,7 +60,7 @@ function sendAjaxRequest(endpoint, data) {
         success: function (response) {
             // 서버 응답을 채팅창에 추가
             var chatbox = $("#chatbot-messages");
-            var botMessage = $("<div></div>").addClass("bot-message").text("챗봇: " + response);
+            var botMessage = $("<div></div>").addClass("bot-message").html("챗봇: " + response);
             chatbox.append(botMessage);
 
             // 채팅창을 아래로 스크롤

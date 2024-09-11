@@ -124,14 +124,16 @@ public class OrderController {
      * @throws Exception
      */
     @GetMapping("/orderDetailList")
-    public String orderDetailList(@RequestParam("orderNo") int orderNo, Model model, HttpSession session) throws Exception {
+    public String orderDetailList(@RequestParam("orderNo") int orderNo,@SessionAttribute String c_email ,Model model, HttpSession session) throws Exception {
+        if (session.getAttribute("c_email") != c_email) {
+            model.addAttribute("errorMessage", "로그인을 해주세요.");
+            return "redirect:/login";
+        }
         try {
-            if(session.getAttribute("c_email") == null)
-                throw new Exception("로그인을 해주세요");
-            model.addAttribute("orderDetailList",orderService.getOrderDetailList(orderNo));//주문상세에 대한 정보
+            model.addAttribute("orderDetailList",orderService.getOrderDetailList(orderNo, c_email));//주문상세에 대한 정보
             model.addAttribute("delivery",orderService.getDeliveryList(orderNo));//배송지에대한정보
         } catch (Exception e) {
-            return "orderList";
+            return "redirect:/orders/orderList";
         }
         return "orderDetail";
     }
@@ -220,7 +222,7 @@ public class OrderController {
                 .get(orderService.getOrderList(customerEmail).size()-1).getOrderDate());
         model.addAttribute("orderProductName", orderService.getOrderDetailList(
                         orderService.getOrderList(customerEmail)
-                                .get(orderService.getOrderList(customerEmail).size()-1).getOrderNo())
+                                .get(orderService.getOrderList(customerEmail).size()-1).getOrderNo(),customerEmail)
                 .get(0).getOrderDetailProductName());
 
         return "orderSuccess"; // orderSuccess.jsp로 이동
@@ -244,7 +246,7 @@ public class OrderController {
     private void orderSuccess(Map<String, Object> response, String customerEmail) throws Exception {
         String orderProductName = orderService.getOrderDetailList(
                         orderService.getOrderList(customerEmail)
-                                .get(orderService.getOrderList(customerEmail).size() - 1).getOrderNo())
+                                .get(orderService.getOrderList(customerEmail).size() - 1).getOrderNo(),customerEmail)
                 .get(0).getOrderDetailProductName();
 
         response.put("success", true);

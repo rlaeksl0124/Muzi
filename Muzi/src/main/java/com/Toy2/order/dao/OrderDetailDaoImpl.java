@@ -34,8 +34,11 @@ public class OrderDetailDaoImpl implements OrderDetailDao{
     }
 
     @Override
-    public List<OrderDetailDto> orderDetailList(int orderNo) throws Exception {
-        return session.selectList(namespace + "orderDetailList", orderNo);
+    public List<OrderDetailDto> orderDetailList(int orderNo, String customerEmail) throws Exception {
+        Map<String, Object> paramMap = new HashMap<>();//map으로 묶어서 전달
+        paramMap.put("orderNo", orderNo);//어떤제품의
+        paramMap.put("customerEmail", customerEmail);
+        return session.selectList(namespace + "orderDetailList", paramMap);
     }
 
     @Override

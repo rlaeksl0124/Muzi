@@ -47,7 +47,7 @@
         <result property="orderDetailDate" column="od_date"/>
     </resultMap>
 
-    <select id="orderDetailList" parameterType="int" resultMap="OrderDetailResultMap">
+    <select id="orderDetailList" parameterType="map" resultMap="OrderDetailResultMap">
         select od_no,
                or_no,
                pdt_no,
@@ -60,7 +60,7 @@
                od_delvinfo,
                od_date
         from order_delt
-        where or_no = #{orderNo};
+        where or_no = #{orderNo} and (select c_email from orders where or_no = #{orderNo}) = #{customerEmail};
     </select>
 
     <delete id="orderDetailDeleteAll">

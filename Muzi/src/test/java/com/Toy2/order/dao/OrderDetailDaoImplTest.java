@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 public class OrderDetailDaoImplTest {
     @Autowired
     private OrderDetailDao odDao;
+    private static final String customerEmail = "admin";
 
     @Test
     public void 주문상세_추가_성공() throws Exception {
@@ -60,8 +61,8 @@ public class OrderDetailDaoImplTest {
     @Test
     public void 주문상세_리스트_성공() throws Exception {
         int orderNo = 89; //주문상세가 있는 주문 No 입력
-
-        List<OrderDetailDto> orderDetailList = odDao.orderDetailList(orderNo);
+        String customerEmail = "admin";
+        List<OrderDetailDto> orderDetailList = odDao.orderDetailList(orderNo,customerEmail);
 
         assertNotNull(orderDetailList);
         assertFalse(orderDetailList.isEmpty());
@@ -94,7 +95,7 @@ public class OrderDetailDaoImplTest {
         int invalidOrderNo = 9999;  // 존재하지 않는 주문 번호
 
         // 주문 상세 목록을 가져옴
-        List<OrderDetailDto> orderDetailList = odDao.orderDetailList(invalidOrderNo);
+        List<OrderDetailDto> orderDetailList = odDao.orderDetailList(invalidOrderNo,customerEmail);
 
         // 리스트가 비어있음을 확인
         assertNotNull(orderDetailList);
@@ -108,7 +109,7 @@ public class OrderDetailDaoImplTest {
         assertEquals(deleteAlltest , 6);//삭제한 개수 입력
 
         // 삭제 후 리스트가 비어있음을 확인
-        List<OrderDetailDto> orderDetailList = odDao.orderDetailList(1);
+        List<OrderDetailDto> orderDetailList = odDao.orderDetailList(1, customerEmail);
         assertNotNull(orderDetailList);
         assertTrue(orderDetailList.isEmpty());
     }

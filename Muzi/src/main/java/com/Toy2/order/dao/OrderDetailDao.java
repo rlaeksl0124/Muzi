@@ -7,6 +7,6 @@ import java.util.List;
 public interface OrderDetailDao {
     int orderDetailInsert(OrderDetailDto orderDetailDto) throws Exception;
     int orderDetailUpdate(int orderDetailNo, String orderDetailStatus) throws Exception;
-    List<OrderDetailDto> orderDetailList(int orderNo) throws Exception;
+    List<OrderDetailDto> orderDetailList(int orderNo, String customerEmail) throws Exception;
     int orderDetailDeleteAll() throws Exception;
 }

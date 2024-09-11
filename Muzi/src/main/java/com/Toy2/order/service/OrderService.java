@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface OrderService {
     int addOrder(OrderDto orderDto, List<OrderDetailDto> orderDetailList, DeliveryDto deliveryDto) throws Exception;
-    List<OrderDetailDto> getOrderDetailList(int orderNo) throws Exception;
+    List<OrderDetailDto> getOrderDetailList(int orderNo, String customerEmail) throws Exception;
     List<OrderResponseDto> getOrderList(String customerEmail) throws Exception;
     int updateOrderDetail(int orderDetailNo, String orderDetailStatus) throws Exception;
     DeliveryDto getDeliveryList(int orderNo) throws Exception;
