@@ -1,11 +1,15 @@
 package com.Toy2.Cust.Domain;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 
-public class CustDto {
+public class CustDto implements UserDetails {
     @NotNull(message = "이메일은 필수 항목입니다.")
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "유효한 이메일 주소를 입력하세요.")
     private String c_email;
@@ -38,15 +42,21 @@ public class CustDto {
     private Date last_mod_dt;
     private String last_mod_id;
 
+
+
+
+    /* 로그인실패 횟수 count */
+    private int failed_attempts;
+
     public CustDto() {
     }
 
     /* 고객 생성 */
     public static CustDto custDto(String c_email) {
-        return new CustDto(c_email, "1234", "bbb", "bnick", "19980223", "W", "01027449853", "02001", "Gangnam-gu, Seoul", "8", 'N');
+        return new CustDto(c_email, "1234", "bbb", "bnick", "19980223", "W", "01027449853", "02001", "Gangnam-gu, Seoul", "8", 'N', 0);
     }
 
-    public CustDto(String c_email, String c_pwd, String c_name, String c_nick, String c_birth, String c_gnd, String c_phn, String c_zip, String c_road_a, String c_det_a, char c_admin) {
+    public CustDto(String c_email, String c_pwd, String c_name, String c_nick, String c_birth, String c_gnd, String c_phn, String c_zip, String c_road_a, String c_det_a, char c_admin, int failed_attempts) {
         this.c_email = c_email;
         this.c_pwd = c_pwd;
         this.c_name = c_name;
@@ -58,6 +68,7 @@ public class CustDto {
         this.c_road_a = c_road_a;
         this.c_det_a = c_det_a;
         this.c_admin = c_admin;
+        this.failed_attempts = failed_attempts;
     }
 
     public CustDto(String c_email, String c_stat_cd, String c_pwd, String c_name, String c_nick, String c_birth, String c_gnd, String c_phn, String c_zip, String c_road_a, String c_det_a, char c_admin, char sms_agr, char email_agr, Date reg_date, Date login_dt, int tot_amt, Date frst_reg_dt, String frst_reg_id, Date last_mod_dt, String last_mod_id) {
@@ -253,17 +264,25 @@ public class CustDto {
         this.last_mod_id = last_mod_id;
     }
 
+    public int getFailed_attempts() {
+        return failed_attempts;
+    }
+
+    public void setFailed_attempts(int failed_attempts) {
+        this.failed_attempts = failed_attempts;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         CustDto custDto = (CustDto) object;
-        return c_gnd == custDto.c_gnd && c_admin == custDto.c_admin && sms_agr == custDto.sms_agr && email_agr == custDto.email_agr && tot_amt == custDto.tot_amt && Objects.equals(c_email, custDto.c_email) && Objects.equals(c_stat_cd, custDto.c_stat_cd) && Objects.equals(c_pwd, custDto.c_pwd) && Objects.equals(c_name, custDto.c_name) && Objects.equals(c_nick, custDto.c_nick) && Objects.equals(c_birth, custDto.c_birth) && Objects.equals(c_phn, custDto.c_phn) && Objects.equals(c_zip, custDto.c_zip) && Objects.equals(c_road_a, custDto.c_road_a) && Objects.equals(c_det_a, custDto.c_det_a) && Objects.equals(reg_date, custDto.reg_date) && Objects.equals(login_dt, custDto.login_dt) && Objects.equals(frst_reg_dt, custDto.frst_reg_dt) && Objects.equals(frst_reg_id, custDto.frst_reg_id) && Objects.equals(last_mod_dt, custDto.last_mod_dt) && Objects.equals(last_mod_id, custDto.last_mod_id);
+        return c_admin == custDto.c_admin && sms_agr == custDto.sms_agr && email_agr == custDto.email_agr && tot_amt == custDto.tot_amt && failed_attempts == custDto.failed_attempts && Objects.equals(c_email, custDto.c_email) && Objects.equals(c_stat_cd, custDto.c_stat_cd) && Objects.equals(c_pwd, custDto.c_pwd) && Objects.equals(c_name, custDto.c_name) && Objects.equals(c_nick, custDto.c_nick) && Objects.equals(c_birth, custDto.c_birth) && Objects.equals(c_gnd, custDto.c_gnd) && Objects.equals(c_phn, custDto.c_phn) && Objects.equals(c_zip, custDto.c_zip) && Objects.equals(c_road_a, custDto.c_road_a) && Objects.equals(c_det_a, custDto.c_det_a) && Objects.equals(reg_date, custDto.reg_date) && Objects.equals(login_dt, custDto.login_dt) && Objects.equals(frst_reg_dt, custDto.frst_reg_dt) && Objects.equals(frst_reg_id, custDto.frst_reg_id) && Objects.equals(last_mod_dt, custDto.last_mod_dt) && Objects.equals(last_mod_id, custDto.last_mod_id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(c_email, c_stat_cd, c_pwd, c_name, c_nick, c_birth, c_gnd, c_phn, c_zip, c_road_a, c_det_a, c_admin, sms_agr, email_agr, reg_date, login_dt, tot_amt, frst_reg_dt, frst_reg_id, last_mod_dt, last_mod_id);
+        return Objects.hash(c_email, c_stat_cd, c_pwd, c_name, c_nick, c_birth, c_gnd, c_phn, c_zip, c_road_a, c_det_a, c_admin, sms_agr, email_agr, reg_date, login_dt, tot_amt, frst_reg_dt, frst_reg_id, last_mod_dt, last_mod_id, failed_attempts);
     }
 
     @Override
@@ -275,7 +294,7 @@ public class CustDto {
                 ", c_name='" + c_name + '\'' +
                 ", c_nick='" + c_nick + '\'' +
                 ", c_birth='" + c_birth + '\'' +
-                ", c_gnd=" + c_gnd +
+                ", c_gnd='" + c_gnd + '\'' +
                 ", c_phn='" + c_phn + '\'' +
                 ", c_zip='" + c_zip + '\'' +
                 ", c_road_a='" + c_road_a + '\'' +
@@ -290,6 +309,50 @@ public class CustDto {
                 ", frst_reg_id='" + frst_reg_id + '\'' +
                 ", last_mod_dt=" + last_mod_dt +
                 ", last_mod_id='" + last_mod_id + '\'' +
+                ", failed_attempts=" + failed_attempts +
                 '}';
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getPassword() {
+        return getC_pwd();
+    }
+
+    @Override
+    public String getUsername() {
+        return getC_email();
+    }
+
+    /* 계정만료여부 */
+    /* 휴먼상태: H가 아니면 false */
+    @Override
+    public boolean isAccountNonExpired() {
+        return !this.c_stat_cd.equals("H");
+    }
+
+    /* 계정잠금여부 */
+    /* 휴먼상태: H가 아니면서 로그인횟수가 4이하면 false */
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.failed_attempts<5 && !this.c_stat_cd.equals("H");
+    }
+
+    /* 비밀번호만료여부 */
+    /* false : 로그인안됨, 비밀번호 갱신필요 */
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    /* 계정활성화여부 */
+    /* 휴먼상태: H가 아니면 false */
+    @Override
+    public boolean isEnabled() {
+        return !this.c_stat_cd.equals("H");
     }
 }

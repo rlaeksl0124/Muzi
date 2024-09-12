@@ -22,4 +22,6 @@ public interface CustDao {
     int deleteAll() throws Exception;
 
     int delete(String c_email) throws Exception;
+
+    int updateNotLoginUserStatusForAll() throws Exception;
 }

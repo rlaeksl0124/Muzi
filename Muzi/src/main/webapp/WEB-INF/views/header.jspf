@@ -22,26 +22,39 @@
             <!-- 로그인/주문배송/장바구니 등을 오른쪽에 배치 -->
             <li>
                 <ul class="accountActions">
-                    <li>
+
                         <c:if test="${sessionScope.c_email == null}">
-                            <a  href="/login?toURL=${requestScope['javax.servlet.forward.request_uri']}?${requestScope['javax.servlet.forward.query_string']}">
-                                <span class="material-icons">login</span>
-                            </a>
-                            <span>로그인</span>
+                            <li>
+                                <a  href="/login?toURL=${requestScope['javax.servlet.forward.request_uri']}?${requestScope['javax.servlet.forward.query_string']}">
+                                    <span class="material-icons">login</span>
+                                </a>
+                                <span>로그인</span>
+                            </li>
                         </c:if>
                         <c:if test="${sessionScope.c_email != null}">
-                            <a       href="/logout">
-                                <span class="material-icons">logout</span>
-                            </a>
-                            <span>로그아웃</span>
+                            <li>
+                                <a href="/mypage">
+                                    <span class="material-icons">myPage</span>
+                                </a>
+                                <span>마이페이지</span>
+                            </li>
+
+                            <li>
+                                <a href="/logout">
+                                    <span class="material-icons">logout</span>
+                                </a>
+                                <span>로그아웃</span>
+                            </li>
+
                         </c:if>
-                    </li>
+
                     <li>
                         <a id="headers" href="/orders/orderList">
-                            <span class="material-icons">local_shipping</span><br>
-                            <span>주문배송</span></a>
+                        <span class="material-icons">local_shipping</span><br>
+                        <span>주문배송</span></a>
                     </li>
-                    <li>    <a id="headers" href="/cart/cart">
+                    <li>
+                        <a id="headers" href="/cart/cart">
                         <span class="material-icons">shopping_cart</span><br>
                         <span>장바구니</span></a>
                     </li>

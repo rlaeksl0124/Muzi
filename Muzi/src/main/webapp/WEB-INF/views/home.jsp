@@ -11,18 +11,63 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<title>Home</title>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<link rel="stylesheet" href="/css/chatbot.css">
+	<style>
+		.slider {
+			box-sizing: border-box;
+		}
+
+		.slider {
+			position: relative;
+			width: 100%;
+			max-width: 600px;
+			margin: auto;
+			overflow: hidden;
+		}
+
+		.slides {
+			display: flex;
+			transition: transform 0.5s ease-in-out;
+		}
+
+		.slides img {
+			width: 100%;
+			max-width: 600px;
+		}
+
+		.prev, .next {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			background-color: rgba(0, 0, 0, 0.5);
+			color: white;
+			border: none;
+			padding: 10px;
+			cursor: pointer;
+		}
+
+		.prev {
+			left: 10px;
+		}
+
+		.next {
+			right: 10px;
+		}
+	</style>
 </head>
 <body>
 <%@ include file="header.jspf" %>
-<h1>
-	Hello world!  
-</h1>
-
-<P>  The time on the server is ${serverTime}. </P>
+<div class="slider">
+	<div class="slides">
+		<img src="/img/image1.png" alt="Image 1">
+		<img src="/img/image2.png" alt="Image 2">
+		<img src="/img/image3.png" alt="Image 3">
+	</div>
+	<button class="prev">&#10094;</button>
+	<button class="next">&#10095;</button>
+</div>
 <a class="cart_link" id="logoutLink" href="<c:url value='${loginOutLink}'/>">${loginOut}</a>
 <a class="cart_link" id="mypage" href="<c:url value='${mypageLink}'/>">${mypage}</a>
 <!-- 챗봇 열기 버튼 -->
@@ -60,8 +105,41 @@
 	</div>
 </div>
 
-
-
 <script src="/js/chatbot.js"></script>
+<script>
+	$(document).ready(function() {
+		let currentSlide = 0;
+		const $slides = $('.slides');
+		const totalSlides = $('.slides img').length;
+
+		function showSlide(index) {
+			if (index < 0) {
+				currentSlide = totalSlides - 1;
+			} else if (index >= totalSlides) {
+				currentSlide = 0;
+			} else {
+				currentSlide = index;
+			}
+			const offset = -currentSlide * 100 + '%';
+			$slides.css('transform', 'translateX(' + offset + ')');
+		}
+
+		// Next button click
+		$('.next').click(function() {
+			showSlide(currentSlide + 1);
+		});
+
+		// Prev button click
+		$('.prev').click(function() {
+			showSlide(currentSlide - 1);
+		});
+
+		// Automatically move to the next slide every 1 second (1000 ms)
+		setInterval(function() {
+			showSlide(currentSlide + 1);
+		}, 1000); // 1초마다 자동 슬라이드
+	});
+
+</script>
 </body>
 </html>

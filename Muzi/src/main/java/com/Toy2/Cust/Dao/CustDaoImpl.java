@@ -67,4 +67,9 @@ public class CustDaoImpl implements CustDao {
     public int delete(String c_email) throws Exception {
         return session.delete(namespace + "selectCustDelete", c_email);
     }
+
+    @Override
+    public int updateNotLoginUserStatusForAll() throws Exception {
+        return session.update(namespace + "updateNotLoginUserStatusForAll");
+    }
 }

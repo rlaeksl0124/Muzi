@@ -30,6 +30,7 @@
     <update id="updateCust" parameterType="CustDto">
         update cust
         <set>
+            <if test="c_stat_cd != null">c_stat_cd = #{c_stat_cd},</if>
             <if test="c_pwd != null">c_pwd = #{c_pwd},</if>
             <if test="c_name != null">c_name = #{c_name},</if>
             <if test="c_nick != null">c_nick = #{c_nick},</if>
@@ -37,6 +38,9 @@
             <if test="c_zip != null">c_zip = #{c_zip},</if>
             <if test="c_road_a != null">c_road_a = #{c_road_a},</if>
             <if test="c_det_a != null">c_det_a = #{c_det_a},</if>
+            <if test="c_admin != null">c_admin = #{c_admin},</if>
+            <if test="failed_attempts != null">failed_attempts = #{failed_attempts},</if>
+            <if test="tot_amt != null">tot_amt = #{tot_amt},</if>
         </set>
         where c_email = #{c_email}
     </update>
@@ -52,14 +56,12 @@
     </update>
 
 
-    <!-- SERVICE DAO 구현해야함 -->
     <!-- 휴먼: admin이 N 이면서, 로그인일자가 1년 이상인 고객 상태코드 H으로 변경 -->
-    <update id="notLoginUserStatusCodeUpdate" parameterType="String">
+    <update id="updateNotLoginUserStatusForAll">
         update cust
         set c_stat_cd = 'H'
         where c_admin = 'N'
-          and c_email= #{c_email}
-          and (login_dt is null or datediff(now(), login_dt)>365)
+        and login_dt &lt;= DATE_SUB(NOW(), INTERVAL 1 YEAR)
     </update>
 
     <!-- 최종 로그인 기록 -->

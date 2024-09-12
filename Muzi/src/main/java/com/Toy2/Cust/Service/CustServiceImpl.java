@@ -4,7 +4,7 @@ import com.Toy2.Cust.Dao.CustDao;
 import com.Toy2.Cust.Domain.CustDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class CustServiceImpl implements CustService, PasswordService {
     private CustDao custDao;
     StringRedisTemplate redisTemplate;
     @Autowired
-    private JavaMailSenderImpl mailSender;
+    private JavaMailSender mailSender;
 
     /* 회원가입폼 이메일 중복검사 */
     @Override
@@ -86,4 +86,51 @@ public class CustServiceImpl implements CustService, PasswordService {
     /*----------------------------- 비밀번호 암호화 끝 -----------------------------*/
 
 
+    /* 1년이상 미접속 고객 휴먼처리 , 상태코드:H */
+    @Override
+    public int updateNotLoginUserStatusForAll() throws Exception {
+        return custDao.updateNotLoginUserStatusForAll();
+    }
+
+    /* 로그인실패횟수 증가*/
+    @Override
+    public void failedLoginCnt(CustDto custDto) throws Exception {
+
+        System.out.println("현재 실패 횟수 (DB 조회): " + custDto.getFailed_attempts());
+
+        /* 로스인 실패시 횟수 1증가 */
+        int failCnt = custDto.getFailed_attempts();
+        failCnt++;
+
+        /* setter 저장 */
+        custDto.setFailed_attempts(failCnt);
+        System.out.println("로그인 실패 후 실패 횟수: " + failCnt);
+
+        /* 실패횟수가 5 이상이면 계정Lock */
+        if(failCnt >= 5){
+            lockAccount(custDto);
+            System.out.println("계정잠금");
+        }
+
+        custDao.updateCust(custDto);
+    }
+
+    /* 계정 Lock */
+    public void lockAccount(CustDto custDto) throws Exception {
+        /* 상태코드를 H로 바꾸고 update 실행 */
+        custDto.setC_stat_cd("H");
+        custDao.updateCust(custDto);
+    }
+
+    /* 고객이 로그인할경우 로그인실패횟수 Reset */
+    @Override
+    public void resetFailedCnt(String c_email) throws Exception {
+        /* 고객을 select */
+        CustDto custDto = custDao.selectEmail(c_email);
+        /* 고객이 null이 아닐경우 setter 0으로 update */
+        if(custDto != null){
+            custDto.setFailed_attempts(0);
+            custDao.updateCust(custDto);
+        }
+    }
 }

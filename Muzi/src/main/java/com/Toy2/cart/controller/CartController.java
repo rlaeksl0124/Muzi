@@ -139,6 +139,7 @@ public class CartController {
         } catch (Exception e) {
             re.addFlashAttribute("errorMessage", "잘못된 접근입니다.");
             String referer = request.getHeader("Referer");
+            System.out.println("referer = " + referer);
             return "redirect:" + referer;
         }
         return "order";

@@ -49,15 +49,18 @@ function sendCategory(category, url) {
 // jQuery로 AJAX 요청 함수
 function sendAjaxRequest(endpoint, data) {
     $.ajax({
-        url: "http://localhost:5000" + endpoint,
+        url: "http://localhost:5001" + endpoint,
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({contents:data}),
         success: function (response) {
             // 서버 응답을 채팅창에 추가
             var chatbox = $("#chatbot-messages");
-            var botMessage = $("<div></div>").addClass("bot-message").text("챗봇: " + response);
+            var botMessage = $("<div></div>").addClass("bot-message").text("챗봇: " + JSON.stringify(response));
+
+            console.log(response)
             chatbox.append(botMessage);
+
 
             // 채팅창을 아래로 스크롤
             chatbox.scrollTop(chatbox.prop("scrollHeight"));
