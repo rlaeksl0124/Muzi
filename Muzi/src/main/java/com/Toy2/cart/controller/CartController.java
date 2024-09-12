@@ -182,8 +182,8 @@ public class CartController {
                                        String[] productCnts,String[] productOptions, OrderDto orderDto,
                                        List<OrderDetailDto> orderDetailList) throws Exception {
         for (int i = 0; i < productNos.length; i++) {
-            Long pp  = Long.parseLong(productPrice[i]);
-            Integer dp = Integer.valueOf(productDeliveryPrice[i]);
+            Long odProductPrice  = Long.parseLong(productPrice[i]);
+            Integer odProductDeliveryPrice = Integer.valueOf(productDeliveryPrice[i]);
             String productName = productService.selectProduct(Integer.parseInt(productNos[i])).getProductName();
 
             if(Integer.parseInt(productCnts[i]) <= 0)
@@ -195,8 +195,8 @@ public class CartController {
                     "주문완료",
                     productOptions[i],
                     "일반배송",
-                    pp,
-                    dp
+                    odProductPrice,
+                    odProductDeliveryPrice
             );
             odDto.setOrderDetailProductName(productName);
             orderDetailList.add(odDto);

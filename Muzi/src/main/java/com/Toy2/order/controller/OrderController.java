@@ -16,9 +16,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -56,9 +58,10 @@ public class OrderController {
     @PostMapping("/complete")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> addOrder(
-            @ModelAttribute OrderDto orderDto,
-            @ModelAttribute DeliveryDto deliveryDto,
+            @Valid @ModelAttribute OrderDto orderDto,
+            @Valid @ModelAttribute DeliveryDto deliveryDto,
             @RequestParam("orderType") String cartOrder,
+            BindingResult result,
             HttpSession session) {
         System.out.println(session.getId());
         Map<String, Object> response = new HashMap<>();
@@ -67,6 +70,10 @@ public class OrderController {
         orderDto.setCustomerEmail(customerEmail);
         List<OrderDetailDto> orderDetails = orderDto.getOrderDetails();
 
+        if (result.hasErrors()) {
+            response.put("success", false);
+            return ResponseEntity.ok(response);
+        }
         try {
             orderService.addOrder(orderDto, orderDetails, deliveryDto);
             if (cartOrder.equals("장바구니구매"))
@@ -98,9 +105,10 @@ public class OrderController {
 
         try {
             int totalCnt = orderService.orderCnt(customerEmail);
-            PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
 
+            PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
             Map pagingMap = new HashMap();
+
             pagingMap.put("offset", (page) * pageSize);// + 되어있었음 * 로 바꿈
             pagingMap.put("pageSize", pageSize);
             pagingMap.put("customerEmail", customerEmail);
@@ -207,11 +215,9 @@ public class OrderController {
     }
 
     @GetMapping("/orderSuccess")//결제 완료 화면
-    public String orderSuccess(@RequestParam String paymentKey,
-            @RequestParam String orderId,
-            @RequestParam Long amount,
-            Model model, HttpSession session) throws Exception {
+    public String orderSuccess(Model model, HttpSession session) throws Exception {
         String customerEmail = (String) session.getAttribute("c_email");
+
         model.addAttribute("orderId", orderService.getOrderList(customerEmail)
                 .get(orderService.getOrderList(customerEmail).size()-1).getOrderNo());
         model.addAttribute("amount", orderService.getOrderList(customerEmail)
@@ -224,9 +230,10 @@ public class OrderController {
                         orderService.getOrderList(customerEmail)
                                 .get(orderService.getOrderList(customerEmail).size()-1).getOrderNo(),customerEmail)
                 .get(0).getOrderDetailProductName());
-
         return "orderSuccess"; // orderSuccess.jsp로 이동
     }
+
+
 //    @ExceptionHandler(Exception.class)
 //    public String handleException(Exception e, HttpServletRequest request, Model model) {
 //        model.addAttribute("ex", e);
