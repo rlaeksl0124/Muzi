@@ -127,7 +127,7 @@ public class CustServiceImpl implements CustService, PasswordService {
     public void resetFailedCnt(String c_email) throws Exception {
         /* 고객을 select */
         CustDto custDto = custDao.selectEmail(c_email);
-        /* 고객이 null이 아닐경우 setter 0으로 update */
+        /* 고객을 조회할수없을경우 */
         if(custDto != null){
             custDto.setFailed_attempts(0);
             custDao.updateCust(custDto);

@@ -2,6 +2,7 @@ package com.Toy2.Cust.Controller;
 
 import com.Toy2.Cust.Dao.CustDao;
 import com.Toy2.Cust.Domain.CustDto;
+import com.Toy2.Cust.Service.CustService;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -42,6 +43,9 @@ public class KakaoLogin {
     @Autowired
     CustDao custDao;
 
+    @Autowired
+    CustService custService;
+
     @GetMapping("/kakao/login")
     public String redirectToKakaoLogin() {
         // Kakao OAuth 인증 URL 생성
@@ -76,7 +80,11 @@ public class KakaoLogin {
 
             /* 고객정보가 DB에 있을경우 */
             if(custDto!=null){
+                /* 로그인일자 업데이트 */
                 custDao.updateLogin(custEmail);
+                /* 비밀번호가 일치할경우 로그인실패 count 초기화 */
+                custService.resetFailedCnt(custDto.getC_email());
+
                 HttpSession session = request.getSession();
                 session.setAttribute("c_email", custDto.getC_email());
                 return "redirect:/";
@@ -95,6 +103,7 @@ public class KakaoLogin {
             custDto.setC_zip("");
             custDto.setC_road_a("");
             custDto.setC_det_a("");
+
 
 
             /* 고객을 DB에 insert 한다 */
