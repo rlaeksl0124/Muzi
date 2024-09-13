@@ -16,10 +16,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -57,17 +58,22 @@ public class OrderController {
     @PostMapping("/complete")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> addOrder(
-            @ModelAttribute OrderDto orderDto,
-            @ModelAttribute DeliveryDto deliveryDto,
+            @Valid @ModelAttribute OrderDto orderDto,
+            @Valid @ModelAttribute DeliveryDto deliveryDto,
             @RequestParam("orderType") String cartOrder,
+            BindingResult result,
             HttpSession session) {
-
+        System.out.println(session.getId());
         Map<String, Object> response = new HashMap<>();
 
         String customerEmail = (String) session.getAttribute("c_email");
         orderDto.setCustomerEmail(customerEmail);
         List<OrderDetailDto> orderDetails = orderDto.getOrderDetails();
 
+        if (result.hasErrors()) {
+            response.put("success", false);
+            return ResponseEntity.ok(response);
+        }
         try {
             orderService.addOrder(orderDto, orderDetails, deliveryDto);
             if (cartOrder.equals("장바구니구매"))
@@ -99,9 +105,10 @@ public class OrderController {
 
         try {
             int totalCnt = orderService.orderCnt(customerEmail);
-            PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
 
+            PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
             Map pagingMap = new HashMap();
+
             pagingMap.put("offset", (page) * pageSize);// + 되어있었음 * 로 바꿈
             pagingMap.put("pageSize", pageSize);
             pagingMap.put("customerEmail", customerEmail);
@@ -125,14 +132,16 @@ public class OrderController {
      * @throws Exception
      */
     @GetMapping("/orderDetailList")
-    public String orderDetailList(@RequestParam("orderNo") int orderNo, Model model, HttpSession session) throws Exception {
+    public String orderDetailList(@RequestParam("orderNo") int orderNo,@SessionAttribute String c_email ,Model model, HttpSession session) throws Exception {
+        if (session.getAttribute("c_email") != c_email) {
+            model.addAttribute("errorMessage", "로그인을 해주세요.");
+            return "redirect:/login";
+        }
         try {
-            if(session.getAttribute("c_email") == null)
-                throw new Exception("로그인을 해주세요");
-            model.addAttribute("orderDetailList",orderService.getOrderDetailList(orderNo));//주문상세에 대한 정보
+            model.addAttribute("orderDetailList",orderService.getOrderDetailList(orderNo, c_email));//주문상세에 대한 정보
             model.addAttribute("delivery",orderService.getDeliveryList(orderNo));//배송지에대한정보
         } catch (Exception e) {
-            return "orderList";
+            return "redirect:/orders/orderList";
         }
         return "orderDetail";
     }
@@ -206,11 +215,9 @@ public class OrderController {
     }
 
     @GetMapping("/orderSuccess")//결제 완료 화면
-    public String orderSuccess(@RequestParam String paymentKey,
-            @RequestParam String orderId,
-            @RequestParam Long amount,
-            Model model, HttpSession session) throws Exception {
+    public String orderSuccess(Model model, HttpSession session) throws Exception {
         String customerEmail = (String) session.getAttribute("c_email");
+
         model.addAttribute("orderId", orderService.getOrderList(customerEmail)
                 .get(orderService.getOrderList(customerEmail).size()-1).getOrderNo());
         model.addAttribute("amount", orderService.getOrderList(customerEmail)
@@ -221,31 +228,32 @@ public class OrderController {
                 .get(orderService.getOrderList(customerEmail).size()-1).getOrderDate());
         model.addAttribute("orderProductName", orderService.getOrderDetailList(
                         orderService.getOrderList(customerEmail)
-                                .get(orderService.getOrderList(customerEmail).size()-1).getOrderNo())
+                                .get(orderService.getOrderList(customerEmail).size()-1).getOrderNo(),customerEmail)
                 .get(0).getOrderDetailProductName());
-
         return "orderSuccess"; // orderSuccess.jsp로 이동
     }
-    @ExceptionHandler(Exception.class)
-    public String handleException(Exception e, HttpServletRequest request, Model model) {
-        model.addAttribute("ex", e);
 
-        String requestURI = request.getRequestURI();
-        // 현재 요청이 GET 요청인지 POST 요청인지 확인
-        if ("POST".equalsIgnoreCase(request.getMethod())) {
-            // POST 요청이라면 GET 요청으로 리다이렉트
-            return "redirect:" + requestURI;
-        } else {
-            // GET 요청이라면 예외가 발생한 페이지를 다시 렌더링
-            return "forward:" + requestURI;
-        }
-    }
+
+//    @ExceptionHandler(Exception.class)
+//    public String handleException(Exception e, HttpServletRequest request, Model model) {
+//        model.addAttribute("ex", e);
+//
+//        String requestURI = request.getRequestURI();
+//        // 현재 요청이 GET 요청인지 POST 요청인지 확인
+//        if ("POST".equalsIgnoreCase(request.getMethod())) {
+//            // POST 요청이라면 GET 요청으로 리다이렉트
+//            return "redirect:" + requestURI;
+//        } else {
+//            // GET 요청이라면 예외가 발생한 페이지를 다시 렌더링
+//            return "forward:" + requestURI;
+//        }
+//    }
 
     //주문성공 후 모델속성 설정하는 로직
     private void orderSuccess(Map<String, Object> response, String customerEmail) throws Exception {
         String orderProductName = orderService.getOrderDetailList(
                         orderService.getOrderList(customerEmail)
-                                .get(orderService.getOrderList(customerEmail).size() - 1).getOrderNo())
+                                .get(orderService.getOrderList(customerEmail).size() - 1).getOrderNo(),customerEmail)
                 .get(0).getOrderDetailProductName();
 
         response.put("success", true);

@@ -37,5 +37,8 @@
 		<priority value="warn" />
 		<appender-ref ref="console" />
 	</root>
+
+	<logger name="org.springframework" level="DEBUG"/>
+
 	
 </log4j:configuration>

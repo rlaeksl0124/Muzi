@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <!-- ConsoleAppender: 콘솔에 로그 출력 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <!-- 기본 로거 설정 -->
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+        </Root>
+
+        <logger name="org.springframework.session.web.http.SessionRepositoryFilter.SESSION_LOGGER" level="INFO" />
+        <!-- Spring Session 관련 로그를 디버그 레벨로 설정 -->
+        <Logger name="org.springframework.session" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="org.springframework.data.redis" level="TRACE" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+    </Loggers>
+</Configuration>

@@ -38,6 +38,7 @@ function sendCategory(category, url) {
     endpoint = url;
     // 사용자 선택을 채팅창에 추가
     var chatbox = $("#chatbot-messages");
+
     var userMessage = $("<div></div>").addClass("user-message").text("사용자: " + category + "을(를) 선택했습니다.");
     chatbox.append(userMessage);
 
@@ -53,14 +54,14 @@ function sendAjaxRequest(endpoint, data) {
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({contents:data}),
+        xhrFields: {
+            withCredentials: true  // 쿠키 전송 활성화
+        },
         success: function (response) {
             // 서버 응답을 채팅창에 추가
             var chatbox = $("#chatbot-messages");
-            var botMessage = $("<div></div>").addClass("bot-message").text("챗봇: " + JSON.stringify(response));
-
-            console.log(response)
+            var botMessage = $("<div></div>").addClass("bot-message").html("챗봇: " + response);
             chatbox.append(botMessage);
-
 
             // 채팅창을 아래로 스크롤
             chatbox.scrollTop(chatbox.prop("scrollHeight"));

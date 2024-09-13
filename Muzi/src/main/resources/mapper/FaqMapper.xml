@@ -6,26 +6,26 @@
 <!--<mapper namespace="com.Toy2.Notice.Dao.FaqMapper">-->
 <mapper namespace="com.Toy2.Faq.Dao.FaqDao">
 
-<!--    보이는 거 관리 하기-->
+    <!--    보이는 거 관리 하기-->
 
     <!-- count - 행 개수 셈  -->
     <!-- parameter : 없음 , result: int -->
     <select id="count" resultType="int">
-        SELECT count(*) FROM FAQ
+        SELECT count(*) FROM faq
     </select>
 
 
     <!--   deleteAll - FAQ 테이블 행 전제 삭제 -->
     <!-- parameter : 없음 , result: 없음 -->
     <delete id="deleteAll">
-        DELETE FROM FAQ
+        DELETE FROM faq
     </delete>
 
 
     <!--   delete - 특정 FAQ 게시글을 하나 삭제; 담당자가 글을 삭제(컨트롤러) -->
     <!-- parameter : map, result: 없음 -->
     <delete id="delete" parameterType="int">
-        DELETE FROM FAQ
+        DELETE FROM faq
         WHERE faq_no = #{faq_no}
     </delete>
 
@@ -33,7 +33,7 @@
     <!-- insert - FAQ 게시글로 FaqDto를 등록 -->
     <!-- parameter : FaqDto, result: 없음 -->
     <insert id="insert" parameterType="FaqDto" useGeneratedKeys="true" keyProperty="faq_no">
-        INSERT INTO FAQ (cate_no, faq_order, faq_title, faq_content, faq_att_file, faq_writer)
+        INSERT INTO faq (cate_no, faq_order, faq_title, faq_content, faq_att_file, faq_writer)
         VALUES (#{cate_no}, #{faq_order}, #{faq_title}, #{faq_content},  #{faq_att_file}, #{faq_writer})
     </insert>
 
@@ -42,15 +42,15 @@
     <!--     parameter : 없음 , result: FaqDto -->
     <select id="selectAll" resultType="FaqDto">
         SELECT *
-        FROM FAQ
+        FROM faq
         ORDER BY first_reg_date DESC;
 #         ORDER BY faq_no ASC;
     </select>
 
 
     <sql id="selectFromFaq">
-        SELECT faq_no, cate_no, faq_order, faq_title, faq_content, faq_closing, FAQ.faq_writer, faq_att_file, faq_reg_date, faq_view_cnt
-        FROM FAQ
+        SELECT faq_no, cate_no, faq_order, faq_title, faq_content, faq_closing, faq_writer, faq_att_file, faq_reg_date, faq_view_cnt
+        FROM faq
     </sql>
 
     <!--    select - 선택한 FAQ 게시글을 하나 조회 -->
@@ -64,7 +64,7 @@
     <!--    update - FAQ에 등록된 게시글을 수정; 게시글의 번호 -->
     <!--    parameter : FaqDto, result : 없음-->
     <update id="update" parameterType="FaqDto">
-        UPDATE FAQ
+        UPDATE faq
         #  faq_writer, faq_admin은 바꾸지 못함
         SET cate_no = #{cate_no},
             faq_order = #{faq_order},
@@ -83,7 +83,7 @@
     <!-- increaseViewCnt - 조회수 올리기 -->
     <!-- parameter : Integer faq_no, result :  없음 -->
     <update id="increaseViewCnt" parameterType="int">
-        UPDATE FAQ
+        UPDATE faq
         SET faq_view_cnt = faq_view_cnt + 1
         WHERE faq_no = #{faq_no}
     </update>
@@ -92,8 +92,8 @@
     <!-- category 이름 보이게 join 해서 가져오기 -->
     <select id="joinCategory" parameterType="int" resultType="String">
         SELECT c.cate_name
-        FROM FAQ f
-                 JOIN FAQ_CATE c
+        FROM faq f
+                 JOIN faq_cate c
                       ON c.cate_no = f.cate_no
         WHERE faq_no = #{faq_no};
     </select>
@@ -115,7 +115,7 @@
 
     <select id="searchSelected" parameterType="SearchCondition" resultType="FaqDto">
         SELECT faq_no, faq_title, faq_content, faq_closing
-        FROM FAQ
+        FROM faq
         WHERE true
         <include refid="searchCondition"/>
         ORDER BY faq_reg_date DESC, faq_no DESC
@@ -123,10 +123,9 @@
 
     <select id="searchResultCnt" parameterType="SearchCondition" resultType="int">
         SELECT count(*)
-        FROM FAQ
+        FROM faq
         WHERE true
         <include refid="searchCondition"/>
     </select>
 
 </mapper>
-

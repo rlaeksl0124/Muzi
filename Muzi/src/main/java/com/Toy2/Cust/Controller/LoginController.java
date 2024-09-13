@@ -13,6 +13,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpSession;
 @Configuration
 @EnableScheduling
 @Controller
+@CrossOrigin("http://localhost:5001")
 public class LoginController {
     @Autowired
     CustDao custDao;
@@ -79,9 +81,7 @@ public class LoginController {
             /* 세션생성 */
             HttpSession session = request.getSession();
             session.setAttribute("c_email", c_email);
-
             session.setMaxInactiveInterval(30 * 60);
-            System.out.println("Session ID: " + session.getId());
 
             /* 마지막 로그인일자를 업데이트하는 Dao 호출 */
             custDao.updateLogin(c_email);

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -70,8 +71,8 @@ public class OrderServiceImpl implements OrderService{
      * @throws Exception
      */
     @Override
-    public List<OrderDetailDto> getOrderDetailList(int orderNo) throws Exception {
-        List<OrderDetailDto> orderDetailList = orderDetailDao.orderDetailList(orderNo);
+    public List<OrderDetailDto> getOrderDetailList(int orderNo, String customerEmail) throws Exception {
+        List<OrderDetailDto> orderDetailList = orderDetailDao.orderDetailList(orderNo, customerEmail);
         orderDetailDtoValid(orderDetailList,"OrderDetailList is empty");
         return orderDetailList;
     }
@@ -85,7 +86,6 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public List<OrderResponseDto> getOrderList(String customerEmail) throws Exception {
         List<OrderResponseDto> orderList = orderDao.orderList(customerEmail);
-        orderListValid(orderList,"OrderList is empty");
         return orderList;
     }
 

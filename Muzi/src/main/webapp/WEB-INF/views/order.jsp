@@ -139,17 +139,17 @@
     <h3>2. 배송지</h3>
 
         <p>주문 하는 사람: ${orderDto.customerEmail}</p>
-        <label>받는 사람 이름: <input type="text" id="deliveryName" name="deliveryName" placeholder="받는사람이름"></label><br>
-        <label>받는 사람 번호: <input type="text" id="deliveryPhone" name="deliveryPhone" placeholder="받는사람번호"></label><br>
-        <label>받는 사람 주소: <input type="text" id="deliveryRoadAddress" name="deliveryRoadAddress" placeholder="도로명주소" readonly>
+        <label>받는 사람 이름: <input type="text" id="deliveryName" name="deliveryName" placeholder="받는사람이름" required></label><br>
+        <label>받는 사람 번호: <input type="text" id="deliveryPhone" name="deliveryPhone" placeholder="받는사람번호" required></label><br>
+        <label>받는 사람 주소: <input type="text" id="deliveryRoadAddress" name="deliveryRoadAddress" placeholder="도로명주소" readonly required>
             <div id="postLayer"></div>
             <input type="hidden" name="deliveryStreetAddress" id="deliveryStreetAddress" value=""></label>
         <input type="hidden" name="Postcode" id="Postcode">
 
         <input type="button" onclick="execDaumPostcode()" value="주소검색"/><br>
-        <label>상세 주소 : <input type="text" id="deliveryDetailAddress" name="deliveryDetailAddress" placeholder="상세주소"></label><br>
-        <label>배송지명: <input type="text" name="deliveryAddressName" placeholder="배송지명"></label><br>
-        <label>배송메시지: <textarea name="deliveryMessage" placeholder="배송메시지"></textarea></label><br>
+        <label>상세 주소 : <input type="text" id="deliveryDetailAddress" name="deliveryDetailAddress" placeholder="상세주소" required></label><br>
+        <label>배송지명: <input type="text" name="deliveryAddressName" placeholder="배송지명" required></label><br>
+        <label>배송메시지: <textarea name="deliveryMessage" placeholder="배송메시지" required></textarea></label><br>
 
 
         <p>
@@ -174,6 +174,31 @@
 
     document.getElementById('payment-button').addEventListener('click', function (event) {
         event.preventDefault(); // 기본 폼 제출 동작을 방지합니다.
+
+        // 입력 필드 검사
+        const deliveryName = document.getElementById('deliveryName').value.trim();
+        const deliveryPhone = document.getElementById('deliveryPhone').value.trim();
+        const deliveryRoadAddress = document.getElementById('deliveryRoadAddress').value.trim();
+        const deliveryDetailAddress = document.getElementById('deliveryDetailAddress').value.trim();
+        const deliveryAddressName = document.getElementsByName('deliveryAddressName')[0].value.trim();
+        const deliveryMessage = document.getElementsByName('deliveryMessage')[0].value.trim();
+        const namePattern = /^[가-힣a-zA-Z]+$/;
+        const phonePattern = /^\d{11}$/;
+
+        if (!namePattern.test(deliveryName)) {
+            alert('받는 사람 이름은 한글 또는 영문만 입력 가능합니다.');
+            return; // 결제 요청 중단
+        }
+
+        if (!phonePattern.test(deliveryPhone)) {
+            alert('받는 사람 번호는 11자리 숫자여야 합니다.예) 01000000000');
+            return; // 결제 요청 중단
+        }
+        // 필드가 비어 있는지 확인
+        if (!deliveryName || !deliveryPhone || !deliveryRoadAddress || !deliveryDetailAddress || !deliveryAddressName || !deliveryMessage) {
+            alert('모든 필드를 입력해 주세요.');
+            return; // 결제 요청 중단
+        }
 
         // TossPayments 결제 요청
         tossPayments.requestPayment('CARD', {
@@ -213,6 +238,7 @@
             window.location.href = 'http://localhost:8080/cart/cart'; // 실패 시 failUrl로 이동
         });
     });
+
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>

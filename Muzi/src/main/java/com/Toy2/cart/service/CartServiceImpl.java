@@ -23,6 +23,7 @@ public class CartServiceImpl implements CartService{
         this.custDao = custDao;
         this.productDao = productDao;
     }
+
     /**
      * 상품추가
      * 같은 제품이 들어갈 경우 예외 던지기
@@ -33,7 +34,7 @@ public class CartServiceImpl implements CartService{
     @Transactional
     public int addCart(CartDto cartDto) throws Exception {
         List<CartDto> check = cartDao.cartSelectAll(cartDto.getCustomerEmail());
-        cartCheck(check, "addCart is Failed");
+
         return cartCheck(check, cartDto);
     }
 
@@ -96,7 +97,6 @@ public class CartServiceImpl implements CartService{
     @Override
     public int cartEmailDelete(String email) throws Exception {
         int deleteCheck = cartDao.cartEmailDelete(email);
-        validateResult(deleteCheck, "cartEmailDelete is Failed");
         return deleteCheck;
     }
 
